@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ESNext",
+    /* Modules */
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "NodeNext"
+  },
+  "include": [
+    "./specs",
+    "./tasks",
+  ]
+}

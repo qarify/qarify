@@ -1,0 +1,39 @@
+{
+  "name": "@qarify/cli",
+  "version": "1.0.0",
+  "private": "false",
+  "author": "Peter HS Kang <peterhs.kang@gmail.com>",
+  "description": "QArify CLI",
+  "license": "MIT",
+  "keywords": [
+  ],
+  "bin": {
+    "qarify": "./bin/qarify.js"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "./bin/qarify.js",
+    "compile": "run-p compile:*",
+    "compile:esm": "tsc -b tsconfig.build.json",
+    "qa:gen": "node -r ts-node/register libs/compose-spec.ts",
+    "qa:run": "mocha --ui exports ./cache/gen/*.spec.js",
+
+    "qa:build:esm": "tsc -b ./cache/tsconfig.esm.json",
+    "qa:gen:esm": "node --no-warnings=ExperimentalWarning --loader ts-node/esm libs/compose-spec-esm.ts",
+    "qa:run:esm": "mocha --ui exports ./cache/gen/*.spec.js"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "execa": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.8",
+    "@types/mocha": "^10.0.0",
+    "node-run": "^1.0.6",
+    "mocha": "^10.2.0",
+    "webdriver": "../ti-wdio/packages/webdriver",
+    "webdriverio": "../ti-wdio/packages/webdriverio",
+    "expect-webdriverio": "../expect-webdriverio",
+    "typescript": "~5.1.6"
+  }
+}
