@@ -1,6 +1,6 @@
 import { expect } from 'expect-webdriverio';
 
-export default function() {
+test('should say hello too', () => {
   const greeting = 'hello world';
   expect(greeting).toBe('hello');
-};
+});

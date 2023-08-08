@@ -1,8 +1,8 @@
 export default async function () {
   return new Promise<void>((resolve) => {
-      setTimeout(() => {
-          console.log('[TASK] bye');
-          resolve();
-      }, 1000);
+    setTimeout(() => {
+      console.log('[TASK] bye');
+      resolve();
+    }, 1000);
   });
 }

@@ -1,16 +1,4 @@
 
-export type Task = {
-  id: string;
-  name: string;
-  path: string;
-};
-
-export type Spec = {
-  id: string;
-  name: string;
-  path: string;
-};
-
 export type QAConnectionInfo = {
   id: string;
   name: string;
@@ -21,18 +9,9 @@ export type QAConnectionInfo = {
   capabilities: any;
 };
 
-export type QATestCase = {
-  id: string;
-  name: string;
-  preTasks: Array<Task>;
-  specs: Array<Spec>;
-  postTasks: Array<Task>;
-};
-
 export type QATestSuite = {
-  id: string;
   name: string;
-  testCases: Array<QATestCase>;
+  specs: string[];
 }
 
 export type QAProject = {
@@ -40,15 +19,22 @@ export type QAProject = {
   name: string;
   connection: QAConnectionInfo;
 
-  testSuite: QATestSuite;
+  testSuites: QATestSuite[];
 };
+
+export const enum CodeRunnerFramework {
+  mocha_bdd = 'Mocha BDD',
+  mocha_tdd = 'Mocha TDD',
+  mocha_qunit = 'Mocha QUnit',
+  mocha_export = 'Mocha Exports',
+  js_eval = 'Normal Script',
+}
 
 export type QAConfig = {
   rootDir?: string;
-  specsDir: string;
-  tasksDir: string;
   cacheDir: string;
-  type: 'module' | 'commonjs';
   tsconfig?: string;
   projects: Array<QAProject>;
+  mochaOptions?: Mocha.MochaOptions;
+  framework: CodeRunnerFramework;
 };

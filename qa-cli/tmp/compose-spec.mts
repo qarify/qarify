@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execa } from "execa";
 
-import type { Task, Spec, QAConfig, QAProject } from "./types";
+import type { Task, Spec, QAConfig, QAProject, QATestCase } from "./types";
 import type { CLIOptions } from "./main";
 import { genESMSpecFile, genCJSSpecFile } from "./gen-spec-file.js";
 
@@ -122,7 +122,7 @@ function composeSpecs(project: QAProject, config: QAConfig) {
     // console.log('>>> preTasksPaths:', preTasksPaths);
     if (isESM) {
       genESMSpecFile(
-        path.join(genDir, `${tc.id}.spec.js`),
+        path.join(genDir, `${testCaseName(tc)}.spec.js`),
         _preTasks,
         _specs,
         _postTasks,
@@ -130,7 +130,7 @@ function composeSpecs(project: QAProject, config: QAConfig) {
       );
     } else {
       genCJSSpecFile(
-        path.join(genDir, `${tc.id}.spec.js`),
+        path.join(genDir, `${testCaseName(tc)}.spec.js`),
         _preTasks,
         _specs,
         _postTasks,
@@ -138,6 +138,10 @@ function composeSpecs(project: QAProject, config: QAConfig) {
       );
     }
   }
+}
+
+function testCaseName(tc: QATestCase) {
+  return tc.name.replaceAll(' ', '_');
 }
 
 function replaceExtension(fileName: string) {

@@ -3,7 +3,7 @@
  */
 import { Command } from 'commander';
 
-import { run } from './compose-spec.mjs';
+import { run } from './runner.js';
 
 // const pac = await import('../package.json');
 

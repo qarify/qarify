@@ -1,9 +1,7 @@
 {
-  "type": "module",
   "tsconfig": "./qa-spec/tsconfig.json",
-  "specsDir": "./qa-spec/specs",
-  "tasksDir": "./qa-spec/tasks",
   "cacheDir": "cache",
+  "framework": "Mocha QUnit",
   "projects": [
     {
       "id": 1,
@@ -17,42 +15,15 @@
         "path": "/",
         "capabilities": "{\n    \"platformName\": \"iOS\",\n    \"appium:automationName\": \"XCUITest\",\n    \"appium:deviceName\": \"iPhone 14\",\n    \"appium:platformVersion\": \"16.4\",\n    \"appium:orientation\": \"PORTRAIT\"\n  }"
       },
-      "testSuite": {
-        "id": 2,
-        "name": "my test suite",
-        "testCases": [
-          {
-            "id": 3,
-            "name": "my test case",
-            "preTasks": [
-              {
-                "id": 5,
-                "name": "task -- hello",
-                "path": "./qa-spec/tasks/hello.ts"
-              }
-            ],
-            "specs": [
-              {
-                "id": 21,
-                "name": "should say hello",
-                "path": "./qa-spec/specs/greeting.ts"
-              },
-              {
-                "id": 22,
-                "name": "should say hello too",
-                "path": "./qa-spec/specs/greeting-failure.ts"
-              }
-            ],
-            "postTasks": [
-              {
-                "id": 10,
-                "name": "task -- bye",
-                "path": "./qa-spec/tasks/bye.ts"
-              }
-            ]
-          }
-        ]
-      }
+      "testSuites": [
+        {
+          "name": "my test suite",
+          "specs": [
+              "./qa-spec/specs/greeting.ts",
+              "./qa-spec/specs/greeting-failure.ts"
+          ]
+        }
+      ]
     }
   ]
 }
