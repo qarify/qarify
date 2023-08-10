@@ -15,12 +15,18 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./types.d.ts",
+  "exports": {
+    "types": "./types.d.ts",
+    "import": "./dist/index.js",
+    "require": "./dist/__cjs/index.js"
+  },
   "scripts": {
     "dev": "./bin/qarify.js",
     "dev2": "./bin/qarify.js -c ./.qarify-remote.json",
     "build": "run-s clean:compile compile",
     "compile": "run-p compile:*",
     "compile:esm": "tsc -b tsconfig.build.json",
+    "compile:cjs": "tsc -b tsconfig.cjs.json",
     "clean:compile": "rimraf ./dist"
   },
   "dependencies": {

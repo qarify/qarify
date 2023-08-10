@@ -2,7 +2,7 @@
 
 import path from "node:path";
 
-import type { CLIOptions } from "./main";
+import type { CLIOptions } from "./_types";
 import {
   loadUserConfig, setupConfig, setupProjects, findAllFiles, mapFilesInConfig, buildSpecs,
 } from "./utils/index.js";

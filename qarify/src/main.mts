@@ -7,11 +7,6 @@ import { run } from './run.js';
 
 // const pac = await import('../package.json');
 
-export type CLIOptions = {
-  config: string;
-  project: string;
-};
-
 const program = new Command();
 
 program

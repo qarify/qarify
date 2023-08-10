@@ -3,16 +3,19 @@
   "compilerOptions": {
     /* Emit */
     "noEmit": false,
-    "outDir": "dist",
+    "outDir": "dist/__cjs",
 
     /* Language and Environment */
-    "target": "ESNext",
+    "target": "ES2020",
 
     /* Modules */
-    "module": "ESNext",
+    "module": "CommonJS",
     "rootDir": "./src",
   },
   "include": [
-    "./src",
+    "./src/*.ts",
+  ],
+  "exclude": [
+    "./src/*.mts",
   ]
 }
