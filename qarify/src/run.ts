@@ -4,7 +4,7 @@ import path from "node:path";
 import { execa } from "execa";
 
 // import type { QAConfig, QAProject } from "../types";
-import type { CLIOptions } from "./main";
+import type { CLIOptions } from "./_types";
 import { loadUserConfig, findAllFiles, mapFilesInConfig } from "./utils/index.js";
 import { runProject } from "./runner/run-project.js";
 import { SpecRunnerFramework } from "./constants";
