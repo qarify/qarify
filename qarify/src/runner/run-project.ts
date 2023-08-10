@@ -59,7 +59,8 @@ export async function runProject(
   project: Required<QAProject>,
   config: QAConfig
 ) {
-  const { connection, options } = project;
+  const { options } = project;
+  const { connection } = options;
   const _isMultiremote = false;
   let _browser;
   if (connection) {

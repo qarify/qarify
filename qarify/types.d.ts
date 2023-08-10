@@ -17,6 +17,8 @@ type QATestSuite = {
 };
 
 type QATestOptions = {
+  connection?: QAConnectionInfo;
+
   mochaOptions?: Mocha.MochaOptions;
   // ms to wait for expectation to succeed
   waitforTimeout?: number;
@@ -27,7 +29,6 @@ type QATestOptions = {
 type QAProject = {
   id: string;
   name: string;
-  connection: QAConnectionInfo;
 
   testSuites: QATestSuite[];
   options?: QATestOptions;

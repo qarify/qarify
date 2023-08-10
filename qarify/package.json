@@ -1,7 +1,7 @@
 {
   "name": "qarify",
   "version": "1.0.0",
-  "private": "false",
+  "private": false,
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
   "description": "QArify",
   "license": "MIT",

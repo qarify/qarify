@@ -1,25 +1,27 @@
 {
   "tsconfig": "./qa-spec/tsconfig.json",
   "framework": "Mocha QUnit",
+  "options": {
+    "connection": {
+      "id": "35e93580-24e9-11ee-8fe1-b7fcdb2ba981",
+      "name": "Local Server 3",
+      "protocol": "http",
+      "hostname": "127.0.0.1",
+      "port": 4723,
+      "path": "/",
+      "capabilities": {
+        "platformName": "iOS",
+        "appium:automationName": "XCUITest",
+        "appium:deviceName": "iPhone 14",
+        "appium:platformVersion": "16.4",
+        "appium:orientation": "PORTRAIT"
+      }
+    }
+  },
   "projects": [
     {
       "id": 1,
       "name": "hello mobile",
-      "connection": {
-        "id": "35e93580-24e9-11ee-8fe1-b7fcdb2ba981",
-        "name": "Local Server 3",
-        "protocol": "http",
-        "hostname": "127.0.0.1",
-        "port": 4723,
-        "path": "/",
-        "capabilities": {
-          "platformName": "iOS",
-          "appium:automationName": "XCUITest",
-          "appium:deviceName": "iPhone 14",
-          "appium:platformVersion": "16.4",
-          "appium:orientation": "PORTRAIT"
-        }
-      },
       "testSuites": [
         {
           "name": "mobile test suite",
