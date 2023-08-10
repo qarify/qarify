@@ -1,6 +1,7 @@
-import Mocha from "mocha";
+import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
 
+import type { QAConfig, QAProject, QATestSuite } from '../types.js';
 import { TestReporter } from './test-reporter.js';
 
 const FILE_PROTOCOL = "file://";
@@ -12,11 +13,11 @@ export async function executeTestSuite(
   runnerId: string
 ) {
   const { framework } = config;
-  const { mochaOptions } = project.options;
+  const { mochaOptions = {} } = project.options;
   const { specs } = testSuite;
   const _mochaOpt = {
     ...mochaOptions,
-    ui: framework.split(" ")[1].toLowerCase(),
+    ui: framework.split(" ")[1].toLowerCase() as keyof InterfaceContributions,
   };
   const mocha = new Mocha(_mochaOpt);
   mocha.reporter(TestReporter, { runnerId });

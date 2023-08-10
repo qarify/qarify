@@ -1,5 +1,7 @@
 import path from "path";
-import { SpecRunnerFramework } from "../constants";
+
+import type { QAConfig, QAProject } from '../types.js';
+import { SpecRunnerFramework } from "../constants.js";
 
 const defaultConfig: Partial<QAConfig> = {
   cacheDir: ".qacache",

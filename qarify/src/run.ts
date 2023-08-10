@@ -1,10 +1,14 @@
 import path from "node:path";
 
-import type { CLIOptions } from "./_types";
 import {
-  loadUserConfig, setupConfig, setupProjects, findAllFiles, mapFilesInConfig, buildSpecs,
+  loadUserConfig, setupConfig, buildProjects,
 } from "./utils/index.js";
 import { runProject } from "./runner/index.js";
+
+export type CLIOptions = {
+  config: string;
+  project: string;
+};
 
 export async function run(options: CLIOptions, baseDir: string) {
   const configFile = path.isAbsolute(options.config)
@@ -14,31 +18,15 @@ export async function run(options: CLIOptions, baseDir: string) {
   const userConfig = await loadUserConfig(baseDir, configFile);
   const configDir = path.dirname(configFile);
   const config = setupConfig(userConfig, configDir);
-  const projects = setupProjects(config, options.project);
 
-  // no projects
-  if (!projects || projects.length === 0) {
-    console.error("No projects", options.project);
+  try {
+    // build
+    const projects = await buildProjects(config, options.project);
+    // run
+    const promises = projects.map((e) => runProject(e, config));
+    await Promise.all(promises);
+  } catch (e) {
+    console.error(e);
     process.exit(1);
   }
-
-  // build
-  console.log(">>> Build...");
-  const outDir = await buildSpecs(config);
-  // build error
-  if (!outDir) {
-    console.error("Build failed");
-    process.exit(1);
-  }
-  console.log(">>> Build done.");
-
-  // map spec files in config to build output
-  const outFiles = findAllFiles(outDir);
-  mapFilesInConfig(projects, outFiles);
-
-  // run
-  console.log(">>> Run projects");
-  const promises = projects.map((e) => runProject(e, config));
-  await Promise.all(promises);
-  console.log(">>> Run done.");
 }

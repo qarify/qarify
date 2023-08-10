@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-// import type { QAConfig, QAProject } from "../../types";
+import type { QAConfig, QAProject } from '../types.js';
 
 export async function loadUserConfig(
   baseDir: string,

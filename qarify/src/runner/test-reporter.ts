@@ -1,19 +1,6 @@
 import { MochaOptions, Runner, Stats, reporters } from "mocha";
 import { SpecRunnerEvent, MochaRunnerEvent } from "../constants.js";
-
-type ReportMessage = {
-  runnerId: string;
-  type: SpecRunnerEvent;
-  title: string;
-  titles: string[];
-  file?: string; // defined when hook:*, test:*
-  duration?: number; // defined when *:end, test:pass, test:fail
-  error?: Error;
-  stats: {
-    passed: number;
-    failed: number;
-  };
-};
+import type { ReportMessage } from '../types.js';
 
 export class TestReporter extends reporters.Base {
   private runnerId: string;
