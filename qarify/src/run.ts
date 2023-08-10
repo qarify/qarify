@@ -1,5 +1,3 @@
-/// <reference path="../types.d.ts" />
-
 import path from "node:path";
 
 import type { CLIOptions } from "./_types";

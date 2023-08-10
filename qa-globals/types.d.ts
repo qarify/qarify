@@ -1,5 +1,3 @@
-// import type { CodeRunnerFramework } from './dist';
-
 type QAConnectionInfo = {
   id: string;
   name: string;

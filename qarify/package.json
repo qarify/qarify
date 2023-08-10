@@ -14,9 +14,9 @@
   },
   "type": "module",
   "main": "./dist/index.js",
-  "types": "./types.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "types": "./types.d.ts",
+    "types": "./dist/index.d.ts",
     "import": "./dist/index.js",
     "require": "./dist/__cjs/index.js"
   },
@@ -30,6 +30,7 @@
     "clean:compile": "rimraf ./dist"
   },
   "dependencies": {
+    "@qarify/globals": "1.0.0",
     "commander": "^11.0.0",
     "execa": "^7.2.0",
     "mocha": "^10.2.0",

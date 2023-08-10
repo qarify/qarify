@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "moduleResolution": "NodeNext",
     "types": [
-      "mocha", "../types.d.ts"
+      "mocha", "@qarify/globals"
     ]
   },
   "include": [
