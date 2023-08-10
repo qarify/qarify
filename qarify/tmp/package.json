@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "private": "false",
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
-  "description": "QArify",
+  "description": "QArify CLI",
   "license": "MIT",
   "keywords": [
-    "QA",
-    "test"
   ],
   "bin": {
     "qarify": "./bin/qarify.js"
@@ -21,20 +19,26 @@
     "build": "run-s clean:compile compile",
     "compile": "run-p compile:*",
     "compile:esm": "tsc -b tsconfig.build.json",
-    "clean:compile": "rimraf ./dist"
+    "clean:compile": "rimraf ./dist",
+    "qa:gen": "node -r ts-node/register libs/compose-spec.ts",
+    "qa:run": "mocha --ui exports ./cache/gen/*.spec.js",
+
+    "qa:build:esm": "tsc -b ./cache/tsconfig.esm.json",
+    "qa:gen:esm": "node --no-warnings=ExperimentalWarning --loader ts-node/esm libs/compose-spec-esm.ts",
+    "qa:run:esm": "mocha --ui exports ./cache/gen/*.spec.js"
   },
   "dependencies": {
     "commander": "^11.0.0",
-    "execa": "^7.2.0",
-    "mocha": "^10.2.0",
-    "webdriverio": "8.11.3",
-    "expect-webdriverio": "4.2.6"
+    "execa": "^7.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",
     "@types/mocha": "^10.0.0",
+    "mocha": "^10.2.0",
+    "webdriverio": "8.11.3",
+    "expect-webdriverio": "4.2.6",
     "typescript": "~5.1.6",
-    "npm-run-all": "^4.1.5",
+    "node-run": "^1.0.6",
     "rimraf": "^5.0.1"
   }
 }
