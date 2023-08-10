@@ -3,6 +3,6 @@ export default async function () {
     setTimeout(() => {
       console.log('[TASK] hello');
       resolve();
-    }, 1000);
+    }, 100);
   });
 }

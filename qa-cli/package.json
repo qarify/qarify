@@ -11,10 +11,15 @@
     "qarify": "./bin/qarify.js"
   },
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./types.d.ts",
   "scripts": {
     "dev": "./bin/qarify.js",
+    "dev2": "./bin/qarify.js -c ./.qarify-remote.json",
+    "build": "run-s clean:compile compile",
     "compile": "run-p compile:*",
     "compile:esm": "tsc -b tsconfig.build.json",
+    "clean:compile": "rimraf ./dist",
     "qa:gen": "node -r ts-node/register libs/compose-spec.ts",
     "qa:run": "mocha --ui exports ./cache/gen/*.spec.js",
 
@@ -31,15 +36,10 @@
     "@types/mocha": "^10.0.0",
     "node-run": "^1.0.6",
     "mocha": "^10.2.0",
-    "@wdio/mocha-framework": "../ti-wdio/packages/wdio-mocha-framework",
-    "@wdio/config": "../ti-wdio/packages/wdio-config",
-    "@wdio/logger": "../ti-wdio/packages/wdio-logger",
-    "@wdio/protocols": "../ti-wdio/packages/wdio-protocols",
-    "@wdio/types": "../ti-wdio/packages/wdio-types",
-    "@wdio/utils": "../ti-wdio/packages/wdio-utils",
-    "webdriver": "../ti-wdio/packages/webdriver",
-    "webdriverio": "../ti-wdio/packages/webdriverio",
-    "expect-webdriverio": "../expect-webdriverio",
-    "typescript": "~5.1.6"
+    "@wdio/mocha-framework": "8.11.0",
+    "webdriverio": "8.11.3",
+    "expect-webdriverio": "4.2.6",
+    "typescript": "~5.1.6",
+    "rimraf": "^5.0.1"
   }
 }

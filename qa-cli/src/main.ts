@@ -3,7 +3,7 @@
  */
 import { Command } from 'commander';
 
-import { run } from './runner.js';
+import { run } from './run.js';
 
 // const pac = await import('../package.json');
 
@@ -20,7 +20,7 @@ program
   .version('1.0.0');
 
 program
-  .option('-c, --config <path>', 'config file path', 'qarify.json')
+  .option('-c, --config <path>', 'config file path', '.qarifyrc')
   .option('-p, --project <name>', 'project name, "*" for all projects', '*');
 
 program.parse();

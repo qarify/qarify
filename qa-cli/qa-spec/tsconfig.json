@@ -5,7 +5,10 @@
     /* Modules */
     "module": "ESNext",
     "skipLibCheck": true,
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "NodeNext",
+    "types": [
+      "mocha", "../types.d.ts"
+    ]
   },
   "include": [
     "./specs",

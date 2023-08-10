@@ -1,0 +1,19 @@
+{
+  "tsconfig": "./qa-spec/tsconfig.json",
+  "framework": "Mocha QUnit",
+  "projects": [
+    {
+      "id": 1,
+      "name": "hello qarify",
+      "testSuites": [
+        {
+          "name": "my test suite",
+          "specs": [
+            "./qa-spec/specs/greeting.ts",
+            "./qa-spec/specs/greeting-failure.ts"
+          ]
+        }
+      ]
+    }
+  ]
+}
