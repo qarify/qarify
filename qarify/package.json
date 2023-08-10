@@ -1,5 +1,5 @@
 {
-  "name": "@qarify/cli",
+  "name": "qarify",
   "version": "1.0.0",
   "private": "false",
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
@@ -34,12 +34,11 @@
   "devDependencies": {
     "@types/node": "^20.4.8",
     "@types/mocha": "^10.0.0",
-    "node-run": "^1.0.6",
     "mocha": "^10.2.0",
-    "@wdio/mocha-framework": "8.11.0",
     "webdriverio": "8.11.3",
     "expect-webdriverio": "4.2.6",
     "typescript": "~5.1.6",
+    "node-run": "^1.0.6",
     "rimraf": "^5.0.1"
   }
 }
