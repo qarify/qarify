@@ -1,7 +1,6 @@
 import { remote, multiremote, attach } from "webdriverio";
 import { expect as _expect, setOptions } from "expect-webdriverio";
 
-// import type { QAConnectionInfo, QAConfig, QAProject } from "../../types";
 import { _setGlobal } from "../global/index.js";
 import { executeTestSuite } from "./execute-test-suite.js";
 
@@ -56,7 +55,10 @@ async function initialiseConnection(
   // return browser;
 }
 
-export async function runProject(project: Required<QAProject>, config: QAConfig) {
+export async function runProject(
+  project: Required<QAProject>,
+  config: QAConfig
+) {
   const { connection, options } = project;
   const _isMultiremote = false;
   let _browser;
@@ -65,7 +67,7 @@ export async function runProject(project: Required<QAProject>, config: QAConfig)
     _setGlobal("browser", _browser);
     _setGlobal("driver", _browser);
     if (_isMultiremote) {
-      _setGlobal('multiremotebrowser', _browser);
+      _setGlobal("multiremotebrowser", _browser);
     }
   }
   // expect

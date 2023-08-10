@@ -1,3 +1,20 @@
+// import Mocha from 'mocha'
+
+// const {
+//  EVENT_RUN_BEGIN,
+//  EVENT_RUN_END,
+// 	EVENT_HOOK_BEGIN,
+// 	EVENT_HOOK_END,
+//  EVENT_SUITE_BEGIN,
+// 	EVENT_SUITE_END,
+//  EVENT_TEST_BEGIN,
+// 	EVENT_TEST_FAIL,
+//  EVENT_TEST_PASS,
+// 	EVENT_TEST_PENDING,
+//  EVENT_TEST_RETRY,
+// 	EVENT_TEST_END,
+// } = Mocha.Runner.constants;
+
 export const enum SpecRunnerFramework {
   mocha_bdd = 'Mocha BDD',
   mocha_tdd = 'Mocha TDD',
@@ -7,14 +24,34 @@ export const enum SpecRunnerFramework {
 }
 
 export const enum SpecRunnerEvent {
+  run_start = 'run:start',
+  run_end = 'run:end',
+
   suite_start = 'suite:start',
   suite_end = 'suite:end',
-  test_start = 'test:start',
-  test_end = 'test:end',
+
   hook_start = 'hook:start',
   hook_end = 'hook:end',
+
+  test_start = 'test:start',
   test_pass = 'test:pass',
   test_fail = 'test:fail',
   test_retry = 'test:retry',
   test_pending = 'test:pending',
+  test_end = 'test:end',
 };
+
+export const MochaRunnerEvent = {
+  'start': SpecRunnerEvent.run_start,
+  'end': SpecRunnerEvent.run_end,
+  'suite': SpecRunnerEvent.suite_start,
+  'suite end': SpecRunnerEvent.suite_end,
+  'test': SpecRunnerEvent.test_start,
+  'test end': SpecRunnerEvent.test_end,
+  'hook': SpecRunnerEvent.hook_start,
+  'hook end': SpecRunnerEvent.hook_end,
+  'pass': SpecRunnerEvent.test_pass,
+  'fail': SpecRunnerEvent.test_fail,
+  'retry': SpecRunnerEvent.test_retry,
+  'pending': SpecRunnerEvent.test_pending,
+} as const;
