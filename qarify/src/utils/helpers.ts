@@ -31,7 +31,7 @@ export function mapFilesInConfig(projects: QAProject[], outFiles: string[]) {
       for (const spec of suite.specs) {
         const file = mapFilePath(spec, outFiles);
         if (!file) {
-          throw new Error("Not found file: " + suite);
+          throw new Error("Not found file: " + spec);
         }
         files.push(file);
       }
