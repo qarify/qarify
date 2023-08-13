@@ -12,7 +12,7 @@ const defaultProject: QAProject = {
 const defaultConfig: QAConfig = {
   rootDir: './qy',
   cacheDir: '.qycache',
-  tsconfig: 'tsconfig.json',
+  tsconfig: './qy/tsconfig.json',
   projects: [ defaultProject ],
   framework: SpecRunnerFramework.mocha_qunit,
   options: {
