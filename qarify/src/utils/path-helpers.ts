@@ -3,39 +3,94 @@ import path from "node:path";
 
 import type { QAConfig, QAProject } from '../types.js';
 
+/**
+ * load user config
+ * 
+ * ## config lookup order
+ * 1. config file if specified
+ * 2. package.json#qarify if exists
+ * 3. minimal config
+ * 
+ * ## root directory
+ * 1. user defined absolute directory
+ * 2. config's basedir if config file is specified
+ * 3. package.json's basedir if package.json#qarify exists
+ * 4. specified baseDir
+ * 
+ * @param baseDir absolute base directory
+ * @param configFile absolute config file path
+ * @returns loaded user config object
+ */
 export async function loadUserConfig(
   baseDir: string,
   configFile?: string
-): Promise<QAConfig | undefined> {
+): Promise<Partial<QAConfig>> {
+  let userConfig = {} as Partial<QAConfig>; 
+
   if (configFile) {
+    if (!path.isAbsolute(configFile)) {
+      configFile = path.join(baseDir, configFile);
+    }
     if (!fs.existsSync(configFile)) {
       throw new Error("Not found: " + configFile);
     }
     if (configFile.endsWith(".qarifyrc") || configFile.endsWith(".json")) {
-      return JSON.parse(fs.readFileSync(configFile, "utf-8")) as QAConfig;
+      userConfig = JSON.parse(fs.readFileSync(configFile, "utf-8"));
     }
-    return (await import(path.resolve(configFile))).default as QAConfig;
+    else {
+      userConfig = (await import(path.resolve(configFile))).default;
+    }
+    baseDir = path.dirname(configFile);
   }
-  const packageJSON = findPackageJSON(baseDir);
-  if (packageJSON) {
-    const pack = JSON.parse(fs.readFileSync(packageJSON, "utf-8"));
-    return pack["qarify"] as QAConfig;
+  else {
+    if (fs.existsSync(path.join(baseDir, '.qarifyrc'))) {
+      userConfig = JSON.parse(fs.readFileSync(path.join(baseDir, '.qarifyrc'), "utf-8"));
+    }
+    else {
+      //
+      // try to load config from package.json
+      const packageJSON = findPackageJSON(baseDir);
+      if (packageJSON) {
+        const pack = JSON.parse(fs.readFileSync(packageJSON, "utf-8"));
+        if (pack["qarify"]) {
+          userConfig = pack["qarify"];
+          baseDir = path.dirname(packageJSON);
+        }
+      }
+    }
   }
-  return undefined;
+
+  if (!userConfig.rootDir) {
+    userConfig.rootDir = baseDir;
+  } else {
+    if (!path.isAbsolute(userConfig.rootDir)) {
+      userConfig.rootDir = path.join(baseDir, userConfig.rootDir);
+    }
+  }
+
+  return userConfig;
 }
 
 export function mapFilesInConfig(projects: QAProject[], outFiles: string[]) {
   for (const project of projects) {
-    for (const suite of project.testSuites) {
-      const files = [];
-      for (const spec of suite.specs) {
-        const file = mapFilePath(spec, outFiles);
-        if (!file) {
-          throw new Error("Not found file: " + spec);
+    if (project.testSuites) {
+      for (const suite of project.testSuites) {
+        const files = [];
+        for (const spec of suite.specs) {
+          const file = mapFilePath(spec, outFiles);
+          if (!file) {
+            throw new Error("Not found file: " + spec);
+          }
+          files.push(file);
         }
-        files.push(file);
+        suite.specs = files;
       }
-      suite.specs = files;
+    } else {
+      // set specs to all files
+      project.testSuites = [{
+        name: '',
+        specs: outFiles,
+      }];
     }
   }
 }

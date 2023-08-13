@@ -200,4 +200,4 @@ dist
 
 # Misc.
 /cache
-/.qacache
+/.qycache

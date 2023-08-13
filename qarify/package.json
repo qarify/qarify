@@ -36,8 +36,8 @@
     "commander": "^11.0.0",
     "execa": "^7.2.0",
     "mocha": "^10.2.0",
-    "webdriverio": "8.11.3",
-    "expect-webdriverio": "4.2.6"
+    "webdriverio": "../ti-wdio/packages/webdriverio",
+    "expect-webdriverio": "../expect-webdriverio"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",

@@ -3,7 +3,7 @@ import { execa } from "execa";
 
 import type { QAConfig } from '../types.js';
 import { setupProjects } from "./setup-config.js";
-import { findAllFiles, mapFilesInConfig } from './helpers.js';
+import { findAllFiles, mapFilesInConfig } from './path-helpers.js';
 
 export async function buildSpecs(config: QAConfig) {
   const outDir = path.join(config.cacheDir, "out");

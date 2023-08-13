@@ -1,23 +1,19 @@
-import path from "node:path";
-
 import {
-  loadUserConfig, setupConfig, buildProjects,
+  loadUserConfig,
+} from "./utils/path-helpers.js";
+import {
+  setupConfig, buildProjects,
 } from "./utils/index.js";
 import { runProject } from "./runner/index.js";
 
 export type CLIOptions = {
-  config: string;
+  config?: string;
   project: string;
 };
 
 export async function run(options: CLIOptions, baseDir: string) {
-  const configFile = path.isAbsolute(options.config)
-    ? options.config
-    : path.join(baseDir, options.config);
-
-  const userConfig = await loadUserConfig(baseDir, configFile);
-  const configDir = path.dirname(configFile);
-  const config = setupConfig(userConfig, configDir);
+  const userConfig = await loadUserConfig(baseDir, options.config);
+  const config = setupConfig(userConfig, userConfig.rootDir!);
 
   try {
     // build

@@ -15,7 +15,7 @@ program
   .version('1.0.0');
 
 program
-  .option('-c, --config <path>', 'config file path', '.qarifyrc')
+  .option('-c, --config <path>', 'config file path')
   .option('-p, --project <name>', 'project name, "*" for all projects', '*');
 
 program.parse();

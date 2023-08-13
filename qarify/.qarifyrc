@@ -1,5 +1,5 @@
 {
-  "tsconfig": "./qa-spec/tsconfig.json",
+  "tsconfig": "./qy/tsconfig.json",
   "framework": "Mocha QUnit",
   "projects": [
     {
@@ -9,8 +9,8 @@
         {
           "name": "my test suite",
           "specs": [
-            "./qa-spec/specs/greeting.ts",
-            "./qa-spec/specs/greeting-failure.ts"
+            "./qy/specs/greeting.ts",
+            "./qy/specs/greeting-failure.ts"
           ]
         }
       ]

@@ -44,14 +44,14 @@ export type QAProject = {
   id: string;
   name: string;
 
-  testSuites: QATestSuite[];
+  testSuites?: QATestSuite[];
   options?: QATestOptions;
 };
 
 export type QAConfig = {
-  rootDir?: string;
+  rootDir: string;
   cacheDir: string;
-  tsconfig?: string;
+  tsconfig: string;
   projects: Array<QAProject>;
   framework: SpecRunnerFramework;
   options: QATestOptions;
