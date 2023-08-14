@@ -1,19 +1,18 @@
 import path from "path";
 
-import type { QAConfig, QAProject } from '../types.js';
+import type { QAConfig, QAProject } from "../types.js";
 import { SpecRunnerFramework } from "../constants.js";
 
-
 const defaultProject: QAProject = {
-  id: 'default',
-  name: 'default',
+  id: "default",
+  name: "default",
 };
 
 const defaultConfig: QAConfig = {
-  rootDir: './qy',
-  cacheDir: '.qycache',
-  tsconfig: './qy/tsconfig.json',
-  projects: [ defaultProject ],
+  rootDir: "./qy",
+  cacheDir: ".qycache",
+  tsconfig: "./qy/tsconfig.json",
+  projects: [defaultProject],
   framework: SpecRunnerFramework.mocha_qunit,
   options: {
     waitforTimeout: 5000,
@@ -21,7 +20,10 @@ const defaultConfig: QAConfig = {
   },
 };
 
-export function setupConfig(userConfig: Partial<QAConfig> | undefined, baseDir: string) {
+export function setupConfig(
+  userConfig: Partial<QAConfig> | undefined,
+  baseDir: string
+) {
   const config = Object.assign({}, defaultConfig, userConfig) as QAConfig;
 
   if (!config.rootDir) {
@@ -42,5 +44,11 @@ export function setupConfig(userConfig: Partial<QAConfig> | undefined, baseDir: 
 export function setupProjects(config: QAConfig, filter: string) {
   return config.projects
     .filter((e) => filter === "*" || e.name === filter)
-    .map((e) => Object.assign({}, { options: config.options, ...e }) as Required<QAProject>);
+    .map(
+      (e) =>
+        Object.assign(
+          {},
+          { options: config.options, ...e }
+        ) as Required<QAProject>
+    );
 }

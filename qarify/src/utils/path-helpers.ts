@@ -1,22 +1,22 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import type { QAConfig, QAProject } from '../types.js';
+import type { QAConfig, QAProject } from "../types.js";
 
 /**
  * load user config
- * 
+ *
  * ## config lookup order
  * 1. config file if specified
  * 2. package.json#qarify if exists
  * 3. minimal config
- * 
+ *
  * ## root directory
  * 1. user defined absolute directory
  * 2. config's basedir if config file is specified
  * 3. package.json's basedir if package.json#qarify exists
  * 4. specified baseDir
- * 
+ *
  * @param baseDir absolute base directory
  * @param configFile absolute config file path
  * @returns loaded user config object
@@ -25,7 +25,7 @@ export async function loadUserConfig(
   baseDir: string,
   configFile?: string
 ): Promise<Partial<QAConfig>> {
-  let userConfig = {} as Partial<QAConfig>; 
+  let userConfig = {} as Partial<QAConfig>;
 
   if (configFile) {
     if (!path.isAbsolute(configFile)) {
@@ -36,17 +36,16 @@ export async function loadUserConfig(
     }
     if (configFile.endsWith(".qarifyrc") || configFile.endsWith(".json")) {
       userConfig = JSON.parse(fs.readFileSync(configFile, "utf-8"));
-    }
-    else {
+    } else {
       userConfig = (await import(path.resolve(configFile))).default;
     }
     baseDir = path.dirname(configFile);
-  }
-  else {
-    if (fs.existsSync(path.join(baseDir, '.qarifyrc'))) {
-      userConfig = JSON.parse(fs.readFileSync(path.join(baseDir, '.qarifyrc'), "utf-8"));
-    }
-    else {
+  } else {
+    if (fs.existsSync(path.join(baseDir, ".qarifyrc"))) {
+      userConfig = JSON.parse(
+        fs.readFileSync(path.join(baseDir, ".qarifyrc"), "utf-8")
+      );
+    } else {
       //
       // try to load config from package.json
       const packageJSON = findPackageJSON(baseDir);
@@ -87,10 +86,12 @@ export function mapFilesInConfig(projects: QAProject[], outFiles: string[]) {
       }
     } else {
       // set specs to all files
-      project.testSuites = [{
-        name: '',
-        specs: outFiles,
-      }];
+      project.testSuites = [
+        {
+          name: "",
+          specs: outFiles,
+        },
+      ];
     }
   }
 }

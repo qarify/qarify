@@ -13,7 +13,7 @@
     "qarify": "./bin/qarify.js"
   },
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/__cjs/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",

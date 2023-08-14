@@ -1,8 +1,8 @@
 import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
 
-import type { QAConfig, QAProject, QATestSuite } from '../types.js';
-import { TestReporter } from './test-reporter.js';
+import type { QAConfig, QAProject, QATestSuite } from "../types.js";
+import { TestReporter } from "./test-reporter.js";
 
 const FILE_PROTOCOL = "file://";
 

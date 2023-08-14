@@ -17,7 +17,7 @@ export type ReportMessage = {
 export type QAConnectionInfo = {
   id: string;
   name: string;
-  protocol: 'http' | 'https';
+  protocol: "http" | "https";
   hostname: string;
   port: number;
   path: string;

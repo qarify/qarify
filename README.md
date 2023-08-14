@@ -1,1 +1,1 @@
-# QArify Examples
+# QArify

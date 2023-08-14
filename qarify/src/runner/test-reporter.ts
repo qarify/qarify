@@ -1,13 +1,13 @@
 import { MochaOptions, Runner, Stats, reporters } from "mocha";
 import { SpecRunnerEvent, MochaRunnerEvent } from "../constants.js";
-import type { ReportMessage } from '../types.js';
+import type { ReportMessage } from "../types.js";
 
 export class TestReporter extends reporters.Base {
   private runnerId: string;
 
   constructor(runner: Runner, options?: MochaOptions) {
     super(runner, options);
-    const reporterOptions = options && options.reporterOptions || {};
+    const reporterOptions = (options && options.reporterOptions) || {};
     this.runnerId = reporterOptions.runnerId || `${Date.now}`;
 
     this.report = this.report.bind(this);

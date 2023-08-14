@@ -1,7 +1,7 @@
 import { remote, multiremote, attach } from "webdriverio";
 import { expect as _expect, setOptions } from "expect-webdriverio";
 
-import type { QAConfig, QAProject, QAConnectionInfo } from '../types.js';
+import type { QAConfig, QAProject, QAConnectionInfo } from "../types.js";
 import { _setGlobal } from "../global/index.js";
 import { executeTestSuite } from "./execute-test-suite.js";
 

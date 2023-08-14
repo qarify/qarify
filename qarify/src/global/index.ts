@@ -77,5 +77,5 @@ expect.extend = (...args: unknown[]) => {
 export function _setGlobal(key: SupportedGlobals, value: any) {
   globals.set(key, value);
   // @ts-expect-error
-  globalThis[key] = value
+  globalThis[key] = value;
 }
