@@ -12,18 +12,26 @@ export async function executeTestSuite(
   config: QAConfig,
   runnerId: string
 ) {
+  const mocha = await initRunner(testSuite, project, config);
+  return run(mocha, runnerId);
+}
+
+export async function initRunner(
+  testSuite: QATestSuite,
+  project: Required<QAProject>,
+  config: QAConfig,
+) {
   const { framework } = config;
   const { mochaOptions = {} } = project.options;
-  const { specs } = testSuite;
+  const { specFiles } = testSuite;
   const _mochaOpt = {
     ...mochaOptions,
     ui: framework.split(" ")[1].toLowerCase() as keyof InterfaceContributions,
   };
   const mocha = new Mocha(_mochaOpt);
-  mocha.reporter(TestReporter, { runnerId });
   mocha.fullTrace();
 
-  specs.forEach((spec) =>
+  specFiles.forEach((spec) =>
     mocha.addFile(
       spec.startsWith(FILE_PROTOCOL) ? url.fileURLToPath(spec) : spec
     )
@@ -35,6 +43,16 @@ export async function executeTestSuite(
     console.error(err);
     throw err;
   }
+
+  return mocha;
+}
+
+export async function run(
+  mocha: Mocha,
+  runnerId: string
+) {
+
+  mocha.reporter(TestReporter, { runnerId });
 
   let runtimeError;
   const result = await new Promise((resolve) => {

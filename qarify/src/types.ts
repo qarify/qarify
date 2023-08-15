@@ -14,6 +14,14 @@ export type ReportMessage = {
   };
 };
 
+export type TestSuiteNode = {
+  type: 'test' | 'suite';
+  title: string;
+  path: string[];
+  file?: string;
+  children?: TestSuiteNode[];
+};
+
 export type QAConnectionInfo = {
   id: string;
   name: string;
@@ -27,7 +35,7 @@ export type QAConnectionInfo = {
 
 export type QATestSuite = {
   name: string;
-  specs: string[];
+  specFiles: string[];
 };
 
 export type QATestOptions = {

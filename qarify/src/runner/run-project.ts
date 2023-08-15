@@ -3,7 +3,7 @@ import { expect as _expect, setOptions } from "expect-webdriverio";
 
 import type { QAConfig, QAProject, QAConnectionInfo } from "../types.js";
 import { _setGlobal } from "../global/index.js";
-import { executeTestSuite } from "./execute-test-suite.js";
+import { executeTestSuite } from "./test-runner.js";
 
 /**
  * initialise connection depending whether remote or multiremote is requested
