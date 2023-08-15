@@ -1,5 +1,5 @@
 {
-  "tsconfig": "./qy/tsconfig.json",
+  "tsconfig": "./qa/tsconfig.json",
   "framework": "Mocha QUnit",
   "options": {
     "connection": {
@@ -26,7 +26,7 @@
         {
           "name": "mobile test suite",
           "specs": [
-            "./qy/specs/mobile.ts"
+            "./qa/specs/mobile.ts"
           ]
         }
       ]

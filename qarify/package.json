@@ -37,7 +37,7 @@
     "execa": "^7.2.0",
     "mocha": "^10.2.0",
     "webdriverio": "../ti-wdio/packages/webdriverio",
-    "expect-webdriverio": "../expect-webdriverio"
+    "expect-webdriverio": "../ti-expect"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",
