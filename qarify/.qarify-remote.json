@@ -1,9 +1,14 @@
 {
+  "framework": "mocha-qunit",
+  "specs": [
+    "./qa/specs/mobile.ts"
+  ],
   "tsconfig": "./qa/tsconfig.json",
-  "framework": "Mocha QUnit",
-  "options": {
-    "connection": {
-      "id": "35e93580-24e9-11ee-8fe1-b7fcdb2ba981",
+  "nodeOptions": ["--loader=ts-node/esm"],
+  "forceBuild": false,
+
+  "drivers": [
+    {
       "name": "Local Server 3",
       "protocol": "http",
       "hostname": "127.0.0.1",
@@ -16,20 +21,6 @@
         "appium:platformVersion": "16.4",
         "appium:orientation": "PORTRAIT"
       }
-    }
-  },
-  "projects": [
-    {
-      "id": 1,
-      "name": "hello mobile",
-      "testSuites": [
-        {
-          "name": "mobile test suite",
-          "specs": [
-            "./qa/specs/mobile.ts"
-          ]
-        }
-      ]
     }
   ]
 }

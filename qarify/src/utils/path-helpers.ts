@@ -1,99 +1,20 @@
 import fs from "node:fs";
 import path from "node:path";
+import { glob } from 'glob';
+import debug from 'debug';
 
-import type { QAConfig, QAProject } from "../types.js";
+const log = debug('qarify:utils:path-helpers');
 
-/**
- * load user config
- *
- * ## config lookup order
- * 1. config file if specified
- * 2. package.json#qarify if exists
- * 3. minimal config
- *
- * ## root directory
- * 1. user defined absolute directory
- * 2. config's basedir if config file is specified
- * 3. package.json's basedir if package.json#qarify exists
- * 4. specified baseDir
- *
- * @param baseDir absolute base directory
- * @param configFile absolute config file path
- * @returns loaded user config object
- */
-export async function loadUserConfig(
-  baseDir: string,
-  configFile?: string
-): Promise<Partial<QAConfig>> {
-  let userConfig = {} as Partial<QAConfig>;
-
-  if (configFile) {
-    if (!path.isAbsolute(configFile)) {
-      configFile = path.join(baseDir, configFile);
+export function mapFilesInConfig(specFiles: string[], outFiles: string[]) {
+  const files = [];
+  for (const spec of specFiles) {
+    const file = mapFilePath(spec, outFiles);
+    if (!file) {
+      throw new Error("Not found file: " + spec);
     }
-    if (!fs.existsSync(configFile)) {
-      throw new Error("Not found: " + configFile);
-    }
-    if (configFile.endsWith(".qarifyrc") || configFile.endsWith(".json")) {
-      userConfig = JSON.parse(fs.readFileSync(configFile, "utf-8"));
-    } else {
-      userConfig = (await import(path.resolve(configFile))).default;
-    }
-    baseDir = path.dirname(configFile);
-  } else {
-    if (fs.existsSync(path.join(baseDir, ".qarifyrc"))) {
-      userConfig = JSON.parse(
-        fs.readFileSync(path.join(baseDir, ".qarifyrc"), "utf-8")
-      );
-    } else {
-      //
-      // try to load config from package.json
-      const packageJSON = findPackageJSON(baseDir);
-      if (packageJSON) {
-        const pack = JSON.parse(fs.readFileSync(packageJSON, "utf-8"));
-        if (pack["qarify"]) {
-          userConfig = pack["qarify"];
-          baseDir = path.dirname(packageJSON);
-        }
-      }
-    }
+    files.push(file);
   }
-
-  if (!userConfig.rootDir) {
-    userConfig.rootDir = baseDir;
-  } else {
-    if (!path.isAbsolute(userConfig.rootDir)) {
-      userConfig.rootDir = path.join(baseDir, userConfig.rootDir);
-    }
-  }
-
-  return userConfig;
-}
-
-export function mapFilesInConfig(projects: QAProject[], outFiles: string[]) {
-  for (const project of projects) {
-    if (project.testSuites) {
-      for (const suite of project.testSuites) {
-        const files = [];
-        for (const spec of suite.specFiles) {
-          const file = mapFilePath(spec, outFiles);
-          if (!file) {
-            throw new Error("Not found file: " + spec);
-          }
-          files.push(file);
-        }
-        suite.specFiles = files;
-      }
-    } else {
-      // set specs to all files
-      project.testSuites = [
-        {
-          name: "",
-          specFiles: outFiles,
-        },
-      ];
-    }
-  }
+  return files;
 }
 
 function mapFilePath(file: string, files: string[]) {
@@ -143,19 +64,37 @@ export function findAllFiles(dir: string, files?: string[]) {
   return files;
 }
 
-function findPackageJSON(dir: string) {
-  do {
-    const pack = path.join(dir, "package.json");
-    if (fs.existsSync(pack)) {
-      return pack;
+export function findSpecFiles(files: string[], extensions: string[] = []) {
+  const found: string[] = [];
+  files.forEach((filepath) => {
+    if (!fs.existsSync(filepath)) {
+      let pattern;
+      if (glob.hasMagic(filepath, {windowsPathsNoEscape: true})) {
+        // Handle glob as is without extensions
+        pattern = filepath;
+      } else {
+        // glob pattern e.g. 'filepath+(.js|.ts)'
+        const strExtensions = extensions
+          .map(ext => (ext.startsWith('.') ? ext : `.${ext}`))
+          .join('|');
+        pattern = `${filepath}+(${strExtensions})`;
+        log('looking for files using glob pattern: %s', pattern);
+      }
+      found.push(
+        ...glob.sync(pattern, {
+          nodir: true,
+          windowsPathsNoEscape: true
+        }));
+    } else {
+      if (fs.statSync(filepath).isFile()) {
+        found.push(filepath);
+      } else {
+        throw new Error('not a file' + filepath);
+      }
     }
-    dir = path.dirname(dir);
+  });
 
-    // / => ['', '']
-    // C:\\ => ['C:', '']
-  } while (dir.split(path.sep)[1]);
-
-  return null;
+  return found;
 }
 
 export function isTS(fileName: string) {

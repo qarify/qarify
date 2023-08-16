@@ -13,5 +13,10 @@
   "include": [
     "./specs",
     "./tasks",
-  ]
+  ],
+  "ts-node": {
+    // It is faster to skip typechecking.
+    "transpileOnly": true,
+    "files": true,
+  },
 }

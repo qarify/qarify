@@ -1,26 +1,37 @@
 import {
-  loadUserConfig,
-} from "./utils/path-helpers.js";
-import {
-  setupConfig, buildProjects,
+  loadConfig, buildSpecs,
 } from "./utils/index.js";
-import { runProject } from "./runner/index.js";
-
-export type CLIOptions = {
-  config?: string;
-  project: string;
-};
+import { runQA } from "./runner/index.js";
+import type { CLIOptions } from "./types.js";
 
 export async function run(options: CLIOptions, baseDir: string) {
-  const userConfig = await loadUserConfig(baseDir, options.config);
-  const config = setupConfig(userConfig, userConfig.rootDir!);
+  const config = await loadConfig(baseDir, options);
 
   try {
+    let files = config.specs;
     // build
-    const projects = await buildProjects(config, options.project);
+    if (config.forceBuild) {
+      files = await buildSpecs(config);
+    }
+    // const projects = await buildProjects(config, options.project);
+
     // run
-    const promises = projects.map((e) => runProject(e, config));
-    await Promise.all(promises);
+    if (config.tsconfig) {
+      process.env.TS_NODE_PROJECT = config.tsconfig;
+    }
+    const res = await runQA(files, config);
+
+    // print result
+    if (res.find((e) => e.failed !== 0)) {
+      console.error('QArify Failed:', `${config.name} config`);
+      console.error(res);
+    } else {
+      console.log('QArify Done:', `${config.name} config`);
+      const drivers = res.map((e) => e.driver).filter(Boolean);
+      if (drivers.length) {
+        console.log('  Drivers:', drivers);
+      }
+    }
   } catch (e) {
     console.error(e);
     process.exit(1);

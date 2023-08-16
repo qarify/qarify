@@ -2,10 +2,9 @@ import path from "path";
 import { execa } from "execa";
 
 import type { QAConfig } from "../types.js";
-import { setupProjects } from "./setup-config.js";
-import { findAllFiles, mapFilesInConfig } from "./path-helpers.js";
+import { findAllFiles, findSpecFiles, mapFilesInConfig } from "./path-helpers.js";
 
-export async function buildSpecs(config: QAConfig) {
+async function _buildSpecs(config: QAConfig) {
   const outDir = path.join(config.cacheDir, "out");
   const buildRes = await execa(
     "npx",
@@ -20,18 +19,18 @@ export async function buildSpecs(config: QAConfig) {
   return outDir;
 }
 
-export async function buildProjects(config: QAConfig, filter: string) {
-  const projects = setupProjects(config, filter);
-  if (projects.length <= 0) {
-    throw new Error("No projects");
+export async function buildSpecs(config: QAConfig) {
+  const files = findSpecFiles(config.specs);
+  if (files.length <= 0) {
+    throw new Error("No spec files");
   }
-  const outDir = await buildSpecs(config);
+  const outDir = await _buildSpecs(config);
   if (!outDir) {
     throw new Error("Build failed");
   }
   // map spec files in config to build output
   const outFiles = findAllFiles(outDir);
-  mapFilesInConfig(projects, outFiles);
+  const mappedFiles = mapFilesInConfig(files, outFiles);
 
-  return projects;
+  return mappedFiles;
 }

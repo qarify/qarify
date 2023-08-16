@@ -1,0 +1,17 @@
+{
+  "rootDir": ".",
+  "cacheDir": "./.qycache",
+
+  "framework": "mocha-qunit",
+  "mochaOptions": {},
+  "specs": [
+    "./qa/specs/greeting.ts",
+    "./qa/specs/greeting-failure.ts"
+  ],
+
+  "tsconfig": "./qa/tsconfig.json",
+  "nodeOptions": ["--loader=ts-node/esm"],
+  "forceBuild": false,
+
+  "drivers": []
+}

@@ -56,11 +56,66 @@ export type QAProject = {
   options?: QATestOptions;
 };
 
+export type QAResult = {
+  name: string;
+  driver?: string;
+  failed: number;
+};
+
+// export type QAConfig = {
+//   rootDir: string;
+//   cacheDir: string;
+//   tsconfig: string;
+//   project: QAProject | Array<QAProject>;
+//   framework: SpecRunnerFramework;
+//   options: QATestOptions;
+// };
+
 export type QAConfig = {
+  // display name
+  name: string;
+
+  // base directory.
+  // default는 config file directory or working directory
   rootDir: string;
+
+  // cache directory for build output
+  // default는 '.qycache'
   cacheDir: string;
-  tsconfig: string;
-  projects: Array<QAProject>;
+
+  // test framework.
+  // available value는 'mocha-bdd', 'mocha-tdd', 'mocha-qunit'.
+  // default는 'mocha-qunit'
   framework: SpecRunnerFramework;
-  options: QATestOptions;
+
+  // path of spec files
+  specs: string[];
+
+  // test options
+  testOptions: {
+    waitforTimeout: number;
+    waitforInterval: number,
+  };
+  // mocha options
+  mochaOptions?: Mocha.MochaOptions;
+
+  // tsconfig path for compile typescript
+  tsconfig?: string;
+
+  // node options
+  // e.g. ts-node esm loader
+  // ['--loader=ts-node/esm']
+  // e.g. ts-node register
+  // ['--require=ts-node/register']
+  nodeOptions?: string[];
+
+  // whether to force build spec files
+  forceBuild?: boolean;
+
+  // drivers to use while testing
+  drivers: QAConnectionInfo[];
+};
+
+export type CLIOptions = Partial<QAConfig> & {
+  config?: string;
 };

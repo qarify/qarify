@@ -6,32 +6,28 @@ import { TestReporter } from "./test-reporter.js";
 
 const FILE_PROTOCOL = "file://";
 
-export async function executeTestSuite(
-  testSuite: QATestSuite,
-  project: Required<QAProject>,
+export async function runSpecFiles(
+  files: string[],
   config: QAConfig,
   runnerId: string
 ) {
-  const mocha = await initRunner(testSuite, project, config);
-  return run(mocha, runnerId);
+  const mocha = await initRunner(files, config);
+  return runMocha(mocha, runnerId);
 }
 
 export async function initRunner(
-  testSuite: QATestSuite,
-  project: Required<QAProject>,
+  files: string[],
   config: QAConfig,
 ) {
-  const { framework } = config;
-  const { mochaOptions = {} } = project.options;
-  const { specFiles } = testSuite;
+  const { framework, mochaOptions = {} } = config;
   const _mochaOpt = {
     ...mochaOptions,
-    ui: framework.split(" ")[1].toLowerCase() as keyof InterfaceContributions,
+    ui: framework.split('-')[1].toLowerCase() as keyof InterfaceContributions,
   };
   const mocha = new Mocha(_mochaOpt);
   mocha.fullTrace();
 
-  specFiles.forEach((spec) =>
+  files.forEach((spec) =>
     mocha.addFile(
       spec.startsWith(FILE_PROTOCOL) ? url.fileURLToPath(spec) : spec
     )
@@ -47,7 +43,7 @@ export async function initRunner(
   return mocha;
 }
 
-export async function run(
+export async function runMocha(
   mocha: Mocha,
   runnerId: string
 ) {
@@ -55,7 +51,7 @@ export async function run(
   mocha.reporter(TestReporter, { runnerId });
 
   let runtimeError;
-  const result = await new Promise((resolve) => {
+  const result = await new Promise<number>((resolve) => {
     let _runner;
     try {
       _runner = mocha.run(resolve);

@@ -2,7 +2,7 @@ import path from 'path';
 import url from 'url';
 import Mocha from 'mocha';
 import { expect } from 'expect-webdriverio';
-import { getTestSuiteNode } from "./mocha-helper";
+import { getTestSuiteNode } from "./mocha-helper.js";
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 

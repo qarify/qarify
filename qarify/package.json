@@ -21,8 +21,9 @@
     "require": "./dist/__cjs/index.js"
   },
   "scripts": {
-    "dev": "./bin/qarify.js",
-    "dev2": "./bin/qarify.js -c ./.qarify-remote.json",
+    "dev": "node --loader=ts-node/esm ./bin/qarify.js",
+    "dev2": "node ./bin/qarify.js --forceBuild",
+    "dev:remote": "node --loader=ts-node/esm ./bin/qarify.js -c ./.qarify-remote.json",
     "test": "mocha",
     "build": "run-s clean:compile compile",
     "compile": "run-p compile:*",
@@ -37,12 +38,14 @@
     "commander": "^11.0.0",
     "execa": "^7.2.0",
     "mocha": "^10.2.0",
+    "glob": "^10.3.3",
     "webdriverio": "../ti-wdio/packages/webdriverio",
     "expect-webdriverio": "../ti-expect"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",
     "@types/mocha": "^10.0.0",
+    "debug": "^4.3.4",
     "ts-node": "^10.9.1",
     "typescript": "~5.1.6",
     "patch-package": "^8.0.0",

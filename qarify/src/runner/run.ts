@@ -1,9 +1,9 @@
 import { remote, multiremote, attach } from "webdriverio";
 import { expect as _expect, setOptions } from "expect-webdriverio";
 
-import type { QAConfig, QAProject, QAConnectionInfo } from "../types.js";
+import type { QAConfig, QAResult, QAConnectionInfo } from "../types.js";
 import { _setGlobal } from "../global/index.js";
-import { executeTestSuite } from "./test-runner.js";
+import { runSpecFiles } from "./test-runner.js";
 
 /**
  * initialise connection depending whether remote or multiremote is requested
@@ -56,36 +56,48 @@ async function initialiseConnection(
   // return browser;
 }
 
-export async function runProject(
-  project: Required<QAProject>,
+export async function runQA(
+  files: string[],
   config: QAConfig
-) {
-  const { options } = project;
-  const { connection } = options;
-  const _isMultiremote = false;
-  let _browser;
-  if (connection) {
-    _browser = await initialiseConnection(connection, _isMultiremote);
-    _setGlobal("browser", _browser);
-    _setGlobal("driver", _browser);
-    if (_isMultiremote) {
-      _setGlobal("multiremotebrowser", _browser);
-    }
-  }
+): Promise<QAResult[]> {
+  const { testOptions, drivers } = config;
   // expect
   _setGlobal("expect", _expect);
   setOptions({
-    wait: options.waitforTimeout, // ms to wait for expectation to succeed
-    interval: options.waitforInterval, // interval between attempts
+    wait: testOptions.waitforTimeout, // ms to wait for expectation to succeed
+    interval: testOptions.waitforInterval, // interval between attempts
   });
 
-  const promises = project.testSuites.map((e) =>
-    executeTestSuite(e, project, config, `${project.id}:${e.name}`)
-  );
-  const res = await Promise.all(promises);
+  let res: QAResult[] = [];
+  if (drivers && drivers.length) {
+    const _isMultiremote = false;
+    for (const driver of drivers) {
+      let _browser;
+      if (drivers && drivers.length > 0) {
+        _browser = await initialiseConnection(driver, _isMultiremote);
+        _setGlobal("browser", _browser);
+        _setGlobal("driver", _browser);
+        if (_isMultiremote) {
+          _setGlobal("multiremotebrowser", _browser);
+        }
+      }
+      
+      res.push({
+        name: config.name,
+        driver: driver.name,
+        failed: await runSpecFiles(files, config, `${config.name}`)
+      });
 
-  if (_browser) {
-    await _browser.deleteSession();
+      if (_browser) {
+        await _browser.deleteSession();
+      }
+    }
+  } else {
+    res.push({
+      name: config.name,
+      failed: await runSpecFiles(files, config, `${config.name}`)
+    });
   }
+
   return res;
 }

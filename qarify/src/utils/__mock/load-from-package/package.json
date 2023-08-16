@@ -1,0 +1,5 @@
+{
+  "qarify": {
+    "specs": [ "./qa/specs/*.ts" ]
+  }
+}

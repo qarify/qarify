@@ -16,7 +16,10 @@ program
 
 program
   .option('-c, --config <path>', 'config file path')
-  .option('-p, --project <name>', 'project name, "*" for all projects', '*');
+  .option('--cacheDir <path>', 'cache directory')
+  .option('--framework <framework>', 'test framework')
+  .option('--tsconfig <path>', 'tsconfig path')
+  .option('--forceBuild', 'whether to force build spec files');
 
 program.parse();
 

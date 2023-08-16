@@ -9,10 +9,10 @@ const defaultProject: QAProject = {
 };
 
 const defaultConfig: QAConfig = {
-  rootDir: "./qy",
+  rootDir: "./qa",
   cacheDir: ".qycache",
-  tsconfig: "./qy/tsconfig.json",
-  projects: [defaultProject],
+  tsconfig: "./qa/tsconfig.json",
+  project: [defaultProject],
   framework: SpecRunnerFramework.mocha_qunit,
   options: {
     waitforTimeout: 5000,
@@ -42,7 +42,10 @@ export function setupConfig(
 }
 
 export function setupProjects(config: QAConfig, filter: string) {
-  return config.projects
+  if (!Array.isArray(config.project)) {
+    config.project = [config.project];
+  }
+  const project = config.project
     .filter((e) => filter === "*" || e.name === filter)
     .map(
       (e) =>
@@ -51,4 +54,13 @@ export function setupProjects(config: QAConfig, filter: string) {
           { options: config.options, ...e }
         ) as Required<QAProject>
     );
+
+  const baseDir = config.rootDir;
+  project.forEach((p) => {
+    p.testSuites.forEach((t) => {
+      t.specFiles = t.specFiles.map((s) => path.isAbsolute(s) ? s : path.join(baseDir, s));
+    });
+  });
+
+  return project;
 }

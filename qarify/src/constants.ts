@@ -16,11 +16,11 @@
 // } = Mocha.Runner.constants;
 
 export const enum SpecRunnerFramework {
-  mocha_bdd = 'Mocha BDD',
-  mocha_tdd = 'Mocha TDD',
-  mocha_qunit = 'Mocha QUnit',
-  mocha_export = 'Mocha Exports',
-  js_eval = 'Normal Script',
+  mocha_bdd = 'mocha-bdd',
+  mocha_tdd = 'mocha-tdd',
+  mocha_qunit = 'mocha-qunit',
+  mocha_export = 'mocha-exports',
+  js_eval = 'normal-script',
 }
 
 export const enum SpecRunnerEvent {
