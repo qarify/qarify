@@ -4,6 +4,8 @@ import { execa } from "execa";
 import type { QAConfig } from "../types.js";
 import { findAllFiles, findSpecFiles, mapFilesInConfig } from "./path-helpers.js";
 
+const _defaultTsConfig = './qa/tsconfig.json';
+
 async function _buildSpecs(config: QAConfig) {
   const outDir = path.join(config.cacheDir, "out");
   const buildRes = await execa(
@@ -23,6 +25,9 @@ export async function buildSpecs(config: QAConfig) {
   const files = findSpecFiles(config.specs);
   if (files.length <= 0) {
     throw new Error("No spec files");
+  }
+  if (!config.tsconfig) {
+    config.tsconfig = path.join(config.rootDir, _defaultTsConfig);
   }
   const outDir = await _buildSpecs(config);
   if (!outDir) {
