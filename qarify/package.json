@@ -25,6 +25,7 @@
     "dev2": "node ./bin/qarify.js --forceBuild",
     "dev:remote": "node --loader=ts-node/esm ./bin/qarify.js -c ./.qarify-remote.json",
     "test": "mocha",
+    "test:types": "tsc --noEmit",
     "build": "run-s clean:compile compile",
     "compile": "run-p compile:*",
     "compile:esm": "tsc -b tsconfig.build.json",
@@ -43,6 +44,7 @@
     "expect-webdriverio": "../ti-expect"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.8",
     "@types/node": "^20.4.8",
     "@types/mocha": "^10.0.0",
     "debug": "^4.3.4",

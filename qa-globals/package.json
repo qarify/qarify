@@ -14,6 +14,7 @@
   "types": "./types.d.ts",
   "scripts": {
     "build": "run-s clean:build compile",
+    "test:types": "tsc --noEmit",
     "compile": "tsc",
     "clean": "run-p clean:*",
     "clean:build": "rimraf dist"
