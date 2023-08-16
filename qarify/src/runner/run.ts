@@ -1,4 +1,4 @@
-import { remote, multiremote, attach } from "webdriverio";
+import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
 import { expect as _expect, setOptions } from "expect-webdriverio";
 
 import type { QAConfig, QAResult, QAConnectionInfo } from "../types.js";
@@ -22,7 +22,7 @@ async function initialiseConnection(
     return attach({
       ...connection,
       capabilities,
-    } as Required<QAConnectionInfo>);
+    } as unknown as AttachOptions);
   }
 
   if (!isMultiremote) {

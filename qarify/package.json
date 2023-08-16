@@ -39,10 +39,11 @@
     "execa": "^7.2.0",
     "mocha": "^10.2.0",
     "glob": "^10.3.3",
-    "webdriverio": "../ti-wdio/packages/webdriverio",
-    "expect-webdriverio": "../ti-expect"
+    "webdriverio": "^8.15.4",
+    "expect-webdriverio": "^4.2.7"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.8",	
     "@types/node": "^20.4.8",
     "@types/mocha": "^10.0.0",
     "debug": "^4.3.4",
