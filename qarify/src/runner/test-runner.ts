@@ -1,7 +1,8 @@
 import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
 
-import type { QAConfig, QAProject, QATestSuite } from "../types.js";
+import { SpecRunnerFramework } from '../constants.js';
+import type { QAConfig, } from "../types.js";
 import { TestReporter } from "./test-reporter.js";
 
 const FILE_PROTOCOL = "file://";
@@ -11,20 +12,25 @@ export async function runSpecFiles(
   config: QAConfig,
   runnerId: string
 ) {
-  const mocha = await initRunner(files, config);
-  return runMocha(mocha, runnerId);
+  const mocha = await initRunner(files, config.framework, config.mochaOptions, runnerId);
+  return runRunner(mocha);
 }
 
 export async function initRunner(
   files: string[],
-  config: QAConfig,
+  framework: SpecRunnerFramework,
+  mochaOptions: Mocha.MochaOptions | undefined,
+  runnerId: string,
 ) {
-  const { framework, mochaOptions = {} } = config;
   const _mochaOpt = {
-    ...mochaOptions,
+    ...(mochaOptions || {}),
     ui: framework.split('-')[1].toLowerCase() as keyof InterfaceContributions,
   };
+
   const mocha = new Mocha(_mochaOpt);
+  if (!_mochaOpt.reporter) {
+    mocha.reporter(TestReporter, { runnerId });
+  }
   mocha.fullTrace();
 
   files.forEach((spec) =>
@@ -43,23 +49,26 @@ export async function initRunner(
   return mocha;
 }
 
-export async function runMocha(
-  mocha: Mocha,
-  runnerId: string
-) {
-
-  mocha.reporter(TestReporter, { runnerId });
-
+export async function runRunner(mocha: Mocha, dispose = true) {
   let runtimeError;
+
   const result = await new Promise<number>((resolve) => {
-    let _runner;
     try {
-      _runner = mocha.run(resolve);
+      let _runner = mocha.run((res) => {
+        if (dispose) {
+          _runner.dispose();
+        }
+        resolve(res);
+      });
     } catch (err: any) {
       runtimeError = err;
       return resolve(1);
     }
   });
+
+  if (dispose) {
+    mocha.dispose();
+  }
 
   if (runtimeError) {
     throw runtimeError;

@@ -22,7 +22,7 @@ export type TestSuiteNode = {
   children?: TestSuiteNode[];
 };
 
-export type QAConnectionInfo = {
+export type QADriver = {
   id: string;
   name: string;
   protocol: "http" | "https";
@@ -33,43 +33,11 @@ export type QAConnectionInfo = {
   sessionId?: string;
 };
 
-export type QATestSuite = {
-  name: string;
-  specFiles: string[];
-};
-
-export type QATestOptions = {
-  connection?: QAConnectionInfo;
-
-  mochaOptions?: Mocha.MochaOptions;
-  // ms to wait for expectation to succeed
-  waitforTimeout?: number;
-  // interval between attempts
-  waitforInterval?: number;
-};
-
-export type QAProject = {
-  id: string;
-  name: string;
-
-  testSuites?: QATestSuite[];
-  options?: QATestOptions;
-};
-
-export type QAResult = {
+export type QArifyResult = {
   name: string;
   driver?: string;
   failed: number;
 };
-
-// export type QAConfig = {
-//   rootDir: string;
-//   cacheDir: string;
-//   tsconfig: string;
-//   project: QAProject | Array<QAProject>;
-//   framework: SpecRunnerFramework;
-//   options: QATestOptions;
-// };
 
 export type QAConfig = {
   // display name
@@ -93,8 +61,10 @@ export type QAConfig = {
 
   // test options
   testOptions: {
-    waitforTimeout: number;
-    waitforInterval: number,
+    // ms to wait for expectation to succeed
+    waitforTimeout?: number;
+    // interval between attempts
+    waitforInterval?: number;
   };
   // mocha options
   mochaOptions?: Mocha.MochaOptions;
@@ -113,7 +83,7 @@ export type QAConfig = {
   forceBuild?: boolean;
 
   // drivers to use while testing
-  drivers: QAConnectionInfo[];
+  drivers: QADriver[];
 };
 
 export type CLIOptions = Partial<QAConfig> & {

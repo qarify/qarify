@@ -1,35 +1,35 @@
 import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
 import { expect as _expect, setOptions } from "expect-webdriverio";
 
-import type { QAConfig, QAResult, QAConnectionInfo } from "../types.js";
+import type { QAConfig, QArifyResult, QADriver } from "../types.js";
 import { _setGlobal } from "../global/index.js";
 import { runSpecFiles } from "./test-runner.js";
 
 /**
  * initialise connection depending whether remote or multiremote is requested
- * @param  {Object}  connection        configuration of sessions
- * @param  {Object}  capabilities  desired session capabilities
- * @param  {boolean} isMultiremote isMultiremote
- * @return {Promise}               resolves with browser object
+ * @param driver        configuration of sessions
+ * @param capabilities  desired session capabilities
+ * @param isMultiremote isMultiremote
+ * @return resolves with browser object
  */
 async function initialiseConnection(
-  connection: QAConnectionInfo,
+  driver: QADriver,
   isMultiremote?: boolean
 ): Promise<WebdriverIO.Browser | WebdriverIO.MultiRemoteBrowser> {
-  const { capabilities, sessionId } = connection;
+  const { capabilities, sessionId } = driver;
 
   if (sessionId) {
     return attach({
-      ...connection,
+      ...driver,
       capabilities,
     } as unknown as AttachOptions);
   }
 
   if (!isMultiremote) {
-    return remote(connection);
+    return remote(driver);
   }
 
-  throw new Error("Invalid connection");
+  throw new Error("Invalid driver");
 
   // const options: Record<string, Options.WebdriverIO> = {};
   // delete connection.capabilities;
@@ -59,7 +59,7 @@ async function initialiseConnection(
 export async function runQA(
   files: string[],
   config: QAConfig
-): Promise<QAResult[]> {
+): Promise<QArifyResult[]> {
   const { testOptions, drivers } = config;
   // expect
   _setGlobal("expect", _expect);
@@ -68,7 +68,7 @@ export async function runQA(
     interval: testOptions.waitforInterval, // interval between attempts
   });
 
-  let res: QAResult[] = [];
+  let res: QArifyResult[] = [];
   if (drivers && drivers.length) {
     const _isMultiremote = false;
     for (const driver of drivers) {

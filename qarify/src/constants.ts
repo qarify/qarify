@@ -15,7 +15,8 @@
 // 	EVENT_TEST_END,
 // } = Mocha.Runner.constants;
 
-export const enum SpecRunnerFramework {
+// See https://mochajs.org/#interfaces
+export enum SpecRunnerFramework {
   mocha_bdd = 'mocha-bdd',
   mocha_tdd = 'mocha-tdd',
   mocha_qunit = 'mocha-qunit',
@@ -23,7 +24,7 @@ export const enum SpecRunnerFramework {
   js_eval = 'normal-script',
 }
 
-export const enum SpecRunnerEvent {
+export enum SpecRunnerEvent {
   run_start = 'run:start',
   run_end = 'run:end',
 
