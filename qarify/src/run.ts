@@ -13,7 +13,6 @@ export async function run(options: CLIOptions, baseDir: string) {
     if (config.forceBuild) {
       files = await buildSpecs(config);
     }
-    // const projects = await buildProjects(config, options.project);
 
     // run
     if (config.tsconfig) {

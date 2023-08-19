@@ -42,6 +42,9 @@ export enum SpecRunnerEvent {
   test_end = 'test:end',
 };
 
+/**
+ * map mocha events to SpecRunnerEvent
+ */
 export const MochaRunnerEvent = {
   'start': SpecRunnerEvent.run_start,
   'end': SpecRunnerEvent.run_end,

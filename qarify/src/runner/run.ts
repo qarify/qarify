@@ -1,9 +1,12 @@
 import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
 import { expect as _expect, setOptions } from "expect-webdriverio";
+import debug from 'debug';
 
 import type { QAConfig, QArifyResult, QADriver } from "../types.js";
 import { _setGlobal } from "../global/index.js";
 import { runSpecFiles } from "./test-runner.js";
+
+const log = debug('qarify:runner:run');
 
 /**
  * initialise connection depending whether remote or multiremote is requested
@@ -60,7 +63,7 @@ export async function runQA(
   files: string[],
   config: QAConfig
 ): Promise<QArifyResult[]> {
-  const { testOptions, drivers } = config;
+  const { testOptions, drivers, name } = config;
   // expect
   _setGlobal("expect", _expect);
   setOptions({
@@ -70,33 +73,27 @@ export async function runQA(
 
   let res: QArifyResult[] = [];
   if (drivers && drivers.length) {
+    log('driver length:', drivers.length);
+
     const _isMultiremote = false;
     for (const driver of drivers) {
-      let _browser;
-      if (drivers && drivers.length > 0) {
-        _browser = await initialiseConnection(driver, _isMultiremote);
-        _setGlobal("browser", _browser);
-        _setGlobal("driver", _browser);
-        if (_isMultiremote) {
-          _setGlobal("multiremotebrowser", _browser);
-        }
+      const _browser = await initialiseConnection(driver, _isMultiremote);
+      _setGlobal("browser", _browser);
+      _setGlobal("driver", _browser);
+      if (_isMultiremote) {
+        _setGlobal("multiremotebrowser", _browser);
       }
-      
-      res.push({
-        name: config.name,
-        driver: driver.name,
-        failed: await runSpecFiles(files, config, `${config.name}`)
-      });
 
-      if (_browser) {
-        await _browser.deleteSession();
-      }
+      log(`run ${name} w/ ${driver.name}`);
+      const failed = await runSpecFiles(files, config, `${name}:${driver.name}`);
+      res.push({ name, failed, driver: driver.name });
+
+      await _browser.deleteSession();
     }
   } else {
-    res.push({
-      name: config.name,
-      failed: await runSpecFiles(files, config, `${config.name}`)
-    });
+    log(`run ${name} w/o driver`);
+    const failed = await runSpecFiles(files, config, `${name}`);
+    res.push({ name, failed });
   }
 
   return res;
