@@ -67,6 +67,8 @@ export function setGlobalExpect(options?: DefaultOptions, expect?: Expect) {
 export function setGlobalDriver(driver: WebdriverIO.Browser | WebdriverIO.MultiRemoteBrowser, isMultiremote = false) {
   _setGlobal("browser", driver);
   _setGlobal("driver", driver);
+  _setGlobal("$", driver.$.bind(driver));
+  _setGlobal("$$", driver.$$.bind(driver));
   if (isMultiremote) {
     _setGlobal("multiremotebrowser", driver);
   }
