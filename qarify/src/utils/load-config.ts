@@ -69,24 +69,28 @@ export async function loadConfig(
     }
     baseDir = path.dirname(configFile);
   } else {
-    configFile = path.join(baseDir, ".qarify.json");
-    if (fs.existsSync(configFile)) {
-      log('found config file,', configFile);
+    const defaultConfig = path.join(baseDir, ".qarify.json");
+    if (fs.existsSync(defaultConfig)) {
+      log('found config file,', defaultConfig);
+      configFile = defaultConfig;
       userConfig = JSON.parse(
         fs.readFileSync(configFile, "utf-8")
       );
     } else {
       //
       // try to load config from package.json
-      const packageJSON = findPackageJSON(baseDir);
+      const packageJSON = _findPackageJSON(baseDir);
       if (packageJSON) {
         log('found package.json,', packageJSON);
         const pack = JSON.parse(fs.readFileSync(packageJSON, "utf-8"));
         if (pack["qarify"]) {
           userConfig = pack["qarify"];
-          baseDir = path.dirname(packageJSON);
+          configFile = packageJSON;
         }
       }
+    }
+    if (configFile) {
+      baseDir = path.dirname(configFile);
     }
   }
 
@@ -94,6 +98,9 @@ export async function loadConfig(
   userConfig = Object.assign({}, _defaultOptions, userConfig, _options);
   if (!userConfig.rootDir) {
     userConfig.rootDir = baseDir;
+  }
+  if (configFile) {
+    userConfig.config = configFile;
   }
   if (!path.isAbsolute(userConfig.rootDir)) {
     userConfig.rootDir = path.join(baseDir, userConfig.rootDir);
@@ -109,7 +116,24 @@ export async function loadConfig(
   return userConfig;
 }
 
-function findPackageJSON(dir: string) {
+/**
+ * load QAConfig
+ * @param configPath QArify directory or QArify config file
+ * @returns QAConfig
+ */
+export async function loadConfigByPath(configPath: string) {
+  try {
+    const stat = fs.statSync(configPath);
+    if (stat.isDirectory()) {
+      return loadConfig(configPath);
+    }
+    return loadConfig(path.dirname(configPath), { config: configPath });
+  } catch (e) {
+    throw e;
+  }
+}
+
+function _findPackageJSON(dir: string) {
   do {
     const pack = path.join(dir, "package.json");
     if (fs.existsSync(pack)) {

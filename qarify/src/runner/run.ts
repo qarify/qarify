@@ -1,8 +1,8 @@
 import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
-import { expect as _expect, setOptions } from "expect-webdriverio";
+import { expect as _expect, setOptions, type Expect, type DefaultOptions } from "expect-webdriverio";
 import debug from 'debug';
 
-import type { QAConfig, QArifyResult, QADriver } from "../types.js";
+import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "../types.js";
 import { _setGlobal } from "../global/index.js";
 import { runSpecFiles } from "./test-runner.js";
 
@@ -19,13 +19,13 @@ async function initialiseConnection(
   driver: QADriver,
   isMultiremote?: boolean
 ): Promise<WebdriverIO.Browser | WebdriverIO.MultiRemoteBrowser> {
-  const { capabilities, sessionId } = driver;
+  const { capabilities, session } = driver;
 
-  if (sessionId) {
+  if (session) {
     return attach({
-      ...driver,
+      ...session,
       capabilities,
-    } as unknown as AttachOptions);
+    } as AttachOptions);
   }
 
   if (!isMultiremote) {
@@ -59,41 +59,60 @@ async function initialiseConnection(
   // return browser;
 }
 
+export function setGlobalExpect(options?: DefaultOptions, expect?: Expect) {
+  _setGlobal("expect", expect || _expect);
+  options && setOptions(options);
+}
+
+export function setGlobalDriver(driver: WebdriverIO.Browser | WebdriverIO.MultiRemoteBrowser, isMultiremote = false) {
+  _setGlobal("browser", driver);
+  _setGlobal("driver", driver);
+  if (isMultiremote) {
+    _setGlobal("multiremotebrowser", driver);
+  }
+}
+
 export async function runQA(
   files: string[],
-  config: QAConfig
+  config: QAConfig,
+  options: QARunnerOptions = {},
 ): Promise<QArifyResult[]> {
   const { testOptions, drivers, name } = config;
   // expect
-  _setGlobal("expect", _expect);
-  setOptions({
+  setGlobalExpect({
     wait: testOptions.waitforTimeout, // ms to wait for expectation to succeed
     interval: testOptions.waitforInterval, // interval between attempts
   });
 
   let res: QArifyResult[] = [];
-  if (drivers && drivers.length) {
-    log('driver length:', drivers.length);
+  let _drivers: QADriver[] = [];
 
-    const _isMultiremote = false;
-    for (const driver of drivers) {
-      const _browser = await initialiseConnection(driver, _isMultiremote);
-      _setGlobal("browser", _browser);
-      _setGlobal("driver", _browser);
-      if (_isMultiremote) {
-        _setGlobal("multiremotebrowser", _browser);
-      }
-
-      log(`run ${name} w/ ${driver.name}`);
-      const failed = await runSpecFiles(files, config, `${name}:${driver.name}`);
-      res.push({ name, failed, driver: driver.name });
-
-      await _browser.deleteSession();
+  if (options.drivers && options.drivers.length) {
+    if (drivers && drivers.length) {
+      _drivers.push(...drivers.filter((e) => options.drivers?.find((n) => n === e.name)));
     }
   } else {
-    log(`run ${name} w/o driver`);
-    const failed = await runSpecFiles(files, config, `${name}`);
-    res.push({ name, failed });
+    if (drivers && drivers.length) {
+      _drivers = drivers;
+    } else {
+      _drivers.push({ name: '' } as QADriver);
+    }
+  }
+  const _isMultiremote = false;
+  for (const driver of _drivers) {
+    const _browser = driver.name ? await initialiseConnection(driver, _isMultiremote) : null;
+    if (_browser) {
+      setGlobalDriver(_browser, _isMultiremote);
+      log(`run ${name} w/ ${driver.name}`);
+    } else {
+      log(`run ${name} w/o driver`);
+    }
+
+    res.push(await runSpecFiles(files, config, `${name}:${driver.name}`));
+
+    if (_browser && !driver.session) {
+      await _browser.deleteSession();
+    }
   }
 
   return res;

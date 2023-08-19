@@ -1,4 +1,6 @@
 import type { SpecRunnerEvent, SpecRunnerFramework } from "./constants";
+import type { AttachOptions } from 'webdriver';
+import type { Capabilities } from '@wdio/types';
 
 export type ReportMessage = {
   runnerId: string;
@@ -22,6 +24,13 @@ export type TestSuiteNode = {
   children?: TestSuiteNode[];
 };
 
+export type QADriverSession = Omit<AttachOptions, 'capabilities'> & {
+  capabilities: Capabilities.Capabilities;
+  mjpegScreenshotUrl?: string;
+  isAndroid: boolean;
+  isIOS: boolean;
+};
+
 export type QADriver = {
   id: string;
   name: string;
@@ -30,18 +39,26 @@ export type QADriver = {
   port: number;
   path: string;
   capabilities: any;
-  sessionId?: string;
+  session?: QADriverSession;
 };
 
 export type QArifyResult = {
-  name: string;
-  driver?: string;
+  runnerId: string;
   failed: number;
+};
+
+export type QARunnerOptions = {
+  // specify driver name to run
+  drivers?: string[];
 };
 
 export type QAConfig = {
   // display name
   name: string;
+
+  // config file path
+  // it may not be defined, meaning there is no config file
+  config?: string;
 
   // base directory.
   // default는 config file directory or working directory
@@ -86,6 +103,4 @@ export type QAConfig = {
   drivers: QADriver[];
 };
 
-export type CLIOptions = Partial<QAConfig> & {
-  config?: string;
-};
+export type CLIOptions = Partial<QAConfig>;

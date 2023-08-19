@@ -13,7 +13,11 @@ export async function runSpecFiles(
   runnerId: string
 ) {
   const mocha = await initRunner(files, config.framework, config.mochaOptions, runnerId);
-  return runRunner(mocha);
+  const failed = await runRunner(mocha);
+  return {
+    runnerId,
+    failed,
+  };
 }
 
 export async function initRunner(

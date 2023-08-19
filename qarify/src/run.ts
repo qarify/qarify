@@ -26,9 +26,9 @@ export async function run(options: CLIOptions, baseDir: string) {
       console.error(res);
     } else {
       console.log('QArify Done:', `${config.name} config`);
-      const drivers = res.map((e) => e.driver).filter(Boolean);
-      if (drivers.length) {
-        console.log('  Drivers:', drivers);
+      const ids = res.map((e) => e.runnerId).filter(Boolean);
+      if (ids.length) {
+        console.log('  Runner IDs:', ids);
       }
     }
   } catch (e) {
