@@ -1,6 +1,7 @@
-import type { SpecRunnerEvent, SpecRunnerFramework } from "./constants";
+import type { EventEmitter } from "events";
 import type { AttachOptions } from 'webdriver';
 import type { Capabilities } from '@wdio/types';
+import type { SpecRunnerEvent, SpecRunnerFramework } from "./constants";
 
 export type ReportMessage = {
   runnerId: string;
@@ -47,10 +48,15 @@ export type QArifyResult = {
   failed: number;
 };
 
+export interface QARunnerReporter extends EventEmitter {
+  setOptions: (options?: Mocha.MochaOptions) => void;
+}
+
 export type QARunnerOptions = {
   // specify driver name to run
   drivers?: string[];
   isForked?: boolean;
+  reporter?: QARunnerReporter;
 };
 
 export type QAConfig = {

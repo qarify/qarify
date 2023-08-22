@@ -201,3 +201,4 @@ dist
 # Misc.
 /cache
 /.qycache
+/tmp

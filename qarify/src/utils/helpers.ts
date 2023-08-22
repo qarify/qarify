@@ -31,6 +31,11 @@ export function updateConfigWithRunOptions(
       mochaOptions.reporterOptions = {};
     }
     mochaOptions.reporterOptions.isForked = true;
+    // unset reporter
+    if (mochaOptions.reporter) {
+      // use default reporter
+      mochaOptions.reporter = undefined;
+    }
   }
 
   return {

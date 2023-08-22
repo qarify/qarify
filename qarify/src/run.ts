@@ -3,9 +3,9 @@ import debug from 'debug';
 import {
   loadConfig, buildSpecs, findSpecFiles,
 } from "./utils/index.js";
-import { runQA } from "./runner/index.js";
+import { runQA, execQA } from "./runner/index.js";
 import type { CLIOptions } from "./types.js";
-import { execQA } from "./exec.js";
+// import { TestReporter } from './utils/reporter.js';
 
 const log = debug('qarify:run');
 
@@ -29,9 +29,12 @@ export async function run(options: CLIOptions, baseDir: string) {
       await execQA(files, config);
     }
     else {
+      // const reporter = new TestReporter();
+
       log('run in-process');
       // run in-process
       const res = await runQA(files, config);
+      // const res = await runQA(files, config, { reporter });
 
       // print result
       if (res.find((e) => e.failed !== 0)) {
