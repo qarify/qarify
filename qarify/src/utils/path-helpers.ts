@@ -64,9 +64,10 @@ export function findAllFiles(dir: string, files?: string[]) {
   return files;
 }
 
-export function findSpecFiles(files: string[], extensions: string[] = []) {
+export function findSpecFiles(files: string[], baseDir: string, extensions: string[] = []) {
   const found: string[] = [];
-  files.forEach((filepath) => {
+  files.forEach((_filepath) => {
+    const filepath = path.isAbsolute(_filepath) ? _filepath : path.join(baseDir, _filepath);
     if (!fs.existsSync(filepath)) {
       let pattern;
       if (glob.hasMagic(filepath, {windowsPathsNoEscape: true})) {

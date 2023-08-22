@@ -44,11 +44,13 @@ export function formatReportMessage(type: SpecRunnerEvent, payload: any, err?: E
 
 export class TestReporter extends reporters.Base {
   private runnerId: string;
+  private isForked: boolean;
 
   constructor(runner: Runner, options?: MochaOptions) {
     super(runner, options);
     const reporterOptions = (options && options.reporterOptions) || {};
     this.runnerId = reporterOptions.runnerId || `${Date.now}`;
+    this.isForked = !!reporterOptions.isForked;
 
     this.report = this.report.bind(this);
     // listen runner events
@@ -66,16 +68,10 @@ export class TestReporter extends reporters.Base {
     message.runnerId = this.runnerId;
     message.stats = { passed: this.stats.passes, failed: this.stats.failures };
 
-    // const { type, title, file,  } = test;
-    // let event: SpecRunnerEvent;
-    // console.log(">>> TEST:", test.title, test);
-    // console.log(">>> TEST err:", err && err.stack);
-    console.log(message);
-    // if (payload) {
-    //   if (type.startsWith('suite:start')) {
-    //     console.log('>>> total():', payload.total());
-    //     console.log('>>> CTX:', payload.ctx);
-    //   }
-    // }
+    if (this.isForked) {
+      process.send && process.send(message);
+    } else {
+      console.log(message);
+    }
   }
 }

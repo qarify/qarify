@@ -50,6 +50,7 @@ export type QArifyResult = {
 export type QARunnerOptions = {
   // specify driver name to run
   drivers?: string[];
+  isForked?: boolean;
 };
 
 export type QAConfig = {

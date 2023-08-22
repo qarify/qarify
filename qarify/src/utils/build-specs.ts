@@ -22,7 +22,7 @@ async function _buildSpecs(config: QAConfig) {
 }
 
 export async function buildSpecs(config: QAConfig) {
-  const files = findSpecFiles(config.specs);
+  const files = findSpecFiles(config.specs, config.rootDir);
   if (files.length <= 0) {
     throw new Error("No spec files");
   }

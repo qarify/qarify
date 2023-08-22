@@ -1,11 +1,14 @@
 import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
+import debug from 'debug';
 
 import { SpecRunnerFramework } from '../constants.js';
 import type { QAConfig, } from "../types.js";
 import { TestReporter } from "./test-reporter.js";
+import { getModuleType } from "../utils/platform.js";
 
 const FILE_PROTOCOL = "file://";
+const log = debug('qarify:runner:runner');
 
 export async function runSpecFiles(
   files: string[],
@@ -28,6 +31,7 @@ export async function initRunner(
 ) {
   const _mochaOpt = {
     ...(mochaOptions || {}),
+    parallel: false,
     ui: framework.split('-')[1].toLowerCase() as keyof InterfaceContributions,
   };
 
@@ -37,20 +41,33 @@ export async function initRunner(
   }
   mocha.fullTrace();
 
+  log('specs to run:', files);
   files.forEach((spec) =>
     mocha.addFile(
       spec.startsWith(FILE_PROTOCOL) ? url.fileURLToPath(spec) : spec
     )
   );
 
-  try {
-    await mocha.loadFilesAsync();
-  } catch (err) {
-    console.error(err);
-    throw err;
+  if (getModuleType() === 'module') {
+    log('load files async');
+    try {
+      await mocha.loadFilesAsync();
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  } else {
+    log('files will be loaded sync');
   }
 
   return mocha;
+}
+
+function _disposeSuites(suite: Mocha.Suite) {
+  if (suite.suites) {
+    suite.suites.forEach((s) => _disposeSuites(s));
+  }
+  suite.dispose();
 }
 
 export async function runRunner(mocha: Mocha, dispose = true) {
@@ -58,21 +75,23 @@ export async function runRunner(mocha: Mocha, dispose = true) {
 
   const result = await new Promise<number>((resolve) => {
     try {
-      let _runner = mocha.run((res) => {
+      const _runner = mocha.run((res) => {
         if (dispose) {
+          _disposeSuites(_runner.suite);
           _runner.dispose();
+          try {
+            mocha.dispose();
+          } catch {/* IGNORE */}
         }
+        log('runRunner() DONE with', res);
         resolve(res);
       });
     } catch (err: any) {
+      log('runRunner() error', err.message);
       runtimeError = err;
       return resolve(1);
     }
   });
-
-  if (dispose) {
-    mocha.dispose();
-  }
 
   if (runtimeError) {
     throw runtimeError;
