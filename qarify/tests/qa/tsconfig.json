@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ESNext",
+    /* Modules */
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "NodeNext",
+    "types": [
+      "mocha", "@qarify/globals"
+    ]
+  },
+  "include": [
+    "./specs",
+    "./tasks",
+  ],
+  "ts-node": {
+    // It is faster to skip typechecking.
+    "transpileOnly": true,
+    "files": true,
+  },
+}

@@ -5,13 +5,13 @@
   "framework": "mocha-qunit",
   "mochaOptions": {},
   "specs": [
-    "./qa/specs/greeting.ts",
-    "./qa/specs/greeting-failure.ts"
+    "./tests/qa/specs/greeting.ts",
+    "./tests/qa/specs/greeting-failure.ts"
   ],
 
-  "tsconfig": "./qa/tsconfig.json",
-  "nodeOptions": ["--loader=ts-node/esm"],
-  "forceBuild": false,
+  "tsconfig": "./tests/qa/tsconfig.json",
+  "nodeOptions": ["--loader=ts-node/esm", "--no-warnings"],
+  "forceBuild": true,
 
   "drivers": []
 }

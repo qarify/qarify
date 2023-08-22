@@ -4,7 +4,7 @@
     "./qa/specs/mobile.ts"
   ],
   "tsconfig": "./qa/tsconfig.json",
-  "nodeOptions": ["--loader=ts-node/esm"],
+  "nodeOptions": ["--loader=ts-node/esm", "--no-warnings"],
   "forceBuild": false,
 
   "drivers": [

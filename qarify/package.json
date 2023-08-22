@@ -18,8 +18,11 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "node --loader=ts-node/esm ./bin/qarify.js",
-    "dev2": "node ./bin/qarify.js --forceBuild",
-    "dev:remote": "node --loader=ts-node/esm ./bin/qarify.js -c ./.qarify-remote.json",
+    "e2e:default": "DEBUG='qarify:*' node ./bin/qarify.js",
+    "e2e:remote": "node ./bin/qarify.js -c tests//qarify-remote.json",
+    "e2e:js": "DEBUG='qarify:*' node ./bin/qarify.js -c tests/qarify-js.json",
+    "e2e:esm": "DEBUG='qarify:*' node ./bin/qarify.js -c tests/qarify-esm.json",
+    "e2e:build": "DEBUG='qarify:*' node ./bin/qarify.js -c tests/qarify-build.json",
     "test": "mocha",
     "test:types": "tsc --noEmit",
     "build": "run-s clean:compile compile",

@@ -1,0 +1,10 @@
+{
+  "framework": "mocha-qunit",
+  "specs": [
+    "./qa/specs/greeting.ts",
+    "./qa/specs/greeting-failure.ts"
+  ],
+  "tsconfig": "./qa/tsconfig.json",
+  "nodeOptions": ["--loader=ts-node/esm", "--no-warnings"],
+  "forceBuild": false
+}
