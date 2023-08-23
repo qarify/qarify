@@ -39,3 +39,11 @@ export async function buildSpecs(config: QAConfig) {
 
   return mappedFiles;
 }
+
+export async function prepareSpecs(config: QAConfig) {
+  if (config.forceBuild) {
+    return buildSpecs(config);
+  } else {
+    return findSpecFiles(config.specs, config.rootDir);
+  }
+}

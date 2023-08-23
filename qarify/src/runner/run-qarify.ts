@@ -2,11 +2,11 @@ import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
 import debug from 'debug';
 
 import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "../types.js";
-import { runSpecFiles } from "./test-runner.js";
+import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { updateConfigWithRunOptions } from '../utils/helpers.js';
 
-const log = debug('qarify:runner:run');
+const log = debug('qarify:runner:run-qarify');
 
 /**
  * initialise connection depending whether remote or multiremote is requested
@@ -15,19 +15,22 @@ const log = debug('qarify:runner:run');
  * @param isMultiremote isMultiremote
  * @return resolves with browser object
  */
-async function initialiseConnection(
+async function makeConnection(
   driver: QADriver,
   isMultiremote?: boolean
 ): Promise<WebdriverIO.Browser | WebdriverIO.MultiRemoteBrowser> {
   const { capabilities, session } = driver;
 
+
   if (session) {
+    log(`make connection, ${driver.name} with session ${session.sessionId}`);
     return attach({
       ...session,
       capabilities,
     } as AttachOptions);
   }
 
+  log(`make connection, ${driver.name} w/o session`);
   if (!isMultiremote) {
     return remote(driver);
   }
@@ -59,7 +62,7 @@ async function initialiseConnection(
   // return browser;
 }
 
-export async function runQA(
+export async function runQArify(
   files: string[],
   config: QAConfig,
   options: QARunnerOptions = {},
@@ -75,12 +78,12 @@ export async function runQA(
   const _isMultiremote = false;
 
   for (const driver of drivers) {
-    const _browser = driver.name ? await initialiseConnection(driver, _isMultiremote) : null;
+    const _browser = driver.name ? await makeConnection(driver, _isMultiremote) : null;
     if (_browser) {
       setGlobalDriver(_browser, _isMultiremote);
-      log(`run ${name} w/ ${driver.name}`);
+      log(`run "${name}" w/ driver, ${driver.name}`);
     } else {
-      log(`run ${name} w/o driver`);
+      log(`run "${name}" w/o driver`);
     }
 
     res.push(await runSpecFiles(specs, config, `${name}:${driver.name}`));

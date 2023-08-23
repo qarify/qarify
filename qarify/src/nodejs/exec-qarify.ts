@@ -5,16 +5,16 @@ import debug from 'debug';
 import type { QAConfig, QARunnerOptions, ReportMessage } from "../types.js";
 import _dirname from '../dirname/index.js';
 
-const log = debug('qarify:runner:run-exec');
+const log = debug('qarify:nodejs:exec-qarify');
 
-export async function execQA(
+export async function execQArify(
   files: string[],
   config: QAConfig,
   options: QARunnerOptions = {},
   parallel = false,
 ) {
   const dirname = await _dirname();
-  const runnerPath = path.resolve(dirname, './runner/exec.js');
+  const runnerPath = path.resolve(dirname, './nodejs/run-qarify.js');
   const { nodeOptions, ..._config } = config; 
   const { reporter, ..._options } = options;
 

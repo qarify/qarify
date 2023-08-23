@@ -41,21 +41,3 @@ export enum SpecRunnerEvent {
   test_pending = 'test:pending',
   test_end = 'test:end',
 };
-
-/**
- * map mocha events to SpecRunnerEvent
- */
-export const MochaRunnerEvent = {
-  'start': SpecRunnerEvent.run_start,
-  'end': SpecRunnerEvent.run_end,
-  'suite': SpecRunnerEvent.suite_start,
-  'suite end': SpecRunnerEvent.suite_end,
-  'test': SpecRunnerEvent.test_start,
-  'test end': SpecRunnerEvent.test_end,
-  'hook': SpecRunnerEvent.hook_start,
-  'hook end': SpecRunnerEvent.hook_end,
-  'pass': SpecRunnerEvent.test_pass,
-  'fail': SpecRunnerEvent.test_fail,
-  'retry': SpecRunnerEvent.test_retry,
-  'pending': SpecRunnerEvent.test_pending,
-} as const;

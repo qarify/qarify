@@ -3,7 +3,7 @@
  */
 import { Command } from 'commander';
 
-import { run } from './run.js';
+import { qarify } from './qarify.js';
 
 // const pac = await import('../package.json');
 
@@ -23,4 +23,4 @@ program
 
 program.parse();
 
-await run(program.opts(), process.cwd());
+await qarify(program.opts(), process.cwd());

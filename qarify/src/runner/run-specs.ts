@@ -4,26 +4,26 @@ import debug from 'debug';
 
 import { SpecRunnerFramework } from '../constants.js';
 import type { QAConfig, } from "../types.js";
-import { TestReporter } from "./test-reporter.js";
+import { TestReporter } from "./reporter.js";
 import { getModuleType } from "../utils/platform.js";
 
 const FILE_PROTOCOL = "file://";
-const log = debug('qarify:runner:runner');
+const log = debug('qarify:runner:run-specs');
 
 export async function runSpecFiles(
   files: string[],
   config: QAConfig,
   runnerId: string
 ) {
-  const mocha = await initRunner(files, config.framework, config.mochaOptions, runnerId);
-  const failed = await runRunner(mocha);
+  const mocha = await initFramework(files, config.framework, config.mochaOptions, runnerId);
+  const failed = await runFramework(mocha);
   return {
     runnerId,
     failed,
   };
 }
 
-export async function initRunner(
+export async function initFramework(
   files: string[],
   framework: SpecRunnerFramework,
   mochaOptions: Mocha.MochaOptions | undefined,
@@ -41,7 +41,7 @@ export async function initRunner(
   }
   mocha.fullTrace();
 
-  log('specs to run:', files);
+  log('add files:', files);
   files.forEach((spec) =>
     mocha.addFile(
       spec.startsWith(FILE_PROTOCOL) ? url.fileURLToPath(spec) : spec
@@ -70,9 +70,10 @@ function _disposeSuites(suite: Mocha.Suite) {
   suite.dispose();
 }
 
-export async function runRunner(mocha: Mocha, dispose = true) {
+export async function runFramework(mocha: Mocha, dispose = true) {
   let runtimeError;
 
+  log('run framework... dispose =', dispose);
   const result = await new Promise<number>((resolve) => {
     try {
       const _runner = mocha.run((res) => {
@@ -83,11 +84,11 @@ export async function runRunner(mocha: Mocha, dispose = true) {
             mocha.dispose();
           } catch {/* IGNORE */}
         }
-        log('runRunner() DONE with', res);
+        log('DONE with', res);
         resolve(res);
       });
     } catch (err: any) {
-      log('runRunner() error', err.message);
+      log('EXCEPTION: ', err.message);
       runtimeError = err;
       return resolve(1);
     }
