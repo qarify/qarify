@@ -1,5 +1,3 @@
-import debug from 'debug';
-
 import {
   loadConfig, prepareSpecs,
 } from "./utils/index.js";
@@ -7,10 +5,19 @@ import { runQArify } from "./runner/index.js";
 import { execQArify } from "./nodejs/index.js";
 import type { CLIOptions } from "./types.js";
 import { ConsoleReporter } from './utils/console-reporter.js';
+import { LogLevel, getLogger, setLogLevel } from './logger/logger.js';
 
-const log = debug('qarify:run');
+const log = getLogger('run');
+const err = getLogger('run', 'error');
 
 export async function qarify(options: CLIOptions, baseDir: string) {
+  if (options.logLevel) {
+    setLogLevel(LogLevel[options.logLevel], true);
+  } else {
+    setLogLevel(LogLevel.info, true);
+  }
+  log('options:', options);
+
   const config = await loadConfig(baseDir, options);
 
   try {
@@ -29,7 +36,7 @@ export async function qarify(options: CLIOptions, baseDir: string) {
       await runQArify(files, config);
     }
   } catch (e) {
-    console.error(e);
+    err(e);
     process.exit(1);
   }
 }

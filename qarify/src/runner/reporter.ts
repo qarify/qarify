@@ -1,13 +1,11 @@
 import { MochaOptions, Runner, Stats, reporters } from "mocha";
-import debug from 'debug';
 
-import { SpecRunnerEvent, _DEBUG_QUARIFY } from "../constants.js";
+import { SpecRunnerEvent } from "../constants.js";
 import type { QARunnerReporter, ReportMessage } from "../types.js";
+import { getLogger } from "../logger/logger.js";
 
-const log = debug('qarify:runner:reporter');
-if (_DEBUG_QUARIFY) {
-  log.enabled = true;
-}
+const log = getLogger('runner:reporter');
+const info = getLogger('report', 'info');
 
 /**
  * map mocha events to SpecRunnerEvent
@@ -69,7 +67,7 @@ export class TestReporter extends reporters.Base {
         this.qaReporter.emit(message.type, message);
       }
     } else {
-      console.log(message);
+      info(message);
     }
   }
 }

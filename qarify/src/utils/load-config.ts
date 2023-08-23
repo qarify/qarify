@@ -1,14 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
-import debug from 'debug';
 
 import type { CLIOptions, QAConfig } from "../types.js";
-import { SpecRunnerFramework, _DEBUG_QUARIFY } from "../constants.js";
+import { SpecRunnerFramework } from "../constants.js";
+import { getLogger } from "../logger/logger.js";
 
-const log = debug('qarify:utils:load-config');
-if (_DEBUG_QUARIFY) {
-  log.enabled = true;
-}
+const log = getLogger('utils:load-config');
+
 const _defaultOptions: Partial<QAConfig> = {
   name: 'default',
   cacheDir: ".qycache",
@@ -46,7 +44,7 @@ export async function loadConfig(
   baseDir: string,
   options?: CLIOptions,
 ): Promise<QAConfig> {
-  let { config: configFile, ..._options } = options || {};
+  let { config: configFile, ..._options } = options || {} as CLIOptions;
   let userConfig = {} as QAConfig;
 
   if (_options.cacheDir && !path.isAbsolute(_options.cacheDir)) {

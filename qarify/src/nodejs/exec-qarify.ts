@@ -1,16 +1,14 @@
 import {SendHandle, Serializable, spawn} from 'child_process';
 import path from 'path';
-import debug from 'debug';
 
 import type { QAConfig, QARunnerOptions, ReportMessage } from "../types.js";
 import _dirname from '../dirname/index.js';
-import { _DEBUG_QUARIFY } from '../constants.js';
 import { updateExecConfig } from '../utils/helpers.js';
+import { getLogger } from '../logger/logger.js';
 
-const log = debug('qarify:nodejs:exec-qarify');
-if (_DEBUG_QUARIFY) {
-  log.enabled = true;
-}
+const log = getLogger('nodejs:exec-qarify');
+const info = getLogger('report', 'info');
+const err = getLogger('nodejs:exec-qarify', 'error');
 
 export async function execQArify(
   files: string[],
@@ -46,7 +44,7 @@ export async function execQArify(
     if (qaReporter) {
       log('qaReporter events:', eventNames);
       if (reporter) {
-        console.warn('qaReporter will replace frameworkOptions.reporter');
+        err('qaReporter will replace frameworkOptions.reporter');
       }
     } else {
       log('no qaReporter');
@@ -67,7 +65,7 @@ export async function execQArify(
           // reporter.emit(type, type, message);
         }
       } else {
-        console.log(message);
+        info(message);
       }
     });
 

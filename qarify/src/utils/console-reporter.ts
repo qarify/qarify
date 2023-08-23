@@ -3,6 +3,9 @@ import {
   type ReportMessage, type QARunnerReporter
 } from '../types.js';
 import { SpecRunnerEvent, } from '../constants.js';
+import { getLogger } from "../logger/logger.js";
+
+const info = getLogger('report', 'info');
 
 /**
  * Console Reporter
@@ -25,6 +28,6 @@ export class ConsoleReporter extends EventEmitter implements QARunnerReporter {
    * Invoked by test runner whenever any event's been emitted.
    */
   report(type: SpecRunnerEvent, message: ReportMessage) {
-    console.log(type, message);
+    info(type, message);
   }
 }

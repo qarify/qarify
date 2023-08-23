@@ -34,7 +34,7 @@ export async function buildSpecs(config: QAConfig) {
     config.tsconfig = path.join(config.rootDir, _defaultTsConfig);
   }
   if (!fs.existsSync(config.tsconfig)) {
-    throw new Error('no tsconfig files specified for build files');
+    throw new Error('no tsconfig file specified for build files');
   }
   const outDir = await _buildSpecs(config);
   if (!outDir) {

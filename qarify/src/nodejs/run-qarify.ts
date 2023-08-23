@@ -1,13 +1,9 @@
 
 import { QAConfig, QARunnerOptions } from '../types.js';
 import { runQArify } from '../runner/run-qarify.js';
-import debug from 'debug';
-import { _DEBUG_QUARIFY } from '../constants.js';
+import { getLogger } from '../logger/logger.js';
 
-const log = debug('qarify:nodejs:run-qarify');
-if (_DEBUG_QUARIFY) {
-  log.enabled = true;
-}
+const log = getLogger('nodejs:run-qarify');
 
 (async (args: string[] = []) => {
   if (!args || !args.length) {

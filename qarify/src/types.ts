@@ -2,6 +2,7 @@ import type { EventEmitter } from "events";
 import type { AttachOptions } from 'webdriver';
 import type { Capabilities } from '@wdio/types';
 import type { SpecRunnerEvent, SpecRunnerFramework } from "./constants";
+import type { LogLevelName } from './logger/logger';
 
 export type ReportMessage = {
   runnerId: string;
@@ -129,4 +130,6 @@ export type QAConfig = {
   drivers: QADriver[];
 };
 
-export type CLIOptions = Partial<QAConfig>;
+export type CLIOptions = Partial<QAConfig> & {
+  logLevel?: LogLevelName;
+};

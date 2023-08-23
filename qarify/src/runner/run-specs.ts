@@ -1,17 +1,15 @@
 import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
-import debug from 'debug';
 
 import { SpecRunnerFramework, _DEBUG_QUARIFY } from '../constants.js';
 import type { QAConfig, } from "../types.js";
 import { TestReporter } from "./reporter.js";
 import { getModuleType } from "../utils/platform.js";
+import { getLogger } from "../logger/logger.js";
 
 const FILE_PROTOCOL = "file://";
-const log = debug('qarify:runner:run-specs');
-if (_DEBUG_QUARIFY) {
-  log.enabled = true;
-}
+const log = getLogger('runner:run-specs');
+const err = getLogger('runner:run-specs', 'error');
 
 export async function runSpecFiles(
   files: string[],
@@ -59,9 +57,9 @@ export async function initFramework(
     log('load files async');
     try {
       await mocha.loadFilesAsync();
-    } catch (err) {
-      console.error(err);
-      throw err;
+    } catch (e) {
+      err(e);
+      throw e;
     }
   } else {
     log('files will be loaded sync');

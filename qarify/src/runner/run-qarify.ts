@@ -1,16 +1,12 @@
 import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
-import debug from 'debug';
 
 import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "../types.js";
 import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { updateConfigWithRunOptions } from '../utils/helpers.js';
-import { _DEBUG_QUARIFY } from "../constants.js";
+import { getLogger } from "../logger/logger.js";
 
-const log = debug('qarify:runner:run-qarify');
-if (_DEBUG_QUARIFY) {
-  log.enabled = true;
-}
+const log = getLogger('runner:run-qarify');
 
 export async function runQArify(
   files: string[],

@@ -1,14 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { glob } from 'glob';
-import debug from 'debug';
 
-import { _DEBUG_QUARIFY } from "../constants.js";
+import { getLogger } from "../logger/logger.js";
 
-const log = debug('qarify:utils:path-helpers');
-if (_DEBUG_QUARIFY) {
-  log.enabled = true;
-}
+const log = getLogger('qarify:utils:path-helpers');
 
 export function mapFilesInConfig(specFiles: string[], outFiles: string[]) {
   const files = [];
