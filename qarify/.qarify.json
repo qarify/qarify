@@ -3,7 +3,7 @@
   "cacheDir": "./.qycache",
 
   "framework": "mocha-qunit",
-  "mochaOptions": {},
+  "frameworkOptions": {},
   "specs": [
     "./tests/qa/specs/greeting.ts",
     "./tests/qa/specs/greeting-failure.ts"

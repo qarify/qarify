@@ -1,6 +1,6 @@
 // import Mocha from 'mocha'
 
-export const _DEBUG_QUARIFY = true;
+export const _DEBUG_QUARIFY = false;
 
 // const {
 //  EVENT_RUN_BEGIN,
