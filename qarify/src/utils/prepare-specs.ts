@@ -10,9 +10,7 @@ const _defaultTsConfig = './qa/tsconfig.json';
 async function _buildSpecs(config: QAConfig) {
   const outDir = path.join(config.cacheDir, "out");
   const args = ['tsc'];
-  if (config.tsconfig && fs.existsSync(config.tsconfig)) {
-    args.push('-p', config.tsconfig);
-  }
+  args.push('-p', config.tsconfig!);
   args.push('--outDir', outDir, '--noEmit', 'false');
   const buildRes = await execa(
     "npx",
@@ -34,6 +32,9 @@ export async function buildSpecs(config: QAConfig) {
   }
   if (!config.tsconfig) {
     config.tsconfig = path.join(config.rootDir, _defaultTsConfig);
+  }
+  if (!fs.existsSync(config.tsconfig)) {
+    throw new Error('no tsconfig files specified for build files');
   }
   const outDir = await _buildSpecs(config);
   if (!outDir) {
