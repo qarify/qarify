@@ -3,7 +3,12 @@ import path from "node:path";
 import { glob } from 'glob';
 import debug from 'debug';
 
+import { _DEBUG_QUARIFY } from "../constants.js";
+
 const log = debug('qarify:utils:path-helpers');
+if (_DEBUG_QUARIFY) {
+  log.enabled = true;
+}
 
 export function mapFilesInConfig(specFiles: string[], outFiles: string[]) {
   const files = [];

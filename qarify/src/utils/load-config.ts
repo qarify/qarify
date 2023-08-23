@@ -3,10 +3,12 @@ import path from "node:path";
 import debug from 'debug';
 
 import type { CLIOptions, QAConfig } from "../types.js";
-import { SpecRunnerFramework } from "../constants.js";
+import { SpecRunnerFramework, _DEBUG_QUARIFY } from "../constants.js";
 
 const log = debug('qarify:utils:load-config');
-
+if (_DEBUG_QUARIFY) {
+  log.enabled = true;
+}
 const _defaultOptions: Partial<QAConfig> = {
   name: 'default',
   cacheDir: ".qycache",
