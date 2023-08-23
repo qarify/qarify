@@ -2,13 +2,16 @@ import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
 import debug from 'debug';
 
-import { SpecRunnerFramework } from '../constants.js';
+import { SpecRunnerFramework, _DEBUG_QUARIFY } from '../constants.js';
 import type { QAConfig, } from "../types.js";
 import { TestReporter } from "./reporter.js";
 import { getModuleType } from "../utils/platform.js";
 
 const FILE_PROTOCOL = "file://";
 const log = debug('qarify:runner:run-specs');
+if (_DEBUG_QUARIFY) {
+  log.enabled = true;
+}
 
 export async function runSpecFiles(
   files: string[],
@@ -34,11 +37,12 @@ export async function initFramework(
     parallel: false,
     ui: framework.split('-')[1].toLowerCase() as keyof InterfaceContributions,
   };
+  if (!_mochaOpt.reporter) {
+    _mochaOpt.reporter = TestReporter;
+  }
+  log('mochaOpt:', _mochaOpt);
 
   const mocha = new Mocha(_mochaOpt);
-  if (!_mochaOpt.reporter) {
-    mocha.reporter(TestReporter, { runnerId });
-  }
   mocha.fullTrace();
 
   log('add files:', files);

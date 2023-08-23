@@ -5,8 +5,48 @@ import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "../types
 import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { updateConfigWithRunOptions } from '../utils/helpers.js';
+import { _DEBUG_QUARIFY } from "../constants.js";
 
 const log = debug('qarify:runner:run-qarify');
+if (_DEBUG_QUARIFY) {
+  log.enabled = true;
+}
+
+export async function runQArify(
+  files: string[],
+  config: QAConfig,
+  options: QARunnerOptions = {},
+): Promise<QArifyResult[]> {
+  const _config = updateConfigWithRunOptions(config, files, options);
+  const { testOptions, drivers, name, specs } = _config;
+  // expect
+  setGlobalExpect({
+    wait: testOptions.waitforTimeout, // ms to wait for expectation to succeed
+    interval: testOptions.waitforInterval, // interval between attempts
+  });
+
+  let res: QArifyResult[] = [];
+  const _isMultiremote = false;
+
+  for (const driver of drivers) {
+    const _browser = driver.name ? await makeConnection(driver, _isMultiremote) : null;
+    if (_browser) {
+      setGlobalDriver(_browser, _isMultiremote);
+      log(`run "${name}" w/ driver, ${driver.name}`);
+    } else {
+      log(`run "${name}" w/o driver`);
+    }
+
+    res.push(await runSpecFiles(specs, _config, `${name}:${driver.name}`));
+
+    if (_browser && !driver.session) {
+      await _browser.deleteSession();
+    }
+  }
+
+  return res;
+}
+
 
 /**
  * initialise connection depending whether remote or multiremote is requested
@@ -60,38 +100,4 @@ async function makeConnection(
   // }
 
   // return browser;
-}
-
-export async function runQArify(
-  files: string[],
-  config: QAConfig,
-  options: QARunnerOptions = {},
-): Promise<QArifyResult[]> {
-  const { testOptions, drivers, name, specs } = updateConfigWithRunOptions(config, files, options);
-  // expect
-  setGlobalExpect({
-    wait: testOptions.waitforTimeout, // ms to wait for expectation to succeed
-    interval: testOptions.waitforInterval, // interval between attempts
-  });
-
-  let res: QArifyResult[] = [];
-  const _isMultiremote = false;
-
-  for (const driver of drivers) {
-    const _browser = driver.name ? await makeConnection(driver, _isMultiremote) : null;
-    if (_browser) {
-      setGlobalDriver(_browser, _isMultiremote);
-      log(`run "${name}" w/ driver, ${driver.name}`);
-    } else {
-      log(`run "${name}" w/o driver`);
-    }
-
-    res.push(await runSpecFiles(specs, config, `${name}:${driver.name}`));
-
-    if (_browser && !driver.session) {
-      await _browser.deleteSession();
-    }
-  }
-
-  return res;
 }

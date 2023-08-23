@@ -49,13 +49,15 @@ export type QArifyResult = {
 };
 
 export interface QARunnerReporter extends EventEmitter {
-  setOptions: (options?: Mocha.MochaOptions) => void;
+  setOptions?: (options?: Mocha.MochaOptions) => void;
+  report: (type: SpecRunnerEvent, message: ReportMessage) => void;
 }
 
 export type QARunnerOptions = {
   // specify driver name to run
   drivers?: string[];
   isForked?: boolean;
+  keepMainProcess?: boolean;
   reporter?: QARunnerReporter;
 };
 

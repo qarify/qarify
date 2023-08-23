@@ -4,19 +4,24 @@ import debug from 'debug';
 
 import type { QAConfig, QARunnerOptions, ReportMessage } from "../types.js";
 import _dirname from '../dirname/index.js';
+import { _DEBUG_QUARIFY } from '../constants.js';
 
 const log = debug('qarify:nodejs:exec-qarify');
+if (_DEBUG_QUARIFY) {
+  log.enabled = true;
+}
 
 export async function execQArify(
   files: string[],
   config: QAConfig,
   options: QARunnerOptions = {},
   parallel = false,
+  execFileName = './nodejs/run-qarify.js',
 ) {
   const dirname = await _dirname();
-  const runnerPath = path.resolve(dirname, './nodejs/run-qarify.js');
+  const runnerPath = path.resolve(dirname, execFileName);
   const { nodeOptions, ..._config } = config; 
-  const { reporter, ..._options } = options;
+  const { reporter, keepMainProcess, ..._options } = options;
 
   const rawConfig = JSON.stringify({ ..._config, specs: files });
   const rawOptions = JSON.stringify({ ..._options, isForked: true });
@@ -31,19 +36,25 @@ export async function execQArify(
 
   const env = { ...process.env };
   if (_config.tsconfig) { env.TS_NODE_PROJECT = _config.tsconfig; };
-  log('env:', env);
+  // log('env:', env);
 
   const proc = spawn('node', args, {
-    stdio: 'inherit', env,
+    stdio: ['inherit', 'inherit', 'inherit', 'ipc'], env,
   });
 
-  reporter && reporter.setOptions(_config.mochaOptions);
   const eventNames = reporter && reporter.eventNames();
+  if (reporter) {
+    reporter.setOptions && reporter.setOptions(_config.mochaOptions ? _config.mochaOptions.reporterOptions : undefined);
+    log('reporter events:', eventNames);
+  } else {
+    log('no reporter');
+  }
   proc.on('message', (message: Serializable, sendHandle: SendHandle) => {
     if (eventNames) {
       const { type } = message as ReportMessage;
-      if (eventNames.indexOf(type) >= 0) {
-        reporter.emit(type, message);
+      if (eventNames.length === 0 || eventNames.indexOf(type) >= 0) {
+        reporter.report(type, message as ReportMessage);
+        // reporter.emit(type, type, message);
       }
     } else {
       console.log(message);
@@ -51,6 +62,10 @@ export async function execQArify(
   });
 
   proc.on('exit', (code, signal) => {
+    log('child process is exit, keepMainProcess =', !!keepMainProcess);
+    if (keepMainProcess) {
+      return;
+    }
     process.on('exit', () => {
       if (signal) {
         process.kill(process.pid, signal);

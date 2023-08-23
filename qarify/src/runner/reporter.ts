@@ -1,6 +1,13 @@
 import { MochaOptions, Runner, Stats, reporters } from "mocha";
-import { SpecRunnerEvent } from "../constants.js";
-import type { ReportMessage } from "../types.js";
+import debug from 'debug';
+
+import { SpecRunnerEvent, _DEBUG_QUARIFY } from "../constants.js";
+import type { QARunnerReporter, ReportMessage } from "../types.js";
+
+const log = debug('qarify:runner:reporter');
+if (_DEBUG_QUARIFY) {
+  log.enabled = true;
+}
 
 /**
  * map mocha events to SpecRunnerEvent
@@ -19,6 +26,53 @@ export const MochaRunnerEvent = {
   'retry': SpecRunnerEvent.test_retry,
   'pending': SpecRunnerEvent.test_pending,
 } as const;
+
+export class TestReporter extends reporters.Base {
+  private runnerId: string;
+  private isForked: boolean;
+  private qaReporter?: QARunnerReporter;
+  private qaReporterMessages?: string[];
+
+  constructor(runner: Runner, options?: MochaOptions) {
+    super(runner, options);
+    const reporterOptions = (options && options.reporterOptions) || {};
+    log('reporter options:', reporterOptions);
+
+    this.runnerId = reporterOptions.runnerId || `${Date.now}`;
+    this.isForked = !!reporterOptions.isForked;
+    this.qaReporter = reporterOptions.qaReporter;
+    if (this.qaReporter) {
+      this.qaReporterMessages = this.qaReporter.eventNames() as string[];
+      log('qaReporterMessages:', this.qaReporterMessages);
+    }
+
+    this.report = this.report.bind(this);
+    // listen runner events
+    (
+      Object.keys(MochaRunnerEvent) as Array<keyof typeof MochaRunnerEvent>
+    ).forEach((e) => runner.on(e, this.report.bind(this, MochaRunnerEvent[e])));
+  }
+
+  /**
+   * Invoked by test runner whenever any event's been emitted.
+   */
+  report(type: SpecRunnerEvent, payload: any, err?: Error) {
+    const message = formatReportMessage(type, payload, err);
+    message.runnerId = this.runnerId;
+    message.stats = { passed: this.stats.passes, failed: this.stats.failures };
+
+    if (this.isForked) {
+      process.send && process.send(message);
+    } else if (this.qaReporter && this.qaReporterMessages) {
+      const { type } = message;
+      if (this.qaReporterMessages.indexOf(type) >= 0) {
+        this.qaReporter.emit(message.type, message);
+      }
+    } else {
+      console.log(message);
+    }
+  }
+}
 
 export function formatReportMessage(type: SpecRunnerEvent, payload: any, err?: Error) {
   const message = {
@@ -58,38 +112,4 @@ export function formatReportMessage(type: SpecRunnerEvent, payload: any, err?: E
     message.error = err;
   }
   return message;
-}
-
-export class TestReporter extends reporters.Base {
-  private runnerId: string;
-  private isForked: boolean;
-
-  constructor(runner: Runner, options?: MochaOptions) {
-    super(runner, options);
-    const reporterOptions = (options && options.reporterOptions) || {};
-    this.runnerId = reporterOptions.runnerId || `${Date.now}`;
-    this.isForked = !!reporterOptions.isForked;
-
-    this.report = this.report.bind(this);
-    // listen runner events
-    (
-      Object.keys(MochaRunnerEvent) as Array<keyof typeof MochaRunnerEvent>
-    ).forEach((e) => runner.on(e, this.report.bind(this, MochaRunnerEvent[e])));
-  }
-
-  /**
-   * Invoked by test runner whenever any event's been emitted.
-   * @param msg
-   */
-  report(type: SpecRunnerEvent, payload: any, err?: Error) {
-    const message = formatReportMessage(type, payload, err);
-    message.runnerId = this.runnerId;
-    message.stats = { passed: this.stats.passes, failed: this.stats.failures };
-
-    if (this.isForked) {
-      process.send && process.send(message);
-    } else {
-      console.log(message);
-    }
-  }
 }
