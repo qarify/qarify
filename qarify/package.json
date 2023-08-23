@@ -19,8 +19,9 @@
   "scripts": {
     "dev": "node --loader=ts-node/esm ./bin/qarify.js",
     "e2e:default": "DEBUG='qarify:*' node ./bin/qarify.js",
-    "e2e:remote": "node ./bin/qarify.js -c tests//qarify-remote.json",
+    "e2e:remote": "node ./bin/qarify.js -c tests/qarify-remote.json",
     "e2e:js": "DEBUG='qarify:*' node ./bin/qarify.js -c tests/qarify-js.json",
+    "e2e:js-build": "DEBUG='qarify:*' node ./bin/qarify.js -c tests/qarify-js.json --forceBuild",
     "e2e:esm": "DEBUG='qarify:*' node ./bin/qarify.js -c tests/qarify-esm.json",
     "e2e:build": "DEBUG='qarify:*' node ./bin/qarify.js -c tests/qarify-build.json",
     "test": "mocha",

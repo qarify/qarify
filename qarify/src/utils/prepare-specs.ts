@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from "path";
 import { execa } from "execa";
 
@@ -8,9 +9,14 @@ const _defaultTsConfig = './qa/tsconfig.json';
 
 async function _buildSpecs(config: QAConfig) {
   const outDir = path.join(config.cacheDir, "out");
+  const args = ['tsc'];
+  if (config.tsconfig && fs.existsSync(config.tsconfig)) {
+    args.push('-p', config.tsconfig);
+  }
+  args.push('--outDir', outDir, '--noEmit', 'false');
   const buildRes = await execa(
     "npx",
-    ["tsc", "-p", config.tsconfig!, "--outDir", outDir],
+    args,
     {
       stdio: "inherit",
     }
