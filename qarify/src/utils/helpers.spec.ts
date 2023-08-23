@@ -1,7 +1,8 @@
 import { expect } from 'expect-webdriverio';
-import { updateConfigWithRunOptions } from "./helpers.js";
-import { QAConfig, QADriver, QARunnerOptions } from '../types.js';
+import { updateConfigWithRunOptions, updateExecConfig } from "./helpers.js";
+import { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions } from '../types.js';
 import { SpecRunnerFramework } from '../constants.js';
+import { TestReporter } from '../runner/reporter.js';
 
 describe('utils/helpers', function() {
 
@@ -29,15 +30,64 @@ describe('utils/helpers', function() {
     };
     res = updateConfigWithRunOptions(config, undefined, options);
     expect(res.drivers).toEqual(_drivers.filter((e) => e.name === '2'));
-
-    // isForked in options
-    options = {
-      isForked: true,
-    };
-    res = updateConfigWithRunOptions(config, undefined, options);
-    expect(res.mochaOptions).toEqual({
-      reporterOptions: { isForked: true }
-    });
   });
 
+  it('updateExecConfigWithRunOptions should update config', async function() {
+    const config: QAConfig = {
+      name: '', rootDir: '.', cacheDir: '.', framework: SpecRunnerFramework.mocha_qunit,
+      specs: [], testOptions: {}, drivers: [],
+    };
+
+    let res = updateExecConfig(config);
+    expect(res).toEqual({ 
+      config: { ...config, frameworkOptions: { reporter: undefined, reporterOptions: { isForked: true } } },
+      nodeOptions: undefined,
+      reporter: undefined,
+      qaReporter: undefined,
+      options: {},
+    });
+
+    let frameworkOptions: QAFrameworkOption = { reporter: 'a' };
+    res = updateExecConfig({ ...config, frameworkOptions });
+    expect(res).toEqual({ 
+      config: { ...config, frameworkOptions: { reporter: 'a', reporterOptions: { isForked: true } } },
+      nodeOptions: undefined,
+      reporter: undefined,
+      qaReporter: undefined,
+      options: {},
+    });
+
+    frameworkOptions = { reporter: TestReporter };
+    res = updateExecConfig({ ...config, frameworkOptions });
+    expect(res).toEqual({ 
+      config: { ...config, frameworkOptions: { reporter: undefined, reporterOptions: { isForked: true } } },
+      nodeOptions: undefined,
+      reporter: TestReporter,
+      qaReporter: undefined,
+      options: {},
+    });
+
+    frameworkOptions = { reporterOptions: { qaReporter: {} } };
+    res = updateExecConfig({ ...config, frameworkOptions });
+    expect(res).toEqual({ 
+      config: { ...config, frameworkOptions: { reporter: undefined, reporterOptions: { isForked: true } } },
+      nodeOptions: undefined,
+      reporter: undefined,
+      qaReporter: {},
+      options: {},
+    });
+
+    // override qaReporter
+    frameworkOptions = { reporterOptions: { qaReporter: {} } };
+    let options: QARunnerOptions = { execReporter: ['execReporter'] as any, keepMainProcess: true };
+
+    res = updateExecConfig({ ...config, frameworkOptions }, [], options);
+    expect(res).toEqual({ 
+      config: { ...config, frameworkOptions: { reporter: undefined, reporterOptions: { isForked: true } } },
+      nodeOptions: undefined,
+      reporter: undefined,
+      qaReporter: ['execReporter'],
+      options: { keepMainProcess: true },
+    });
+  });
 });

@@ -49,16 +49,32 @@ export type QArifyResult = {
 };
 
 export interface QARunnerReporter extends EventEmitter {
-  setOptions?: (options?: Mocha.MochaOptions) => void;
   report: (type: SpecRunnerEvent, message: ReportMessage) => void;
+}
+
+export type QAReporterOptions = Mocha.MochaOptions['reporterOptions'] & {
+  runnerId?: string;
+
+  // 전달받고자 하는 QARunnerReporter instance
+  qaReporter?: QARunnerReporter;
+
+  // execQArify()로 실행 시 true로 설정됨
+  isForked?: boolean;
+};
+
+export interface QAFrameworkOption extends Omit<Mocha.MochaOptions, 'reporterOptions'> {
+  reporterOptions?: QAReporterOptions;
 }
 
 export type QARunnerOptions = {
   // specify driver name to run
   drivers?: string[];
-  isForked?: boolean;
   keepMainProcess?: boolean;
-  reporter?: QARunnerReporter;
+  /**
+   * execQArify()로 실행 시 사용되는 report
+   * forked runner와 IPC를 통해 전달받은 메시지를 재전달한다.
+   */
+  execReporter?: QARunnerReporter;
 };
 
 export type QAConfig = {
@@ -92,8 +108,9 @@ export type QAConfig = {
     // interval between attempts
     waitforInterval?: number;
   };
-  // mocha options
-  mochaOptions?: Mocha.MochaOptions;
+
+  // test framework options
+  frameworkOptions?: QAFrameworkOption;
 
   // tsconfig path for compile typescript
   tsconfig?: string;

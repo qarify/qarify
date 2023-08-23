@@ -1,12 +1,12 @@
-import type { QAConfig, QADriver, QARunnerOptions } from "../types.js";
+import type { QAConfig, QADriver, QAFrameworkOption, QAReporterOptions, QARunnerOptions } from "../types.js";
 
 export function updateConfigWithRunOptions(
   config: QAConfig,
   files?: string[],
   options: QARunnerOptions = {},
 ): QAConfig {
-  const { drivers: driverOption, isForked } = options;
-  const { drivers, specs, mochaOptions = {} } = config;
+  const { drivers: driverOption } = options;
+  const { drivers, specs, frameworkOptions: mochaOptions = {} } = config;
   
   // apply driverOption
   let _drivers: QADriver[] = [];
@@ -24,24 +24,42 @@ export function updateConfigWithRunOptions(
       _drivers.push({ name: '' } as QADriver);
     }
   }
-  // apply isForked
-  if (isForked) {
-    // set reporterOptions
-    if (!mochaOptions.reporterOptions) {
-      mochaOptions.reporterOptions = {};
-    }
-    mochaOptions.reporterOptions.isForked = true;
-    // unset reporter
-    if (mochaOptions.reporter) {
-      // use default reporter
-      mochaOptions.reporter = undefined;
-    }
-  }
 
   return {
     ...config,
     drivers: _drivers,
     specs: files,
-    ...(mochaOptions && Object.keys(mochaOptions).length ? { mochaOptions } : {}),
+  };
+}
+
+export function updateExecConfig(
+  config: QAConfig,
+  files?: string[],
+  options?: QARunnerOptions,
+) {
+  const { nodeOptions, specs, ..._config } = config;
+  const frameworkOptions = config.frameworkOptions || {} as QAFrameworkOption;
+  const { reporter, reporterOptions, ..._frameworkOptions } = frameworkOptions;
+  const { qaReporter, ..._reporterOptions } = reporterOptions || {};
+  const { execReporter, ..._options } = options || {};
+
+  _reporterOptions.isForked = true;
+
+  if (!files) { files = specs; }
+
+  return {
+    config: {
+      ..._config,
+      specs: files,
+      frameworkOptions: {
+        ..._frameworkOptions,
+        reporter: typeof reporter === 'string' ? reporter : undefined,
+        reporterOptions: _reporterOptions,
+      },
+    },
+    nodeOptions,
+    reporter: typeof reporter !== 'string' ? reporter : undefined,
+    qaReporter: execReporter || qaReporter,
+    options: _options,
   };
 }

@@ -21,7 +21,7 @@ export async function qarify(options: CLIOptions, baseDir: string) {
     if (config.nodeOptions && config.nodeOptions.length) {
       log('run child-process');
       // run child-process
-      await execQArify(files, config, { reporter: new ConsoleReporter() });
+      await execQArify(files, config, { execReporter: new ConsoleReporter() });
     }
     else {
       log('run in-process');

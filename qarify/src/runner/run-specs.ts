@@ -18,7 +18,7 @@ export async function runSpecFiles(
   config: QAConfig,
   runnerId: string
 ) {
-  const mocha = await initFramework(files, config.framework, config.mochaOptions, runnerId);
+  const mocha = await initFramework(files, config.framework, config.frameworkOptions, runnerId);
   const failed = await runFramework(mocha);
   return {
     runnerId,
@@ -40,6 +40,9 @@ export async function initFramework(
   if (!_mochaOpt.reporter) {
     _mochaOpt.reporter = TestReporter;
   }
+  if (!_mochaOpt.reporterOptions) { _mochaOpt.reporterOptions = {}; }
+  _mochaOpt.reporterOptions.runnerId = runnerId;
+
   log('mochaOpt:', _mochaOpt);
 
   const mocha = new Mocha(_mochaOpt);

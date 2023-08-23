@@ -38,7 +38,7 @@ export class TestReporter extends reporters.Base {
     const reporterOptions = (options && options.reporterOptions) || {};
     log('reporter options:', reporterOptions);
 
-    this.runnerId = reporterOptions.runnerId || `${Date.now}`;
+    this.runnerId = reporterOptions.runnerId || `${Date.now()}`;
     this.isForked = !!reporterOptions.isForked;
     this.qaReporter = reporterOptions.qaReporter;
     if (this.qaReporter) {
@@ -65,7 +65,7 @@ export class TestReporter extends reporters.Base {
       process.send && process.send(message);
     } else if (this.qaReporter && this.qaReporterMessages) {
       const { type } = message;
-      if (this.qaReporterMessages.indexOf(type) >= 0) {
+      if (this.qaReporterMessages.length === 0 || this.qaReporterMessages.indexOf(type) >= 0) {
         this.qaReporter.emit(message.type, message);
       }
     } else {
