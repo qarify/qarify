@@ -17,10 +17,10 @@ program
 program
   .option('-c, --config [path]', 'config file path')
   .option('--cacheDir [path]', 'cache directory')
-  .option('--framework [framework]', 'test framework')
+  .option('--framework [mocha-bdd|mocha-tdd|mocha-qunit|mocha-exports|normal-script]', 'test framework')
   .option('--tsconfig [path]', 'tsconfig path')
   .option('--forceBuild', 'whether to force build spec files')
-  .option('--logLevel [debug|info|error|silence]', 'log level (default: info)', 'info')
+  .option('--logLevel [debug|info|error|silence]', 'log level', 'error')
   .option('--forceFork', 'run on a forked process');
 
 program.parse();
