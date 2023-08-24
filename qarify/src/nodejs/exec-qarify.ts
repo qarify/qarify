@@ -1,10 +1,11 @@
 import {SendHandle, Serializable, spawn} from 'child_process';
 import path from 'path';
 
-import type { QAConfig, QARunnerOptions, ReportMessage } from "../types.js";
+import type { QAConfig, QARunnerOptions, QArifyResult, ReportMessage } from "../types.js";
 import _dirname from '../dirname/index.js';
 import { printMessage, updateExecConfig } from '../utils/helpers.js';
 import { getLogger, isSilent } from '../logger/logger.js';
+import { SpecRunnerEvent } from '../constants.js';
 
 const log = getLogger('nodejs:exec-qarify');
 
@@ -15,7 +16,7 @@ export async function execQArify(
   parallel = false,
   execFileName = './nodejs/run-qarify.js',
 ) {
-  return new Promise<number>(async (resolve, reject) => {
+  return new Promise<QArifyResult[]>(async (resolve, reject) => {
     const dirname = await _dirname();
     const runnerPath = path.resolve(dirname, execFileName);
 
@@ -57,6 +58,7 @@ export async function execQArify(
       stdio: ['inherit', 'inherit', 'inherit', 'ipc'], env,
     });
 
+    const result: QArifyResult[] = [];
     proc.on('message', (message: Serializable, sendHandle: SendHandle) => {
       const { type } = message as ReportMessage;
       if (eventNames) {
@@ -66,6 +68,12 @@ export async function execQArify(
         }
       } else {
         printMessage(type, message as ReportMessage);
+      }
+      if (type === SpecRunnerEvent.run_end) {
+        const { runnerId, stats } = message as ReportMessage;
+        result.push({
+          runnerId, failed: stats.failed
+        });
       }
     });
 
@@ -80,7 +88,7 @@ export async function execQArify(
           }
         });
       }
-      resolve(code || 0);
+      resolve(result);
     });
 
     // terminate children.
