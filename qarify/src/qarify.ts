@@ -4,17 +4,14 @@ import { runQArify } from "./runner/index.js";
 import { execQArify } from "./nodejs/index.js";
 import type { CLIOptions, QArifyResult } from "./types.js";
 // import { ConsoleReporter } from './utils/console-reporter.js';
-import { LogLevel, getLogger, setLogLevel, isSilent } from './logger/logger.js';
+import { getLogger, isSilent } from './logger/logger.js';
+import { applyInitialCLIOptions } from "./utils/helpers.js";
 
 const log = getLogger('run');
 
 export async function qarify(options: CLIOptions, baseDir: string) {
-  if (!process.env.DEBUG) {
-    const level = options.ci ? 'silent' : (options.logLevel || 'error');
-    setLogLevel(LogLevel[level], true);
-  } else if (options.logLevel !== 'error') {
-    console.warn('logLevel is ignored as process.env.DEBUG is set,', process.env.DEBUG);
-  }
+  // apply cli options
+  applyInitialCLIOptions(options);
 
   const config = await loadConfig(baseDir, options);
   let res: QArifyResult[];
@@ -25,7 +22,7 @@ export async function qarify(options: CLIOptions, baseDir: string) {
 
     if (options.forceFork || (config.nodeOptions && config.nodeOptions.length)) {
       log('run child-process');
-      res = await execQArify(files, config);
+      res = await execQArify(files, config, undefined, options);
       // await execQArify(files, config, { execReporter: new ConsoleReporter() });
     }
     else {

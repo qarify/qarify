@@ -1,8 +1,10 @@
 import type {
+  CLIOptions,
   QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage
 } from "../types.js";
-import { isSilent } from "../logger/logger.js";
+import { LogLevel, getLogger, setLogLevel, isSilent } from "../logger/logger.js";
 import { SpecRunnerEvent } from "../constants.js";
+import { isNode } from "./platform.js";
 
 export function updateConfigWithRunOptions(
   config: QAConfig,
@@ -81,5 +83,18 @@ export function printMessage(type: SpecRunnerEvent, message: ReportMessage) {
     if (error) {
       error.stack ? console.error(error.stack) : console.error(error.message);
     }
+  }
+}
+
+export function applyInitialCLIOptions(options: CLIOptions) {
+  let applyLogLevel = false;
+  if (isNode()) {
+    applyLogLevel = !process.env.DEBUG;
+  }
+  if (applyLogLevel) {
+    const level = options.ci ? 'silent' : (options.logLevel || 'error');
+    setLogLevel(LogLevel[level], true);
+  } else if (options.logLevel !== 'error') {
+    console.warn('logLevel is ignored as process.env.DEBUG is set,', process.env.DEBUG);
   }
 }

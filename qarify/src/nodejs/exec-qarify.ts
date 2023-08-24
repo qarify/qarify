@@ -1,7 +1,7 @@
 import {SendHandle, Serializable, spawn} from 'child_process';
 import path from 'path';
 
-import type { QAConfig, QARunnerOptions, QArifyResult, ReportMessage } from "../types.js";
+import type { CLIOptions, QAConfig, QARunnerOptions, QArifyResult, ReportMessage } from "../types.js";
 import _dirname from '../dirname/index.js';
 import { printMessage, updateExecConfig } from '../utils/helpers.js';
 import { getLogger, isSilent } from '../logger/logger.js';
@@ -13,7 +13,7 @@ export async function execQArify(
   files: string[],
   config: QAConfig,
   options: QARunnerOptions = {},
-  parallel = false,
+  cliOptions: CLIOptions = {},
   execFileName = './nodejs/run-qarify.js',
 ) {
   return new Promise<QArifyResult[]>(async (resolve, reject) => {
@@ -26,13 +26,14 @@ export async function execQArify(
 
     const rawConfig = JSON.stringify(_config);
     const rawOptions = JSON.stringify(_options);
+    const rawCliOptions = JSON.stringify(cliOptions);
 
     const args = [];
 
     if (nodeOptions && nodeOptions.length) {
       args.push(...nodeOptions);
     }
-    args.push(runnerPath, rawConfig, rawOptions);
+    args.push(runnerPath, rawConfig, rawOptions, rawCliOptions);
     log('args:', args);
 
     const env = { ...process.env };
@@ -78,9 +79,12 @@ export async function execQArify(
     });
 
     proc.on('exit', (code, signal) => {
-      log('child process is exit, keepMainProcess =', !!options.keepMainProcess);
-      // TODO: add some logic when code and signal are not normal
-      resolve(result);
+      log('child process is terminating, keepMainProcess =', !!options.keepMainProcess, `, code=${code}, signal=${signal}`);
+      if (code || signal) {
+        reject(code || 1);
+      } else {
+        resolve(result);
+      }
     });
     // TODO: set listeners for child process
     //_setListeners(proc, parallel);

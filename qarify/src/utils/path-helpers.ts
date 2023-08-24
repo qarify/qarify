@@ -1,10 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { getLogger } from "../logger/logger.js";
-
-const log = getLogger('qarify:utils:path-helpers');
-
 export function mapFilesInConfig(specFiles: string[], outFiles: string[]) {
   const files = [];
   for (const spec of specFiles) {

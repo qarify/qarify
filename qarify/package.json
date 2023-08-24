@@ -22,13 +22,16 @@
     "dev:h": "DEBUG='qarify:*' node --loader=ts-node/esm --no-warnings ./src/cli.mts --help",
     "e2e": "run-s e2e:passed:*",
     "e2e:failed": "run-s -c e2e:failed:*",
+    "e2e:error": "run-s -c e2e:error:*",
     "e2e:failed:default": "node --loader=ts-node/esm --no-warnings ./bin/qarify.js --ci",
     "e2e:passed:remote": "node ./bin/qarify.js -c tests/qarify-remote.json --ci",
     "e2e:passed:js": "node ./bin/qarify.js -c tests/qarify-js.json --ci",
     "e2e:failed:js": "node ./bin/qarify.js -c tests/qarify-js-failure.json --ci",
+    "e2e:error:js": "node ./bin/qarify.js -c tests/qarify-js-error.json --ci",
     "e2e:passed:js-build": "node ./bin/qarify.js -c tests/qarify-js.json --forceBuild --ci",
     "e2e:passed:esm": "node ./bin/qarify.js -c tests/qarify-esm.json --ci",
     "e2e:failed:esm": "node ./bin/qarify.js -c tests/qarify-esm-failure.json --ci",
+    "e2e:error:esm": "node ./bin/qarify.js -c tests/qarify-esm-error.json --ci",
     "e2e:passed:build": "node ./bin/qarify.js -c tests/qarify-build.json --ci",
     "e2e:failed:build": "node ./bin/qarify.js -c tests/qarify-build-failure.json --ci",
     "test": "mocha",
@@ -39,7 +42,8 @@
     "compile:cjs": "tsc -b tsconfig.cjs.json",
     "clean:compile": "rimraf ./dist",
     "patch:gen": "node ./scripts/patch-gen.js @wdio/logger ./patches/browser-env",
-    "patch:apply": "node ./scripts/patch-apply.js ./patches/node-env"
+    "patch:apply": "node ./scripts/patch-apply.js ./patches/node-env",
+    "patch:vsce": "sh scripts/patch-vsce.sh"
   },
   "dependencies": {
     "@qarify/globals": "1.0.0",
