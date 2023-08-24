@@ -12,6 +12,8 @@
 # `diff -u dist/dirname/index.js dist/dirname/index-edited.js > patches/qarify-1.0.0-vsce/dirname-index.diff`
 # - nodejs/index.js
 # `diff -u dist/nodejs/index.js dist/nodejs/index-edited.js > patches/qarify-1.0.0-vsce/nodejs-index.diff`
+# - nodejs/index.d.ts
+# `diff -u dist/nodejs/index.d.ts dist/nodejs/index-edited.d.ts > patches/qarify-1.0.0-vsce/nodejs-index.d.diff`
 
 if [ "$1" == "revert" ]; then
   patch -p0 -R -i patches/qarify-1.0.0-vsce/dirname-index.diff
@@ -21,4 +23,6 @@ else
   patch dist/dirname/index.js patches/qarify-1.0.0-vsce/dirname-index.diff
   # nodejs/index.js
   patch dist/nodejs/index.js patches/qarify-1.0.0-vsce/nodejs-index.diff
+  # nodejs/index.d.ts
+  patch dist/nodejs/index.d.ts patches/qarify-1.0.0-vsce/nodejs-index.d.diff
 fi

@@ -1,0 +1,6 @@
+--- dist/nodejs/index.d.ts	2023-08-25 06:19:06
++++ dist/nodejs/index-edited.d.ts	2023-08-25 06:19:56
+@@ -1 +1,3 @@
+ export * from './exec-qarify.js';
++export * from './prepare-specs.js';
++export * from './find-spec-files.js';
