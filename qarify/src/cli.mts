@@ -20,7 +20,8 @@ program
   .option('--framework [framework]', 'test framework')
   .option('--tsconfig [path]', 'tsconfig path')
   .option('--forceBuild', 'whether to force build spec files')
-  .option('--logLevel [debug|info|error|silence]', 'log level (default: info)', 'info');
+  .option('--logLevel [debug|info|error|silence]', 'log level (default: info)', 'info')
+  .option('--forceFork', 'run on a forked process');
 
 program.parse();
 

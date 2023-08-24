@@ -5,11 +5,10 @@ import { SpecRunnerFramework, _DEBUG_QUARIFY } from '../constants.js';
 import type { QAConfig, } from "../types.js";
 import { TestReporter } from "./reporter.js";
 import { getModuleType } from "../utils/platform.js";
-import { getLogger } from "../logger/logger.js";
+import { getLogger, isSilent } from "../logger/logger.js";
 
 const FILE_PROTOCOL = "file://";
 const log = getLogger('runner:run-specs');
-const err = getLogger('runner:run-specs', 'error');
 
 export async function runSpecFiles(
   files: string[],
@@ -58,7 +57,7 @@ export async function initFramework(
     try {
       await mocha.loadFilesAsync();
     } catch (e) {
-      err(e);
+      if (!isSilent()) { console.error(e); }
       throw e;
     }
   } else {

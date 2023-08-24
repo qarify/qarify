@@ -3,12 +3,10 @@ import path from 'path';
 
 import type { QAConfig, QARunnerOptions, ReportMessage } from "../types.js";
 import _dirname from '../dirname/index.js';
-import { updateExecConfig } from '../utils/helpers.js';
-import { getLogger } from '../logger/logger.js';
+import { printMessage, updateExecConfig } from '../utils/helpers.js';
+import { getLogger, isSilent } from '../logger/logger.js';
 
 const log = getLogger('nodejs:exec-qarify');
-const info = getLogger('report', 'info');
-const err = getLogger('nodejs:exec-qarify', 'error');
 
 export async function execQArify(
   files: string[],
@@ -44,7 +42,9 @@ export async function execQArify(
     if (qaReporter) {
       log('qaReporter events:', eventNames);
       if (reporter) {
-        err('qaReporter will replace frameworkOptions.reporter');
+        if (!isSilent()) {
+          console.warn('qaReporter will replace frameworkOptions.reporter');
+        }
       }
     } else {
       log('no qaReporter');
@@ -58,14 +58,14 @@ export async function execQArify(
     });
 
     proc.on('message', (message: Serializable, sendHandle: SendHandle) => {
+      const { type } = message as ReportMessage;
       if (eventNames) {
-        const { type } = message as ReportMessage;
         if (eventNames.length === 0 || eventNames.indexOf(type) >= 0) {
           qaReporter.report(type, message as ReportMessage);
           // reporter.emit(type, type, message);
         }
       } else {
-        info(message);
+        printMessage(type, message as ReportMessage);
       }
     });
 

@@ -1,4 +1,8 @@
-import type { QAConfig, QADriver, QAFrameworkOption, QAReporterOptions, QARunnerOptions } from "../types.js";
+import type {
+  QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage
+} from "../types.js";
+import { isSilent } from "../logger/logger.js";
+import { SpecRunnerEvent } from "../constants.js";
 
 export function updateConfigWithRunOptions(
   config: QAConfig,
@@ -62,4 +66,20 @@ export function updateExecConfig(
     qaReporter: execReporter || qaReporter,
     options: _options,
   };
+}
+
+export function printMessage(type: SpecRunnerEvent, message: ReportMessage) {
+  if (isSilent()) {
+    return;
+  }
+
+  if (type === SpecRunnerEvent.test_pass) {
+    console.log(message);
+  } else if (type === SpecRunnerEvent.test_fail) {
+    const { error, ..._message } = message;
+    console.error(_message);
+    if (error) {
+      error.stack ? console.error(error.stack) : console.error(error.message);
+    }
+  }
 }

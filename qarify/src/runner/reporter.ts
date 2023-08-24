@@ -3,9 +3,9 @@ import { MochaOptions, Runner, Stats, reporters } from "mocha";
 import { SpecRunnerEvent } from "../constants.js";
 import type { QARunnerReporter, ReportMessage } from "../types.js";
 import { getLogger } from "../logger/logger.js";
+import { printMessage } from "../utils/helpers.js";
 
 const log = getLogger('runner:reporter');
-const info = getLogger('report', 'info');
 
 /**
  * map mocha events to SpecRunnerEvent
@@ -62,12 +62,11 @@ export class TestReporter extends reporters.Base {
     if (this.isForked) {
       process.send && process.send(message);
     } else if (this.qaReporter && this.qaReporterMessages) {
-      const { type } = message;
       if (this.qaReporterMessages.length === 0 || this.qaReporterMessages.indexOf(type) >= 0) {
-        this.qaReporter.emit(message.type, message);
+        this.qaReporter.emit(type, message);
       }
     } else {
-      info(message);
+      printMessage(type, message);
     }
   }
 }
@@ -107,7 +106,11 @@ export function formatReportMessage(type: SpecRunnerEvent, payload: any, err?: E
     }
   }
   if (err) {
-    message.error = err;
+    message.error = {
+      name: err.name,
+      message: err.message,
+      stack: err.stack,
+    };
   }
   return message;
 }

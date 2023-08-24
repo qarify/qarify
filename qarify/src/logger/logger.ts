@@ -8,48 +8,64 @@ export enum LogLevel {
   error,
   silent,
 }
-type _LogLevelName = keyof typeof LogLevel;
-export type LogLevelName = Exclude<_LogLevelName, 'silent'>;
-type Loggers = {
-  [name in LogLevelName]: debug.Debugger;
-};
+
+enum _ns_prefix {
+  debug = ``,
+  info = `i`,
+  error = `i:e`,
+}
+
+export type LogLevelName = keyof typeof _ns_prefix;
 type LoggerCache = {
   [name: string]: debug.Debugger;
 };
 
-const cache: LoggerCache = {};
+const _cache: LoggerCache = {};
 
-const _root = debug(`${RootNS}`);
-const logger: Loggers = {
-  debug: _root,
-  info: _root.extend(`i`),
-  error: _root.extend(`ie`),
-};
+const _logger = debug(`${RootNS}`);
 
-logger.debug.log = console.log.bind(console);
-logger.info.log = console.log.bind(console);
-// logger.warn.log = console.warn.bind(console);
+let _logLevel = LogLevel.error;
+
+export function getLogLevel() {
+  return _logLevel;
+}
+
+/**
+ * bind logger to console.log
+ * By default, logger is bound to console.error.
+ */
+export function bindConsoleLog() {
+  _logger.log = console.log.bind(console);
+}
+
+export const isSilent = () => _logLevel === LogLevel.silent;
 
 export function setLogLevel(level:LogLevel, enable=false) {
+  _logLevel = level;
   debug.disable();
+
   if (level === LogLevel.silent || !enable) {return;}
   if (level === LogLevel.debug) {
-    debug.enable(`${RootNS}:*`);
+    debug.enable(`${RootNS}:${_ns_prefix.debug}*`);
   } else if (level === LogLevel.info) {
-    debug.enable(`${RootNS}:i*`);
+    debug.enable(`${RootNS}:${_ns_prefix.info}:*`);
   } else {
-    debug.enable(`${RootNS}:ie:*`);
+    debug.enable(`${RootNS}:${_ns_prefix.error}:*`);
   }
 }
 
-export function getLogger(name: string, level: LogLevelName = 'debug') {
-  if (!cache[`${level}-${name}`]) {
-    cache[`${level}-${name}`] = logger[level].extend(name);
+export function getLogger(name?: string, level: LogLevelName = 'debug') {
+  if (!name) { return _logger; }
+
+  const key = `${_ns_prefix[level] ? (_ns_prefix[level] + ':') : ''}${name}`;
+  const ns = `${RootNS}:${key}`;
+  if (!_cache[key]) {
+    _cache[key] = _logger.extend(key);
   }
-  if (debug.enabled(`${RootNS}:${level}`) && !debug.enabled(`${RootNS}:${level}:${name}`)) {
-    debug.enable(`${RootNS}:${level}:${name}`);
+  if (debug.enabled(_ns_prefix[level]) && !debug.enabled(ns)) {
+    debug.enable(ns);
   }
-  return cache[`${level}-${name}`];
+  return _cache[key];
 }
 
 export function enableLogger(namespaces = `${RootNS}:*`) {
