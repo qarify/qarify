@@ -1,4 +1,5 @@
 {
+  "name": "remote",
   "framework": "mocha-qunit",
   "specs": [
     "./qa/specs/mobile.ts"

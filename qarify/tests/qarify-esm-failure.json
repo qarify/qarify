@@ -1,8 +1,9 @@
 {
-  "name": "esm",
+  "name": "esm-failure",
   "framework": "mocha-qunit",
   "specs": [
-    "./qa/specs/greeting.ts"
+    "./qa/specs/greeting.ts",
+    "./qa/specs/greeting-failure.ts"
   ],
   "tsconfig": "./qa/tsconfig.json",
   "nodeOptions": ["--loader=ts-node/esm", "--no-warnings"],
