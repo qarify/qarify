@@ -11,15 +11,11 @@ const log = getLogger('run');
 
 export async function qarify(options: CLIOptions, baseDir: string) {
   if (!process.env.DEBUG) {
-    if (options.logLevel) {
-      setLogLevel(LogLevel[options.logLevel], true);
-    } else {
-      setLogLevel(LogLevel.error, true);
-    }
+    const level = options.ci ? 'silent' : (options.logLevel || 'error');
+    setLogLevel(LogLevel[level], true);
   } else if (options.logLevel !== 'error') {
     console.warn('logLevel is ignored as process.env.DEBUG is set,', process.env.DEBUG);
   }
-  log('options:', options);
 
   const config = await loadConfig(baseDir, options);
   let res: QArifyResult[];

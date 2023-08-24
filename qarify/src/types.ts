@@ -133,4 +133,5 @@ export type QAConfig = {
 export type CLIOptions = Partial<QAConfig> & {
   logLevel?: LogLevelName;
   forceFork?: boolean;
+  ci?: boolean;
 };

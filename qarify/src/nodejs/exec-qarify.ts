@@ -79,37 +79,35 @@ export async function execQArify(
 
     proc.on('exit', (code, signal) => {
       log('child process is exit, keepMainProcess =', !!options.keepMainProcess);
-      if (!options.keepMainProcess) {
-        process.on('exit', () => {
-          if (signal) {
-            process.kill(process.pid, signal);
-          } else {
-            process.exit(code || 0);
-          }
-        });
-      }
+      // TODO: add some logic when code and signal are not normal
       resolve(result);
     });
-
-    // terminate children.
-    process.on('SIGINT', () => {
-      // XXX: a previous comment said this would abort the runner, but I can't see that it does
-      // anything with the default runner.
-      log('main process caught SIGINT');
-      proc.kill('SIGINT');
-      // if running in parallel mode, we will have a proper SIGINT handler, so the below won't
-      // be needed.
-      if (!parallel) {
-        // win32 does not support SIGTERM, so use next best thing.
-        if (require('os').platform() === 'win32') {
-          proc.kill('SIGKILL');
-        } else {
-          // using SIGKILL won't cleanly close the output streams, which can result
-          // in cut-off text or a befouled terminal.
-          log('sending SIGTERM to child process');
-          proc.kill('SIGTERM');
-        }
-      }
-    });
+    // TODO: set listeners for child process
+    //_setListeners(proc, parallel);
   });
 }
+
+/*
+function _setListeners(proc: ChildProcess, parallel?: boolean) {
+  // terminate children.
+  process.on('SIGINT', () => {
+    // XXX: a previous comment said this would abort the runner, but I can't see that it does
+    // anything with the default runner.
+    log('main process caught SIGINT');
+    proc.kill('SIGINT');
+    // if running in parallel mode, we will have a proper SIGINT handler, so the below won't
+    // be needed.
+    if (!parallel) {
+      // win32 does not support SIGTERM, so use next best thing.
+      if (require('os').platform() === 'win32') {
+        proc.kill('SIGKILL');
+      } else {
+        // using SIGKILL won't cleanly close the output streams, which can result
+        // in cut-off text or a befouled terminal.
+        log('sending SIGTERM to child process');
+        proc.kill('SIGTERM');
+      }
+    }
+  });
+}
+*/
