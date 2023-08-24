@@ -4,7 +4,7 @@ import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "../types
 import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { updateConfigWithRunOptions } from '../utils/helpers.js';
-import { getLogger } from "../logger/logger.js";
+import { getLogger, isSilent } from "../logger/logger.js";
 
 const log = getLogger('runner:run-qarify');
 
@@ -15,6 +15,17 @@ export async function runQArify(
 ): Promise<QArifyResult[]> {
   const _config = updateConfigWithRunOptions(config, files, options);
   const { testOptions, drivers, name, specs } = _config;
+
+  if (!specs || !specs.length) {
+    if (!config.ignoreNoFiles) {
+      throw new Error('No spec files. Check the "specs" property in the QArify config');
+    }
+    if (!isSilent()) {
+      console.warn('No spec files');
+    }
+    log('no spec files');
+  }
+
   // expect
   setGlobalExpect({
     wait: testOptions.waitforTimeout, // ms to wait for expectation to succeed

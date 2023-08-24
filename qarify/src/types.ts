@@ -70,12 +70,13 @@ export interface QAFrameworkOption extends Omit<Mocha.MochaOptions, 'reporterOpt
 export type QARunnerOptions = {
   // specify driver name to run
   drivers?: string[];
-  keepMainProcess?: boolean;
-  /**
-   * execQArify()로 실행 시 사용되는 report
-   * forked runner와 IPC를 통해 전달받은 메시지를 재전달한다.
-   */
+
+  // execQArify()로 실행 시 사용되는 report
+  // forked runner와 IPC를 통해 전달받은 메시지를 재전달한다.
   execReporter?: QARunnerReporter;
+
+  // whether not to kill main process
+  keepMainProcess?: boolean;
 };
 
 export type QAConfig = {
@@ -128,10 +129,16 @@ export type QAConfig = {
 
   // drivers to use while testing
   drivers: QADriver[];
+
+  // whether to ignore no spec files to run
+  ignoreNoFiles?: boolean;
 };
 
 export type CLIOptions = Partial<QAConfig> & {
   logLevel?: LogLevelName;
-  forceFork?: boolean;
+
+  // whether to run in ci-mode
   ci?: boolean;
+
+  forceFork?: boolean;
 };

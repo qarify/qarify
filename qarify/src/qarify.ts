@@ -20,7 +20,7 @@ export async function qarify(options: CLIOptions, baseDir: string) {
   let res: QArifyResult[];
 
   try {
-    log('prepare files with forceBuild =', config.forceBuild);
+    log('prepare files with forceBuild =', !!config.forceBuild);
     const files = await prepareSpecs(config);
 
     if (options.forceFork || (config.nodeOptions && config.nodeOptions.length)) {

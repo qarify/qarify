@@ -1,0 +1,7 @@
+{
+  "name": "js-error",
+  "framework": "mocha-qunit",
+  "specs": [
+    "./qa-js/specs/not-existing-file.js"
+  ]
+}

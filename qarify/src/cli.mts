@@ -21,7 +21,8 @@ program
   .option('--tsconfig [path]', 'tsconfig path')
   .option('--forceBuild', 'whether to force build spec files')
   .option('--logLevel [debug|info|error|silence]', 'log level', 'error')
-  .option('--ci', 'run in ci-mode')
+  .option('--ci', 'whether to run in ci-mode')
+  .option('--ignoreNoFiles', 'whether to ignore no spec files to run')
   .option('--forceFork', 'run on a forked process');
 
 program.parse();

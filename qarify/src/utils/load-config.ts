@@ -45,7 +45,7 @@ export async function loadConfig(
   options?: CLIOptions,
 ): Promise<QAConfig> {
   let { config: configFile, ..._options } = options || {} as CLIOptions;
-  let userConfig = {} as QAConfig;
+  let userConfig = {..._options} as QAConfig;
 
   if (_options.cacheDir && !path.isAbsolute(_options.cacheDir)) {
     _options.cacheDir = path.join(baseDir, _options.cacheDir);
