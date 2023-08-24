@@ -2,7 +2,6 @@
   "name": "js-failure",
   "framework": "mocha-qunit",
   "specs": [
-    "./qa-js/specs/greeting.js",
-    "./qa-js/specs/greeting-failure.js"
+    "./qa-js/specs/*.js"
   ]
 }

@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import { glob } from 'glob';
 
 import { getLogger } from "../logger/logger.js";
 
@@ -63,40 +62,6 @@ export function findAllFiles(dir: string, files?: string[]) {
     }
   });
   return files;
-}
-
-export function findSpecFiles(files: string[], baseDir: string, extensions: string[] = []) {
-  const found: string[] = [];
-  files.forEach((_filepath) => {
-    const filepath = path.isAbsolute(_filepath) ? _filepath : path.join(baseDir, _filepath);
-    if (!fs.existsSync(filepath)) {
-      let pattern;
-      if (glob.hasMagic(filepath, {windowsPathsNoEscape: true})) {
-        // Handle glob as is without extensions
-        pattern = filepath;
-      } else {
-        // glob pattern e.g. 'filepath+(.js|.ts)'
-        const strExtensions = extensions
-          .map(ext => (ext.startsWith('.') ? ext : `.${ext}`))
-          .join('|');
-        pattern = `${filepath}+(${strExtensions})`;
-        log('looking for files using glob pattern: %s', pattern);
-      }
-      found.push(
-        ...glob.sync(pattern, {
-          nodir: true,
-          windowsPathsNoEscape: true
-        }));
-    } else {
-      if (fs.statSync(filepath).isFile()) {
-        found.push(filepath);
-      } else {
-        throw new Error('not a file' + filepath);
-      }
-    }
-  });
-
-  return found;
 }
 
 export function isTS(fileName: string) {

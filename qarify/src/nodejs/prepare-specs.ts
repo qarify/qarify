@@ -3,7 +3,8 @@ import path from "path";
 import { execa } from "execa";
 
 import type { QAConfig } from "../types.js";
-import { findAllFiles, findSpecFiles, mapFilesInConfig } from "./path-helpers.js";
+import { findAllFiles, mapFilesInConfig } from "../utils/path-helpers.js";
+import { findSpecFiles } from './find-spec-files.js';
 
 const _defaultTsConfig = './qa/tsconfig.json';
 

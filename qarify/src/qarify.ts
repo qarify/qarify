@@ -1,6 +1,5 @@
-import {
-  loadConfig, prepareSpecs,
-} from "./utils/index.js";
+import { loadConfig } from "./utils/index.js";
+import { prepareSpecs } from './nodejs/prepare-specs.js';
 import { runQArify } from "./runner/index.js";
 import { execQArify } from "./nodejs/index.js";
 import type { CLIOptions, QArifyResult } from "./types.js";
