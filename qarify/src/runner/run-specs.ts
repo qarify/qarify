@@ -1,7 +1,7 @@
 import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
 
-import { SpecRunnerFramework, _DEBUG_QUARIFY } from '../constants.js';
+import { SpecRunnerFramework } from '../constants.js';
 import type { QAConfig, } from "../types.js";
 import { TestReporter } from "./reporter.js";
 import { getModuleType } from "../utils/platform.js";

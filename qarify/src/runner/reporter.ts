@@ -7,6 +7,21 @@ import { printMessage } from "../utils/helpers.js";
 
 const log = getLogger('runner:reporter');
 
+// const {
+//  EVENT_RUN_BEGIN,
+//  EVENT_RUN_END,
+// 	EVENT_HOOK_BEGIN,
+// 	EVENT_HOOK_END,
+//  EVENT_SUITE_BEGIN,
+// 	EVENT_SUITE_END,
+//  EVENT_TEST_BEGIN,
+// 	EVENT_TEST_FAIL,
+//  EVENT_TEST_PASS,
+// 	EVENT_TEST_PENDING,
+//  EVENT_TEST_RETRY,
+// 	EVENT_TEST_END,
+// } = Runner.constants;
+
 /**
  * map mocha events to SpecRunnerEvent
  */

@@ -31,9 +31,8 @@ export function findSpecFiles(files: string[], baseDir: string, extensions: stri
     } else {
       if (fs.statSync(filepath).isFile()) {
         found.push(filepath);
-      } else {
-        throw new Error('not a file' + filepath);
       }
+      // TODO: handle directory
     }
   });
 

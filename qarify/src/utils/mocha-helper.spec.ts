@@ -14,7 +14,7 @@ describe('spec-info', function() {
 
   it('should return valid spec node', async function() {
     const mocha = new Mocha();
-    mocha.addFile(path.resolve(__dirname, '__mock', 'spec-data.js'));
+    mocha.addFile(path.resolve(__dirname, '__mock', 'spec-bdd.js'));
     await mocha.loadFilesAsync();
 
     const res = getTestSuiteNode(mocha);

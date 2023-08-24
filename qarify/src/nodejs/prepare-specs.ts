@@ -8,7 +8,7 @@ import { findSpecFiles } from './find-spec-files.js';
 
 const _defaultTsConfig = './qa/tsconfig.json';
 
-async function _buildSpecs(config: QAConfig) {
+async function _execBuild(config: QAConfig) {
   const outDir = path.join(config.cacheDir, "out");
   const args = ['tsc'];
   args.push('-p', config.tsconfig!);
@@ -26,7 +26,7 @@ async function _buildSpecs(config: QAConfig) {
   return outDir;
 }
 
-export async function buildSpecs(config: QAConfig) {
+async function buildSpecs(config: QAConfig) {
   const files = findSpecFiles(config.specs, config.rootDir);
   if (files.length <= 0) {
     throw new Error("No spec files");
@@ -37,7 +37,7 @@ export async function buildSpecs(config: QAConfig) {
   if (!fs.existsSync(config.tsconfig)) {
     throw new Error('no tsconfig file specified for build files');
   }
-  const outDir = await _buildSpecs(config);
+  const outDir = await _execBuild(config);
   if (!outDir) {
     throw new Error("Build failed");
   }
