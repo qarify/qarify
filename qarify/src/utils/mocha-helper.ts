@@ -1,6 +1,5 @@
 import type Mocha from "mocha";
-
-import type { TestSuiteNode } from '../types';
+import type { TestSuiteNode } from '@qarify/types';
 
 //
 // See https://github.com/maty21/mocha-sidebar/blob/master/lib/core.js

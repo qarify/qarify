@@ -1,8 +1,7 @@
 import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
+import type { QAConfig, SpecRunnerFramework } from "@qarify/types";
 
-import { SpecRunnerFramework } from '../constants.js';
-import type { QAConfig, } from "../types.js";
 import { TestReporter } from "./reporter.js";
 import { getModuleType } from "../utils/platform.js";
 import { getLogger, isSilent } from "../logger/logger.js";

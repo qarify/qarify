@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from "path";
 import { execa } from "execa";
+import type { QAConfig } from "@qarify/types";
 
-import type { QAConfig } from "../types.js";
 import { findAllFiles, mapFilesInConfig } from "../utils/path-helpers.js";
 import { findSpecFiles } from './find-spec-files.js';
 

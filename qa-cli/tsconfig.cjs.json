@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    /* Emit */
+    "noEmit": false,
+    "outDir": "dist/__cjs",
+
+    /* Language and Environment */
+    "target": "ES2020",
+
+    /* Modules */
+    "module": "CommonJS",
+    "rootDir": "./src",
+  },
+  "include": [
+    "./src",
+  ],
+  "exclude": [
+    "./src/**/*.mts",
+    "./src/**/*.spec.ts",
+  ]
+}

@@ -1,5 +1,5 @@
+import type { CLIOptions, QAConfig, QARunnerOptions } from '@qarify/types';
 
-import type { CLIOptions, QAConfig, QARunnerOptions } from '../types.js';
 import { runQArify } from '../runner/run-qarify.js';
 import { getLogger, isSilent } from '../logger/logger.js';
 import { applyInitialCLIOptions } from "../utils/helpers.js";

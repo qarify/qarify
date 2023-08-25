@@ -1,10 +1,10 @@
 import path from "node:path";
 import url from 'url';
 import { expect } from 'expect-webdriverio';
+import type { QAConfig } from "@qarify/types";
+import { SpecRunnerFramework } from "@qarify/types";
 
 import { loadConfig } from "./load-config.js";
-import { QAConfig } from "../types.js";
-import { SpecRunnerFramework } from "../constants.js";
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const _baseDir = path.join(__dirname, '__mock');

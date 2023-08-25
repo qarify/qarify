@@ -1,8 +1,8 @@
 import { EventEmitter } from "events";
 import type {
-  ReportMessage, QARunnerReporter
-} from '../types.js';
-import { SpecRunnerEvent } from '../constants.js';
+  ReportMessage, QARunnerReporter, SpecRunnerEvent
+} from '@qarify/types';
+
 import { printMessage } from "./helpers.js";
 
 /**

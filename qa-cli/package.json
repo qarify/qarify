@@ -1,0 +1,66 @@
+{
+  "name": "@qarify/cli",
+  "version": "1.0.0",
+  "private": false,
+  "author": "Peter HS Kang <peterhs.kang@gmail.com>",
+  "description": "QArify",
+  "license": "MIT",
+  "keywords": [
+    "QA",
+    "test"
+  ],
+  "bin": {
+    "qarify": "./bin/qarify.js"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/__cjs/index.js",
+  "exports": {
+    ".": [
+      {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "require": "./dist/__cjs/index.js"
+      },
+      "./dist/__cjs/index.js"
+    ]
+  },
+  "scripts": {
+    "dev": "DEBUG='qarify:*' node --loader=ts-node/esm --no-warnings ./src/cli.mts",
+    "dev:build": "DEBUG='qarify:*' node --loader=ts-node/esm --no-warnings ./src/cli.mts --forceBuild",
+    "dev:h": "DEBUG='qarify:*' node --loader=ts-node/esm --no-warnings ./src/cli.mts --help",
+    "e2e": "run-p e2e:passed:*",
+    "e2e:failed": "run-s -c e2e:failed:*",
+    "e2e:error": "run-s -c e2e:error:*",
+    "e2e:failed:default": "node --loader=ts-node/esm --no-warnings ./bin/qarify.js --ci",
+    "e2e:passed:remote": "node ./bin/qarify.js -c tests-e2e/qarify-remote.json --ci",
+    "e2e:passed:js": "node ./bin/qarify.js -c tests-e2e/qarify-js.json --ci",
+    "e2e:failed:js": "node ./bin/qarify.js -c tests-e2e/qarify-js-failure.json --ci",
+    "e2e:error:js": "node ./bin/qarify.js -c tests-e2e/qarify-js-error.json --ci",
+    "e2e:passed:js-build": "node ./bin/qarify.js -c tests-e2e/qarify-js.json --forceBuild --ci",
+    "e2e:passed:esm": "node ./bin/qarify.js -c tests-e2e/qarify-esm.json --ci",
+    "e2e:failed:esm": "node ./bin/qarify.js -c tests-e2e/qarify-esm-failure.json --ci",
+    "e2e:error:esm": "node ./bin/qarify.js -c tests-e2e/qarify-esm-error.json --ci",
+    "e2e:passed:build": "node ./bin/qarify.js -c tests-e2e/qarify-build.json --ci",
+    "e2e:failed:build": "node ./bin/qarify.js -c tests-e2e/qarify-build-failure.json --ci",
+    "test:types": "tsc --skipLibCheck",
+    "build": "run-s clean:build compile:*",
+    "compile": "run-s compile:*",
+    "compile:esm": "tsc -b tsconfig.build.json",
+    "compile:cjs": "tsc -b tsconfig.cjs.json",
+    "clean:build": "rimraf ./dist"
+  },
+  "dependencies": {
+    "qarify": "1.0.0",
+    "@qarify/types": "1.0.0",
+    "@qarify/globals": "1.0.0",
+    "commander": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.8",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.1.6",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.1"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES6",
+    "lib": ["es6"],
+    "allowJs": true,
+    "checkJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "types": [],
+
+    /* Output */
+    "outDir": "./dist",
+    "declaration": true,
+    "removeComments": true,
+    "sourceMap": false,
+    "noEmit": true,
+
+    /* Lint */
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+  },
+  "include": ["./src", "./types.d.ts"],
+  "exclude": ["./dist"]
+}

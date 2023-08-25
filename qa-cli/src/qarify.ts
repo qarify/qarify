@@ -1,11 +1,8 @@
-import { loadConfig } from "./utils/index.js";
-import { prepareSpecs } from './nodejs/prepare-specs.js';
-import { runQArify } from "./runner/index.js";
-import { execQArify } from "./nodejs/index.js";
-import type { CLIOptions, QArifyResult } from "./types.js";
-// import { ConsoleReporter } from './utils/console-reporter.js';
-import { getLogger, isSilent } from './logger/logger.js';
-import { applyInitialCLIOptions } from "./utils/helpers.js";
+import type { CLIOptions, QArifyResult } from "@qarify/types";
+
+import {
+  loadConfig, prepareSpecs, runQArify, execQArify, getLogger, isSilent, applyInitialCLIOptions
+} from "qarify";
 
 const log = getLogger('run');
 

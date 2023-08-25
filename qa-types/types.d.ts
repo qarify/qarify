@@ -1,8 +1,13 @@
-import type { EventEmitter } from "events";
-import type { AttachOptions } from 'webdriver';
-import type { Capabilities } from '@wdio/types';
-import type { SpecRunnerEvent, SpecRunnerFramework } from "./constants";
-import type { LogLevelName } from './logger/logger';
+/// <reference types="node" />
+/// <reference types="mocha" />
+
+export * from './dist/index';
+import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework } from './dist/index';
+
+declare type AttachOptions = { }
+declare namespace Capabilities {
+  type Capabilities = { }
+}
 
 export type ReportMessage = {
   runnerId: string;
@@ -49,7 +54,7 @@ export type QArifyResult = {
   failed: number;
 };
 
-export interface QARunnerReporter extends EventEmitter {
+export interface QARunnerReporter extends NodeJS.EventEmitter {
   report: (type: SpecRunnerEvent, message: ReportMessage) => void;
 }
 
@@ -135,7 +140,7 @@ export type QAConfig = {
 };
 
 export type CLIOptions = Partial<QAConfig> & {
-  logLevel?: LogLevelName;
+  logLevel?: keyof typeof LogLevel;
 
   // whether to run in ci-mode
   ci?: boolean;

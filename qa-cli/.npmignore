@@ -1,4 +1,7 @@
 # .npmignore - the files to not push to NPM
 patches/
+qa/
 scripts/
 src/
+tests/
+tmp/

@@ -1,6 +1,6 @@
 import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
+import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "@qarify/types";
 
-import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "../types.js";
 import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { updateConfigWithRunOptions } from '../utils/helpers.js';
@@ -70,7 +70,7 @@ async function makeConnection(
 
 
   if (session) {
-    log(`make connection, ${driver.name} with session ${session.sessionId}`);
+    log(`make connection, ${driver.name} with session,`, session);
     return attach({
       ...session,
       capabilities,

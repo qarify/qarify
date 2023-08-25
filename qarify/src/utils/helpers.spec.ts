@@ -1,7 +1,8 @@
 import { expect } from 'expect-webdriverio';
+import type { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions } from '@qarify/types';
+import { SpecRunnerFramework } from '@qarify/types';
+
 import { updateConfigWithRunOptions, updateExecConfig } from "./helpers.js";
-import { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions } from '../types.js';
-import { SpecRunnerFramework } from '../constants.js';
 import { TestReporter } from '../runner/reporter.js';
 
 describe('utils/helpers', function() {

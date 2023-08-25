@@ -1,9 +1,9 @@
 import type {
-  CLIOptions,
-  QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage
-} from "../types.js";
+  CLIOptions, QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage
+} from "@qarify/types";
+import { SpecRunnerEvent } from "@qarify/types";
+
 import { LogLevel, getLogger, setLogLevel, isSilent } from "../logger/logger.js";
-import { SpecRunnerEvent } from "../constants.js";
 import { isNode } from "./platform.js";
 
 export function updateConfigWithRunOptions(

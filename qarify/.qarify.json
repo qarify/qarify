@@ -1,9 +1,0 @@
-{
-  "name": "test qarify",
-  "specs": [
-    "./tests/qa/specs/greeting.ts",
-    "./tests/qa/specs/greeting-failure.ts"
-  ],
-
-  "tsconfig": "./tests/qa/tsconfig.json"
-}

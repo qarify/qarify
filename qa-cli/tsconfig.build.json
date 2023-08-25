@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    /* Emit */
+    "noEmit": false,
+    "outDir": "dist",
+    "declaration": true,
+
+    /* Language and Environment */
+    "target": "ESNext",
+
+    /* Modules */
+    "module": "ESNext",
+    "rootDir": "./src",
+  },
+  "include": [
+    "./src",
+  ],
+  "exclude": [
+    "./src/**/*.cts",
+    "./src/**/*.spec.ts",
+  ]
+}

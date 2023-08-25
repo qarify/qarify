@@ -5,6 +5,8 @@
     "build": "lerna run build",
     "compile": "lerna run compile",
     "clean": "lerna run clean:build",
+    "test": "lerna run test",
+    "e2e": "lerna run e2e",
     "test:types": "lerna run test:types"
   },
   "devDependencies": {

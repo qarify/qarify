@@ -1,3 +1,11 @@
+
+export enum LogLevel {
+  debug = 1,
+  info,
+  error,
+  silent,
+}
+
 // See https://mochajs.org/#interfaces
 export enum SpecRunnerFramework {
   mocha_bdd = 'mocha-bdd',

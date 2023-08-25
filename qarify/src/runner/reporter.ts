@@ -1,7 +1,7 @@
 import { MochaOptions, Runner, Stats, reporters } from "mocha";
+import type { QARunnerReporter, ReportMessage } from "@qarify/types";
+import { SpecRunnerEvent } from "@qarify/types";
 
-import { SpecRunnerEvent } from "../constants.js";
-import type { QARunnerReporter, ReportMessage } from "../types.js";
 import { getLogger } from "../logger/logger.js";
 import { printMessage } from "../utils/helpers.js";
 
