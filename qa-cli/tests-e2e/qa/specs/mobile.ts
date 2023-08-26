@@ -1,7 +1,10 @@
-import { expect } from 'expect-webdriverio';
 
 test('driver should be defined', () => {
   expect(driver).toBeDefined();
+  expect($).toBeDefined();
+  expect($$).toBeDefined();
+  expect(typeof $).toBe('function');
+  expect(typeof $$).toBe('function');
 });
 
 test('session should be defined', async () => {

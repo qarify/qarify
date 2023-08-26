@@ -1,4 +1,3 @@
-import { expect } from 'expect-webdriverio';
 import bye from '../tasks/bye.js';
 import hello from '../tasks/hello.js';
 
