@@ -1,13 +1,12 @@
 /// <reference types="node" />
 /// <reference types="mocha" />
 
-export * from './dist/index';
-import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework } from './dist/index';
+import type { AttachOptions } from 'webdriver';
+import type { Capabilities } from '@wdio/types';
 
-declare type AttachOptions = { }
-declare namespace Capabilities {
-  type Capabilities = { }
-}
+import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework } from './dist/index.js';
+
+export * from './dist/index.js';
 
 export type ReportMessage = {
   runnerId: string;
