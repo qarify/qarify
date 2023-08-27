@@ -4,6 +4,19 @@
 # Install-deps / Build / Link / Unlink Packages
 #
 
+NPM_GLOBAL_DIR=/usr/local/lib/node_modules
+__DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+ROOT_DIR=$(realpath "$__DIR/..")
+
+PACKAGE_DIR_NAMES=(
+    qa-types
+    qa-globals
+    qarify
+    qa-cli
+)
+
+PACKAGE_DIR="$ROOT_DIR"
+
 function usage() {
     echo "Usage:"
     echo "$0 [hiIbBludC] [package-dir-name]"
@@ -63,6 +76,7 @@ function _do_jobs() {
             #echo "sudo npm link $name"
             npm link
             res="$?"
+            ls -al "$NPM_GLOBAL_DIR/$name"
         fi
     fi
 
@@ -73,23 +87,12 @@ function _do_jobs() {
             #echo "sudo npm unlink $name"
             npm unlink $name
             res="$?"
+            ls -al "$NPM_GLOBAL_DIR/$name"
         fi
     fi
 
     return "$res"
 }
-
-__DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-ROOT_DIR=$(realpath "$__DIR/..")
-
-PACKAGE_DIR_NAMES=(
-    qa-types
-    qa-globals
-    qarify
-    qa-cli
-)
-
-PACKAGE_DIR="$ROOT_DIR"
 
 # -h: print usage and exit
 # -i: install deps
