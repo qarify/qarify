@@ -28,18 +28,17 @@
   },
   "scripts": {
     "test:types": "tsc --skipLibCheck",
-    "compile": "run-s compile:*",
+    "compile": "tsc -b ./tsconfig.build.json ./tsconfig.cjs.json",
     "compile:esm": "tsc -b ./tsconfig.build.json",
     "compile:cjs": "tsc -b ./tsconfig.cjs.json",
     "clean:build": "rimraf dist",
-    "build": "run-s clean:build compile:*",
-    "postinstall": "npm run build"
+    "build": "run-s clean:build compile"
   },
   "devDependencies": {
+    "@wdio/types": "8.10.4",
     "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.1",
     "typescript": "~5.1.6",
-    "@wdio/types": "8.10.4",
     "webdriver": "8.11.1"
   },
   "optionalDependencies": {
