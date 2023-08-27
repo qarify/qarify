@@ -40,8 +40,8 @@
     "execa": "^7.2.0",
     "mocha": "^10.2.0",
     "glob": "^10.3.3",
-    "webdriverio": "^8.15.4",
-    "expect-webdriverio": "^4.2.7"
+    "webdriverio": "8.10.7",
+    "expect-webdriverio": "4.2.6"
   },
   "devDependencies": {
     "@types/debug": "^4.1.8",

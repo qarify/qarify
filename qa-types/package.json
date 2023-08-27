@@ -40,10 +40,10 @@
     "rimraf": "^5.0.1",
     "typescript": "~5.1.6",
     "@wdio/types": "8.10.4",
-    "webdriver": "8.11.1"
+    "webdriver": "8.10.7"
   },
   "optionalDependencies": {
     "@wdio/types": "8.10.4",
-    "webdriver": "8.11.1"
+    "webdriver": "8.10.7"
   }
 }
