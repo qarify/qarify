@@ -8,7 +8,8 @@
     "clean": "lerna run clean:build",
     "test": "lerna run test",
     "e2e": "lerna run e2e",
-    "test:types": "lerna run test:types"
+    "test:types": "lerna run test:types",
+    "link:wdio": "npm link @wdio/types webdriverio expect-webdriverio"
   },
   "devDependencies": {
     "lerna": "~7.1.1"

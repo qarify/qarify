@@ -22,6 +22,40 @@ function usage() {
     echo "$0 [hiIbBludC] [package-dir-name]"
 }
 
+# -h: print usage and exit
+# -i: install deps
+# -I: clean install
+# -b: build
+# -B: clean build
+# -l: link
+# -u: unlink
+# -d: dry run
+# -c: cleanup `dist`, `node_modules` and exit
+# -C: cleanup `dist`, `node_modules`, `package-lock.json` and exit
+
+JOBS="$1"
+if [[ "$JOBS" =~ "h" ]]; then
+   usage
+   exit 0
+fi
+
+shift
+TARGET_PACKAGES=( "$@" )
+if [[ "$TARGET_PACKAGES" == "" ]]; then
+    TARGET_PACKAGES=( ${PACKAGE_DIR_NAMES[@]} )
+fi
+
+# check cleanup
+if [[ "$JOBS" =~ [cC] ]]; then
+    pushd "$ROOT_DIR" > /dev/null
+    if [[ "$JOBS" =~ "C" ]]; then
+        find . \( -name "node_modules" -type d \) -o \( -name "dist" -type d \) -o \( -name "package-lock.json" -type f \) | xargs rm -rf
+    else 
+        find . \( -name "node_modules" -type d \) -o \( -name "dist" -type d \) | xargs rm -rf
+    fi
+    exit 0
+fi
+
 function _install_deps() {
     local jobs="$1"
     local res=0
@@ -93,39 +127,6 @@ function _do_jobs() {
 
     return "$res"
 }
-
-# -h: print usage and exit
-# -i: install deps
-# -I: clean install
-# -b: build
-# -B: clean build
-# -l: link
-# -u: unlink
-# -d: dry run
-# -c: cleanup `dist`, `node_modules`
-
-JOBS="$1"
-if [[ "$JOBS" =~ "h" ]]; then
-   usage
-   exit 0
-fi
-
-shift
-TARGET_PACKAGES=( "$@" )
-if [[ "$TARGET_PACKAGES" == "" ]]; then
-    TARGET_PACKAGES=( ${PACKAGE_DIR_NAMES[@]} )
-fi
-
-# check cleanup
-if [[ "$JOBS" =~ [cC] ]]; then
-    pushd "$ROOT_DIR" > /dev/null
-    if [[ "$JOBS" =~ "C" ]]; then
-        find . \( -name "node_modules" -type d \) -o \( -name "dist" -type d \) -o \( -name "package-lock.json" -type f \) | xargs rm -rf
-    else 
-        find . \( -name "node_modules" -type d \) -o \( -name "dist" -type d \) | xargs rm -rf
-    fi
-    exit 0
-fi
 
 if [[ "$JOBS" =~ [iI] ]]; then
     pushd "$ROOT_DIR" > /dev/null
