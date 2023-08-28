@@ -13,6 +13,7 @@
 - `e2e`: run e2e tests
 - `test:types`: check types
 - `link:deps`: run `npm link` with deps packages, such as `webdriverio`
+- `patch:vsce`: vscode extension에서 사용하기 위한 patch를 적용함
 
 ## TODO
 
