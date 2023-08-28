@@ -1,13 +1,7 @@
 import debug from 'debug';
+import { LogLevel } from '@qarify/types';
 
 const RootNS = 'qarify';
-
-export enum LogLevel {
-  debug = 1,
-  info,
-  error,
-  silent,
-}
 
 enum _ns_prefix {
   debug = ``,

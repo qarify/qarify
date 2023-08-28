@@ -3,7 +3,7 @@ import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "@qarify/
 
 import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
-import { updateConfigWithRunOptions } from '../utils/helpers.js';
+import { updateConfigWithRunnerOptions } from '../utils/helpers.js';
 import { getLogger, isSilent } from "../logger/logger.js";
 
 const log = getLogger('runner:run-qarify');
@@ -13,7 +13,7 @@ export async function runQArify(
   config: QAConfig,
   options: QARunnerOptions = {},
 ): Promise<QArifyResult[]> {
-  const _config = updateConfigWithRunOptions(config, files, options);
+  const _config = updateConfigWithRunnerOptions(config, files, options);
   const { testOptions, drivers, name, specs } = _config;
 
   if (!specs || !specs.length) {

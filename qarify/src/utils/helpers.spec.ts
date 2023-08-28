@@ -2,7 +2,7 @@ import { expect } from 'expect-webdriverio';
 import type { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions } from '@qarify/types';
 import { SpecRunnerFramework } from '@qarify/types';
 
-import { updateConfigWithRunOptions, updateExecConfig } from "./helpers.js";
+import { updateConfigWithRunnerOptions, updateExecConfig } from "./helpers.js";
 import { TestReporter } from '../runner/reporter.js';
 
 describe('utils/helpers', function() {
@@ -17,19 +17,19 @@ describe('utils/helpers', function() {
       specs: [], testOptions: {}, drivers: _drivers,
     };
   
-    let res = updateConfigWithRunOptions(config);
+    let res = updateConfigWithRunnerOptions(config);
     expect(res).toEqual(config);
     
     // files
     const files = [ './spec.ts' ];
-    res = updateConfigWithRunOptions(config, files);
+    res = updateConfigWithRunnerOptions(config, files);
     expect(res.specs).toEqual(files);
 
     // drivers in options
     let options: QARunnerOptions = {
       drivers: ['2'],
     };
-    res = updateConfigWithRunOptions(config, undefined, options);
+    res = updateConfigWithRunnerOptions(config, undefined, options);
     expect(res.drivers).toEqual(_drivers.filter((e) => e.name === '2'));
   });
 
