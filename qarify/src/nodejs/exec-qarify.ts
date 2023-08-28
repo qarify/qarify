@@ -36,9 +36,14 @@ export async function execQArify(
     args.push(runnerPath, rawConfig, rawOptions, rawCliOptions);
     log('args:', args);
 
-    const env = { ...process.env };
+    const env = { ...(Object.entries(process.env).reduce((acc, [k, v]) => {
+      if (!k.startsWith('npm_') && !k.startsWith('VSCODE_')) {
+        acc[k] = v;
+      }
+      return acc;
+    }, {} as any)) };
     if (_config.tsconfig) { env.TS_NODE_PROJECT = _config.tsconfig; };
-    // log('env:', env);
+    log('env:', env);
 
     const eventNames = qaReporter && qaReporter.eventNames();
     if (qaReporter) {
@@ -56,7 +61,7 @@ export async function execQArify(
     }
 
     const proc = spawn('node', args, {
-      stdio: ['inherit', 'inherit', 'inherit', 'ipc'], env,
+      stdio: ['inherit', 'inherit', 'inherit', 'ipc'], env, cwd: _config.rootDir,
     });
 
     const result: QArifyResult[] = [];

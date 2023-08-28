@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"name": "root",
+			"path": "."
+		},
+		{
+			"path": "qa-cli"
+		},
+		{
+			"path": "qa-globals"
+		},
+		{
+			"path": "qa-types"
+		},
+		{
+			"path": "qarify"
+		},
+		{
+			"path": "../qarify-examples"
+		}
+	],
+	"settings": {}
+}
