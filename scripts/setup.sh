@@ -1,7 +1,12 @@
 #!/bin/bash
 
 #
-# Install-deps / Build / Link / Unlink Packages
+# Job order
+# - Clean: c/C
+# - Install deps: i/I
+# - Build package: b/B
+# - Link package: l/L
+# - Unlink package: u
 #
 
 NPM_GLOBAL_DIR=/usr/local/lib/node_modules
@@ -17,26 +22,34 @@ PACKAGE_DIR_NAMES=(
 
 PACKAGE_DIR="$ROOT_DIR"
 
-function usage() {
-    echo "Usage:"
-    echo "$0 [hiIbBludC] [package-dir-name]"
-}
-
 # -h: print usage and exit
 # -i: install deps
 # -I: clean install
 # -b: build
 # -B: clean build
-# -l: link
+# -l: link link only if link dir does not exist
+# -L: link
 # -u: unlink
 # -d: dry run
 # -c: cleanup `dist`, `node_modules` before doing others
 # -C: cleanup `dist`, `node_modules`, `package-lock.json` before doing others
+VALID_JOBS=iIbBlLudcC
+
+function usage() {
+    echo "$1"
+    echo "Usage:"
+    echo "$0 [$VALID_JOBS] [package-dir-name]"
+}
 
 JOBS="$1"
 if [[ "$JOBS" =~ "h" ]]; then
    usage
    exit 0
+fi
+
+if [[ ! "$JOBS" =~ ^[$VALID_JOBS]*$ ]]; then
+    usage "Error: Invalid job-flag"
+    exit 1
 fi
 
 shift
@@ -106,12 +119,14 @@ function _do_jobs() {
     if [ "$res" -ne 0 ]; then return "$res"; fi
 
     # linking
-    if [[ "$jobs" =~ "l" ]]; then
+    if [[ "$jobs" =~ [lL] ]]; then
         echo ">>> Linking $name"
         if [[ ! "$jobs" =~ "d" ]]; then
-            #echo "sudo npm link $name"
-            npm link
-            res="$?"
+            #echo "npm link $name"
+            if [[ "$jobs" =~ "L" || ! -d "$NPM_GLOBAL_DIR/$name" ]]; then
+                npm link
+                res="$?"
+            fi
             ls -al "$NPM_GLOBAL_DIR/$name"
         fi
     fi
@@ -120,7 +135,7 @@ function _do_jobs() {
     if [[ "$jobs" =~ "u" ]]; then
         echo ">>> Uninking $name"
         if [[ ! "$jobs" =~ "d" ]]; then
-            #echo "sudo npm unlink $name"
+            #echo "npm unlink $name"
             npm unlink $name
             res="$?"
             ls -al "$NPM_GLOBAL_DIR/$name"

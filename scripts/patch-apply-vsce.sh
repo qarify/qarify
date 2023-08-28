@@ -21,7 +21,7 @@ if [ "$1" == "revert" ]; then
   # patch -p0 -R -i patches/qarify-1.0.0-vsce/nodejs-index.diff
 else
   # dirname/index.js
-  patch qarify/dist/dirname/index.js patches/qarify-1.0.0-vsce/dirname-index.diff
+  patch -N qarify/dist/dirname/index.js patches/qarify-1.0.0-vsce/dirname-index.diff
   # nodejs/index.js
   # patch dist/nodejs/index.js patches/qarify-1.0.0-vsce/nodejs-index.diff
   # nodejs/index.d.ts

@@ -14,6 +14,9 @@
 - `test:types`: check types
 - `link:deps`: run `npm link` with deps packages, such as `webdriverio`
 - `patch:vsce`: vscode extension에서 사용하기 위한 patch를 적용함
+  - apply `./patches/qarify-1.0.0-vsce/*.diff`
+  - run `npm link [dpes...]`
+  - re-build packages
 
 ## TODO
 

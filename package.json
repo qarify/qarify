@@ -2,18 +2,18 @@
   "name": "qarify-mono-repo",
   "private": true,
   "scripts": {
-    "setup": "bash scripts/setup.sh",
-    "setup:full": "bash scripts/setup.sh cibl",
-    "build": "lerna run build",
     "compile": "lerna run compile",
+    "build": "lerna run build",
     "clean": "lerna run clean:build",
+    "test:types": "lerna run test:types",
     "test": "lerna run test",
     "e2e": "lerna run e2e",
-    "test:types": "lerna run test:types",
+    "setup": "bash scripts/setup.sh",
+    "setup:full": "bash scripts/setup.sh cibl",
     "link:deps": "npm link @wdio/types webdriverio expect-webdriverio",
     "patch:gen": "node ./scripts/patch-gen.js @wdio/logger ./patches/browser-env",
     "patch:node": "node ./scripts/patch-apply.js ./patches/node-env",
-    "patch:vsce": "sh scripts/patch-apply-vsce.sh; npm run link:deps"
+    "patch:vsce": "sh scripts/patch-apply-vsce.sh ; npm run link:deps && npm run build"
   },
   "devDependencies": {
     "lerna": "~7.1.1",
