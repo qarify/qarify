@@ -1,11 +1,10 @@
 import fs from 'fs';
 import path from "path";
-import { execa } from "execa";
 import type { QAConfig } from "@qarify/types";
 
 import { findAllFiles, mapFilesInConfig } from "../utils/path-helpers.js";
 import { findSpecFiles } from './find-spec-files.js';
-
+import { execAsync } from './exec-async.js';
 const _defaultTsConfig = './qa/tsconfig.json';
 
 async function _execBuild(config: QAConfig) {
@@ -13,14 +12,14 @@ async function _execBuild(config: QAConfig) {
   const args = ['tsc'];
   args.push('-p', config.tsconfig!);
   args.push('--outDir', outDir, '--noEmit', 'false');
-  const buildRes = await execa(
+  const exitCode = await execAsync(
     "npx",
     args,
     {
       stdio: "inherit",
     }
   );
-  if (buildRes.exitCode !== 0) {
+  if (exitCode !== 0) {
     return null;
   }
   return outDir;

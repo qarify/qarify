@@ -30,8 +30,8 @@ function usage() {
 # -l: link
 # -u: unlink
 # -d: dry run
-# -c: cleanup `dist`, `node_modules` and exit
-# -C: cleanup `dist`, `node_modules`, `package-lock.json` and exit
+# -c: cleanup `dist`, `node_modules` before doing others
+# -C: cleanup `dist`, `node_modules`, `package-lock.json` before doing others
 
 JOBS="$1"
 if [[ "$JOBS" =~ "h" ]]; then
@@ -53,7 +53,9 @@ if [[ "$JOBS" =~ [cC] ]]; then
     else 
         find . \( -name "node_modules" -type d \) -o \( -name "dist" -type d \) | xargs rm -rf
     fi
-    exit 0
+
+    [[ "$JOBS" == "c" || "$JOBS" == "C" ]] && exit 0
+    popd > /dev/null
 fi
 
 function _install_deps() {

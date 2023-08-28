@@ -1,4 +1,4 @@
-import { execa } from "execa";
+import { execAsync } from "./exec-async.js";
 
 (async (args) => {
   if (args.length !== 2) {
@@ -7,16 +7,16 @@ import { execa } from "execa";
   }
 
   console.log('>>> Generate patch for ', args[0]);
-  const res = await execa(
+  const exitCode = await execAsync(
     "npx",
     ["patch-package", args[0], '--patch-dir', args[1]],
     {
       stdio: "inherit",
     }
   );
-  if (res.exitCode !== 0) {
-    console.error('!!! Failed with Exit Code,', res);
-    process.exit(res.exitCode);
+  if (exitCode !== 0) {
+    console.error('!!! Failed with Exit Code,', exitCode);
+    process.exit(typeof exitCode === 'string' ? 1 : exitCode);
   } else {
     console.log('>>> DONE.');
   }

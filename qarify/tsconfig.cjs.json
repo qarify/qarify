@@ -1,8 +1,7 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
     /* Emit */
-    "noEmit": false,
     "outDir": "dist/__cjs",
 
     /* Language and Environment */
@@ -10,7 +9,6 @@
 
     /* Modules */
     "module": "CommonJS",
-    "rootDir": "./src",
   },
   "include": [
     "./src",
