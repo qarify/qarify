@@ -14,7 +14,7 @@ export async function execQArify(
   config: QAConfig,
   options: QARunnerOptions = {},
   cliOptions: CLIOptions = {},
-  execFileName = './nodejs/run-qarify.js',
+  execFileName = './nodejs/run-qarify.js', // <== based src root directory
 ) {
   return new Promise<QArifyResult[]>(async (resolve, reject) => {
     const dirname = await _dirname();

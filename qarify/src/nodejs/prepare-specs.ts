@@ -5,6 +5,7 @@ import type { QAConfig } from "@qarify/types";
 import { findAllFiles, mapFilesInConfig } from "../utils/path-helpers.js";
 import { findSpecFiles } from './find-spec-files.js';
 import { execAsync } from './exec-async.js';
+
 const _defaultTsConfig = './qa/tsconfig.json';
 
 async function _execBuild(config: QAConfig) {
@@ -18,7 +19,7 @@ async function _execBuild(config: QAConfig) {
     {
       stdio: "inherit",
     }
-  );
+  ).catch(e => e);
   if (exitCode !== 0) {
     return null;
   }
