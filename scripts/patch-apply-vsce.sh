@@ -1,3 +1,4 @@
+#!/bin/bash
 
 #
 # Apply patch to qarify build output for building vsc extension

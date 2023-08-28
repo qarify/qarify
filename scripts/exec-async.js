@@ -1,4 +1,4 @@
-import {ChildProcess, spawn} from 'child_process';
+import {spawn} from 'child_process';
 
 /** @typedef {Promise<NodeJS.Signals | number> & { process: import('child_process').ChildProcess}} ProcessPromise */
 /** @typedef {import('child_process').SpawnOptions} ExecAsyncOptions */
