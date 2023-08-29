@@ -1,6 +1,7 @@
 import { expect } from 'expect-webdriverio';
+import { LogLevel } from '@qarify/types';
 import {
-  setLogLevel, getLogger, enableLogger, disableLogger, LogLevel
+  setLogLevel, getLogger, enableLogger, disableLogger
 } from "./logger.js";
 
 describe('logger', function() {

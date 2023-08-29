@@ -93,7 +93,7 @@ export async function runFramework(mocha: Mocha, dispose = true) {
     } catch (err: any) {
       log('EXCEPTION: ', err.message);
       runtimeError = err;
-      return resolve(1);
+      resolve(1);
     }
   });
 

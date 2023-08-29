@@ -1,22 +1,28 @@
-import type { CLIOptions, QAConfig, QARunnerOptions } from '@qarify/types';
 
 import { runQArify } from '../runner/run-qarify.js';
 import { getLogger, isSilent } from '../logger/logger.js';
 import { applyInitialCLIOptions } from "../utils/helpers.js";
 
+/** @typedef {import('@qarify/types').QAConfig} QAConfig */
+/** @typedef {import('@qarify/types').QARunnerOptions} QARunnerOptions */
+/** @typedef {import('@qarify/types').CLIOptions} CLIOptions */
+
 const log = getLogger('nodejs:run-qarify');
 
-(async (args: string[] = []) => {
+(async (args = []) => {
   if (!args || !args.length) {
     console.error('[nodejs:run-qarify]: args is null');
     // we are in a child-process
     process.exit(1);
   }
 
-  const config: QAConfig = JSON.parse(args[0]);
-  const options: QARunnerOptions = args.length > 1 ? JSON.parse(args[1]) : {};
+  /** @type {QAConfig} */
+  const config = JSON.parse(args[0]);
+  /** @type {QARunnerOptions} */
+  const options = args.length > 1 ? JSON.parse(args[1]) : {};
   // apply cli options
-  const cliOptions: CLIOptions = args.length > 2 ? JSON.parse(args[2]) : {};
+  /** @type {CLIOptions} */
+  const cliOptions = args.length > 2 ? JSON.parse(args[2]) : {};
   applyInitialCLIOptions(cliOptions);
 
   // log after applying cli options

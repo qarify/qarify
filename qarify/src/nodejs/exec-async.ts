@@ -1,6 +1,6 @@
 import {type SpawnOptions, type ChildProcess, spawn} from 'child_process';
 
-type ProcessPromise = Promise<NodeJS.Signals | number> & {
+export type ProcessPromise = Promise<NodeJS.Signals | number> & {
   process: ChildProcess;
 }
 
