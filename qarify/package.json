@@ -1,6 +1,6 @@
 {
   "name": "qarify",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "QArify Core",
   "private": false,
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
@@ -35,8 +35,8 @@
     "patch:vsce": "sh scripts/patch-vsce.sh"
   },
   "dependencies": {
-    "@qarify/globals": "1.0.0",
-    "@qarify/types": "1.0.0",
+    "@qarify/globals": "0.9.0",
+    "@qarify/types": "0.9.0",
     "mocha": "^10.2.0",
     "glob": "^10.3.3",
     "webdriverio": "8.10.7",

@@ -1,6 +1,6 @@
 {
   "name": "@qarify/globals",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "private": false,
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
   "description": "QArify Globals",

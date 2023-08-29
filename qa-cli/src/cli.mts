@@ -12,7 +12,7 @@ const program = new Command();
 program
   .name('qarify')
   .description('QArify CLI')
-  .version('1.0.0');
+  .version('0.9.0');
 
 program
   .option('-c, --config [path]', 'config file path')
