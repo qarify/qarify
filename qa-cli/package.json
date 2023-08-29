@@ -10,7 +10,8 @@
     "test"
   ],
   "bin": {
-    "qarify": "./bin/qarify.js"
+    "qarify": "./bin/qarify.js",
+    "qy": "./bin/qarify.js"
   },
   "type": "module",
   "types": "./dist/index.d.ts",
