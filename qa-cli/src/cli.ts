@@ -27,4 +27,4 @@ program
 
 program.parse();
 
-await qarify(program.opts(), process.cwd());
+qarify(program.opts(), process.cwd()).then(() => {}).catch((e) => {console.error(e);});

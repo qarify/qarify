@@ -3,9 +3,7 @@
   "compilerOptions": {
     /* Emit */
     "outDir": "dist/__cjs",
-
-    /* Language and Environment */
-    "target": "ES2020",
+    "declaration": false,
 
     /* Modules */
     "module": "CommonJS",
@@ -16,5 +14,6 @@
   "exclude": [
     "./src/**/*.mts",
     "./src/**/*.spec.ts",
+    "./src/**/__mock",
   ]
 }

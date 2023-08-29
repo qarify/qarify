@@ -4,14 +4,7 @@
     /* Emit */
     "noEmit": false,
     "outDir": "dist",
-    "declaration": true,
-
-    /* Language and Environment */
-    "target": "ESNext",
-
-    /* Modules */
-    "module": "ESNext",
-    "rootDir": "./src",
+    "declaration": false,
   },
   "include": [
     "./src",

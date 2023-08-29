@@ -1,16 +1,12 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
     /* Emit */
-    "noEmit": false,
     "outDir": "dist/__cjs",
-
-    /* Language and Environment */
-    "target": "ES2020",
+    "declaration": false,
 
     /* Modules */
     "module": "CommonJS",
-    "rootDir": "./src",
   },
   "include": [
     "./src",
