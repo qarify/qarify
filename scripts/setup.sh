@@ -145,6 +145,7 @@ function _do_jobs() {
     return "$res"
 }
 
+# install on root
 if [[ "$JOBS" =~ [iI] ]]; then
     pushd "$ROOT_DIR" > /dev/null
     _install_deps "$JOBS"
@@ -153,6 +154,7 @@ if [[ "$JOBS" =~ [iI] ]]; then
     popd > /dev/null
 fi
 
+# do jobs for each packages
 for dir_name in "${TARGET_PACKAGES[@]}" ; do
     pushd "$PACKAGE_DIR/$dir_name" >> /dev/null
     _do_jobs $JOBS
