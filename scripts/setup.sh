@@ -15,6 +15,7 @@ ROOT_DIR=$(realpath "$__DIR/..")
 
 PACKAGE_DIR_NAMES=(
     qa-types
+    qa-logger
     qa-globals
     qarify
     qa-cli
