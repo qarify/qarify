@@ -1,8 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { glob } from 'glob';
-
-import { getLogger } from "../logger/logger.js";
+import { getLogger } from '@qarify/logger';
 
 const log = getLogger('qarify:nodejs:find-spec-files');
 

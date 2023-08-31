@@ -3,7 +3,7 @@ import url from 'node:url';
 import { expect } from 'expect-webdriverio';
 import { runSpecFiles } from './run-specs.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
-import { setGlobalExpect, setLogLevel } from '../index.js';
+import { setGlobalExpect } from '../index.js';
 import { LogLevel } from '@qarify/types';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));

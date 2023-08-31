@@ -1,10 +1,10 @@
 import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
 import type { QAConfig, QArifyResult, QADriver, QARunnerOptions } from "@qarify/types";
+import { getLogger, isSilent } from '@qarify/logger';
 
 import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { updateConfigWithRunnerOptions } from '../utils/helpers.js';
-import { getLogger, isSilent } from "../logger/logger.js";
 
 const log = getLogger('runner:run-qarify');
 

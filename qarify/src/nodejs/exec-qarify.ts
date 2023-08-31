@@ -2,10 +2,10 @@ import {SendHandle, Serializable, spawn} from 'child_process';
 import path from 'path';
 import type { CLIOptions, QAConfig, QARunnerOptions, QArifyResult, ReportMessage } from "@qarify/types";
 import { SpecRunnerEvent } from '@qarify/types';
+import { getLogger, isSilent } from '@qarify/logger';
 
 import _dirname from '../dirname/index.js';
 import { printMessage, updateExecConfig } from '../utils/helpers.js';
-import { getLogger, isSilent } from '../logger/logger.js';
 
 const log = getLogger('nodejs:exec-qarify');
 

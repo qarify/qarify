@@ -1,7 +1,7 @@
 import { expect } from 'expect-webdriverio';
 import { LogLevel } from '@qarify/types';
 import {
-  setLogLevel, getLogger, enableLogger, disableLogger
+  setLogLevel, getLogger, setLogLevelName, disableLogger
 } from "./logger.js";
 
 describe('logger', function() {
@@ -9,13 +9,6 @@ describe('logger', function() {
     expect(getLogger('ie', 'debug').enabled).toBeFalsy();
     expect(getLogger('ie', 'info').enabled).toBeFalsy();
     expect(getLogger('ie', 'error').enabled).toBeFalsy();
-  });
-
-  it('should enable all', function() {
-    enableLogger();
-    expect(getLogger('ie', 'debug').enabled).toBe(true);
-    expect(getLogger('ie', 'info').enabled).toBe(true);
-    expect(getLogger('ie', 'error').enabled).toBe(true);
   });
 
   it('should disable all', function() {
@@ -27,6 +20,11 @@ describe('logger', function() {
 
   it('should be disabled initially', function() {
     setLogLevel(LogLevel.silent);
+    expect(getLogger('ie', 'debug').enabled).toBe(false);
+    expect(getLogger('ie', 'info').enabled).toBe(false);
+    expect(getLogger('ie', 'error').enabled).toBe(false);
+
+    setLogLevelName('silent');
     expect(getLogger('ie', 'debug').enabled).toBe(false);
     expect(getLogger('ie', 'info').enabled).toBe(false);
     expect(getLogger('ie', 'error').enabled).toBe(false);
@@ -49,6 +47,28 @@ describe('logger', function() {
     expect(getLogger('ie', 'error').enabled).toBe(true);
 
     setLogLevel(LogLevel.silent, true);
+    expect(getLogger('ie', 'debug').enabled).toBe(false);
+    expect(getLogger('ie', 'info').enabled).toBe(false);
+    expect(getLogger('ie', 'error').enabled).toBe(false);
+  });
+
+  it('should set log level by namespace', function() {
+    setLogLevelName('debug', true);
+    expect(getLogger('ie', 'debug').enabled).toBe(true);
+    expect(getLogger('ie', 'info').enabled).toBe(true);
+    expect(getLogger('ie', 'error').enabled).toBe(true);
+
+    setLogLevelName('info', true);
+    expect(getLogger('ie', 'debug').enabled).toBe(false);
+    expect(getLogger('ie', 'info').enabled).toBe(true);
+    expect(getLogger('ie', 'error').enabled).toBe(true);
+
+    setLogLevelName('error', true);
+    expect(getLogger('ie', 'debug').enabled).toBe(false);
+    expect(getLogger('ie', 'info').enabled).toBe(false);
+    expect(getLogger('ie', 'error').enabled).toBe(true);
+
+    setLogLevelName('silent', true);
     expect(getLogger('ie', 'debug').enabled).toBe(false);
     expect(getLogger('ie', 'info').enabled).toBe(false);
     expect(getLogger('ie', 'error').enabled).toBe(false);

@@ -5,11 +5,13 @@ const RootNS = 'qarify';
 
 enum _ns_prefix {
   debug = ``,
-  info = `i`,
-  error = `i:e`,
+  info = `I`,
+  error = `E`,
 }
 
-export type LogLevelName = keyof typeof _ns_prefix;
+export type LogLevelName = keyof typeof LogLevel;
+export type LogGetterName = Exclude<LogLevelName, 'silent'>
+
 type LoggerCache = {
   [name: string]: debug.Debugger;
 };
@@ -20,10 +22,15 @@ const _logger = debug(`${RootNS}`);
 
 let _logLevel = LogLevel.error;
 
+let _logNamespace: string | undefined = undefined;
+
 export function getLogLevel() {
   return _logLevel;
 }
 
+export function getLogNamespace() {
+  return _logNamespace;
+}
 /**
  * bind logger to console.log
  * By default, logger is bound to console.error.
@@ -40,15 +47,22 @@ export function setLogLevel(level:LogLevel, enable=false) {
 
   if (level === LogLevel.silent || !enable) {return;}
   if (level === LogLevel.debug) {
-    debug.enable(`${RootNS}:${_ns_prefix.debug}*`);
+    // enable all(debug, info, error)
+    debug.enable(`${RootNS}:*`);
   } else if (level === LogLevel.info) {
-    debug.enable(`${RootNS}:${_ns_prefix.info}:*`);
+    // enable 'info' and 'error'
+    debug.enable(`${RootNS}:${_ns_prefix.info}:*,${RootNS}:${_ns_prefix.error}:*`);
   } else {
+    // enable 'error' only
     debug.enable(`${RootNS}:${_ns_prefix.error}:*`);
   }
 }
 
-export function getLogger(name?: string, level: LogLevelName = 'debug') {
+export function setLogLevelName(level: LogLevelName, enable=false) {
+  return setLogLevel(LogLevel[level], enable);
+}
+
+export function getLogger(name?: string, level: LogGetterName = 'debug') {
   if (!name) { return _logger; }
 
   const key = `${_ns_prefix[level] ? (_ns_prefix[level] + ':') : ''}${name}`;
@@ -60,10 +74,6 @@ export function getLogger(name?: string, level: LogLevelName = 'debug') {
     debug.enable(ns);
   }
   return _cache[key];
-}
-
-export function enableLogger(namespaces = `${RootNS}:*`) {
-  debug.enable(namespaces);
 }
 
 export function disableLogger() {

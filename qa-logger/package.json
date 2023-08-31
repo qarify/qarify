@@ -1,7 +1,7 @@
 {
-  "name": "qarify",
+  "name": "@qarify/logger",
   "version": "0.9.0",
-  "description": "QArify Core",
+  "description": "QArify Logger",
   "private": false,
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
   "license": "MIT",
@@ -29,25 +29,17 @@
     "compile:esm": "tsc -b ./tsconfig.build.json",
     "compile:cjs": "tsc -b ./tsconfig.cjs.json",
     "clean:build": "rimraf dist",
-    "build": "run-s clean:build compile",
-    "patch:gen": "node ./scripts/patch-gen.js @wdio/logger ./patches/browser-env",
-    "patch:apply": "node ./scripts/patch-apply.js ./patches/node-env",
-    "patch:vsce": "sh scripts/patch-vsce.sh"
+    "build": "run-s clean:build compile"
   },
   "dependencies": {
-    "@qarify/globals": "0.9.0",
-    "@qarify/logger": "0.9.0",
     "@qarify/types": "0.9.0",
-    "debug": "^4.3.4",
-    "glob": "^10.3.3",
-    "mocha": "^10.2.0",
-    "webdriverio": "8.10.7",
-    "expect-webdriverio": "4.2.6"
+    "debug": "^4.3.4"
   },
   "devDependencies": {
     "@types/debug": "^4.1.8",
     "@types/mocha": "^10.0.0",
     "@types/node": "^20.4.8",
+    "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",

@@ -1,7 +1,7 @@
 import type { CLIOptions, QArifyResult } from "@qarify/types";
-
+import { getLogger, isSilent } from '@qarify/logger';
 import {
-  loadConfig, prepareSpecs, runQArify, execQArify, getLogger, isSilent, applyInitialCLIOptions
+  loadConfig, prepareSpecs, runQArify, execQArify, applyInitialCLIOptions
 } from "qarify";
 
 const log = getLogger('run');

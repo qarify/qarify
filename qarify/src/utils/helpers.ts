@@ -2,8 +2,8 @@ import type {
   CLIOptions, QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage
 } from "@qarify/types";
 import { SpecRunnerEvent, LogLevel } from "@qarify/types";
+import { setLogLevel, isSilent } from '@qarify/logger';
 
-import { setLogLevel, isSilent } from "../logger/logger.js";
 import { isNode } from "./platform.js";
 
 export function updateConfigWithRunnerOptions(

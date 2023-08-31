@@ -1,10 +1,10 @@
 import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
 import type { QAConfig, SpecRunnerFramework } from "@qarify/types";
+import { getLogger, isSilent } from '@qarify/logger';
 
 import { TestReporter } from "./reporter.js";
 import { getModuleType } from "../utils/platform.js";
-import { getLogger, isSilent } from "../logger/logger.js";
 
 const FILE_PROTOCOL = "file://";
 const log = getLogger('runner:run-specs');

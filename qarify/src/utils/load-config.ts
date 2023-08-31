@@ -2,8 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { CLIOptions, QAConfig } from "@qarify/types";
 import { SpecRunnerFramework } from "@qarify/types";
-
-import { getLogger } from "../logger/logger.js";
+import { getLogger } from '@qarify/logger';
 
 const log = getLogger('utils:load-config');
 

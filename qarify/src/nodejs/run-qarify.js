@@ -1,6 +1,6 @@
+import { getLogger, isSilent } from '@qarify/logger';
 
 import { runQArify } from '../runner/run-qarify.js';
-import { getLogger, isSilent } from '../logger/logger.js';
 import { applyInitialCLIOptions } from "../utils/helpers.js";
 
 /** @typedef {import('@qarify/types').QAConfig} QAConfig */
