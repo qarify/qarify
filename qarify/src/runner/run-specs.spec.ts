@@ -1,10 +1,10 @@
 import path from 'node:path';
 import url from 'node:url';
 import { expect } from 'expect-webdriverio';
+import { setLogLevelName } from '@qarify/logger';
 import { runSpecFiles } from './run-specs.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
 import { setGlobalExpect } from '../index.js';
-import { LogLevel } from '@qarify/types';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const _dataDir = path.join(__dirname, '__mock');
@@ -19,7 +19,7 @@ const allSpecFiles = [
 
 describe('run-specs', () => {
   before(() => {
-    // setLogLevel(LogLevel.debug, true);
+    setLogLevelName('silent');
   });
 
   it('should run *js* spec files', async () => {

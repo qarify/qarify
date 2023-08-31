@@ -4,9 +4,13 @@ import type { CLIOptions, QAConfig } from "@qarify/types";
 import { SpecRunnerFramework } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 
+import { MAX_SUPPORT_VERSION } from "../constants.js";
+import { isValidConfigVersion } from "../utils/helpers.js";
+
 const log = getLogger('utils:load-config');
 
 const _defaultOptions: Partial<QAConfig> = {
+  version: `${(MAX_SUPPORT_VERSION / 10000).toFixed(0)}.${MAX_SUPPORT_VERSION % 1000}`,
   name: 'default',
   cacheDir: ".qycache",
 
@@ -55,6 +59,9 @@ export async function loadConfig(
   log('options:', options || 'no options');
 
   if (configFile) {
+    //
+    // load config from specified config file
+    //
     if (!path.isAbsolute(configFile)) {
       configFile = path.join(baseDir, configFile);
     }
@@ -70,6 +77,9 @@ export async function loadConfig(
   } else {
     const defaultConfig = path.join(baseDir, ".qarify.json");
     if (fs.existsSync(defaultConfig)) {
+      //
+      // load config from default config file
+      //
       log('found config file,', defaultConfig);
       configFile = defaultConfig;
       userConfig = JSON.parse(
@@ -79,13 +89,24 @@ export async function loadConfig(
       //
       // try to load config from package.json
       const packageJSON = _findPackageJSON(baseDir);
+      let loaded = false;
       if (packageJSON) {
         log('found package.json,', packageJSON);
         const pack = JSON.parse(fs.readFileSync(packageJSON, "utf-8"));
         if (pack["qarify"]) {
+          //
+          // load config from package.json file
+          //
           userConfig = pack["qarify"];
           configFile = packageJSON;
+          loaded = true;
         }
+      }
+      if (!loaded) {
+        //
+        // load config from empty directory
+        //
+        userConfig.version = _defaultOptions.version!;
       }
     }
     if (configFile) {
@@ -93,8 +114,16 @@ export async function loadConfig(
     }
   }
 
+  if (!userConfig.version) {
+    throw new Error('no version');
+  }
   // config priority: default < config file < cli options
   userConfig = Object.assign({}, _defaultOptions, userConfig, _options);
+
+  // check version
+  isValidConfigVersion(userConfig.version);
+
+  // check directory and files
   if (!userConfig.rootDir) {
     userConfig.rootDir = baseDir;
   }

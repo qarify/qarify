@@ -1,9 +1,14 @@
 import { expect } from 'expect-webdriverio';
-import type { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions } from '@qarify/types';
-import { SpecRunnerFramework } from '@qarify/types';
+import type { QADriver, QAFrameworkOption, QARunnerOptions } from '@qarify/types';
 
-import { updateConfigWithRunnerOptions, updateExecConfig } from "./helpers.js";
+import {
+  updateConfigWithRunnerOptions, updateExecConfig,
+  configVersionToNumber,
+  isValidConfigVersion,
+} from "./helpers.js";
 import { TestReporter } from '../runner/reporter.js';
+import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
+import { MAX_SUPPORT_VERSION, MIN_SUPPORT_VERSION } from '../constants.js';
 
 describe('utils/helpers', function() {
 
@@ -12,10 +17,7 @@ describe('utils/helpers', function() {
       { id: '1', name: '1', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
       { id: '2', name: '2', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
     ];
-    const config: QAConfig = {
-      name: '', rootDir: '.', cacheDir: '.', framework: SpecRunnerFramework.mocha_qunit,
-      specs: [], testOptions: {}, drivers: _drivers,
-    };
+    const config = getDefaultQAConfig('.', { drivers: _drivers });
   
     let res = updateConfigWithRunnerOptions(config);
     expect(res).toEqual(config);
@@ -34,10 +36,7 @@ describe('utils/helpers', function() {
   });
 
   it('updateExecConfigWithRunOptions should update config', async function() {
-    const config: QAConfig = {
-      name: '', rootDir: '.', cacheDir: '.', framework: SpecRunnerFramework.mocha_qunit,
-      specs: [], testOptions: {}, drivers: [],
-    };
+    const config = getDefaultQAConfig('.');
 
     let res = updateExecConfig(config);
     expect(res).toEqual({ 
@@ -90,5 +89,37 @@ describe('utils/helpers', function() {
       qaReporter: ['execReporter'],
       options: { keepMainProcess: true },
     });
+  });
+
+  it('configVersionToNumber', () => {
+    // invalid length
+    expect(configVersionToNumber('')).toBe(-1);
+    expect(configVersionToNumber('1')).toBe(-1);
+    expect(configVersionToNumber('a')).toBe(-1);
+    expect(configVersionToNumber('a..')).toBe(-1);
+    // invalid value
+    expect(configVersionToNumber('1.')).toBe(-2);
+    expect(configVersionToNumber('a.')).toBe(-2);
+    expect(configVersionToNumber('a.a')).toBe(-2);
+    expect(configVersionToNumber('1.a')).toBe(-2);
+    expect(configVersionToNumber('a.1')).toBe(-2);
+    expect(configVersionToNumber('1.9999999')).toBe(-2);
+    // parsed number
+    expect(configVersionToNumber('1.0')).toBe(10000);
+    expect(configVersionToNumber('1.1')).toBe(10001);
+    expect(configVersionToNumber('1.9999')).toBe(19999);
+    expect(configVersionToNumber('10.9999')).toBe(109999);
+  });
+
+  it('isValidConfigVersion', () => {
+    expect(isValidConfigVersion('1.0')).toBe(10000);
+
+    expect(() => isValidConfigVersion('1.')).toThrow(/invalid version/);
+
+    const upperVersion = `${(MAX_SUPPORT_VERSION / 10000).toFixed(0)}.${(MAX_SUPPORT_VERSION % 1000) + 1}`;
+    expect(() => isValidConfigVersion(upperVersion)).toThrow(/not supported version/);
+    
+    const lowerVersion = `${(MIN_SUPPORT_VERSION / 10000).toFixed(0)}.${(MIN_SUPPORT_VERSION % 1000) - 1}`;
+    expect(() => isValidConfigVersion(lowerVersion)).toThrow(/not supported version/);
   });
 });

@@ -23,7 +23,8 @@
     ]
   },
   "scripts": {
-    "test": "mocha ./src/**/*.spec.ts",
+    "test:unit": "mocha ./src/runner/*.spec.ts",
+    "test": "mocha src/**/*.spec.ts",
     "test:types": "tsc --skipLibCheck",
     "compile": "tsc -b ./tsconfig.build.json ./tsconfig.cjs.json",
     "compile:esm": "tsc -b ./tsconfig.build.json",

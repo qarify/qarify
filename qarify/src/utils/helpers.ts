@@ -5,6 +5,7 @@ import { SpecRunnerEvent, LogLevel } from "@qarify/types";
 import { setLogLevel, isSilent } from '@qarify/logger';
 
 import { isNode } from "./platform.js";
+import { MAX_SUPPORT_VERSION, MIN_SUPPORT_VERSION } from "../constants.js";
 
 export function updateConfigWithRunnerOptions(
   config: QAConfig,
@@ -97,4 +98,31 @@ export function applyInitialCLIOptions(options: CLIOptions) {
   } else if (options.logLevel !== 'error') {
     console.warn('logLevel is ignored as process.env.DEBUG is set,', process.env.DEBUG);
   }
+}
+
+export function configVersionToNumber(ver: string) {
+  const v = ver.split('.');
+
+  // invalid length
+  if (v.length !== 2) { return -1; }
+
+  // invalid value
+  if (!v[0] || !v[1]) { return -2; }
+  const v1 = Number.parseInt(v[0], 10);
+  const v2 = Number.parseInt(v[1], 10)
+  if (!Number.isInteger(v1) || !Number.isInteger(v2)) { return -2; }
+  if (v2 > 9999) { return -2; }
+
+  return v1 * 10000 + v2;
+}
+
+export function isValidConfigVersion(ver: string) {
+  const v = configVersionToNumber(ver);
+  if (v < 0) {
+    throw new Error('invalid version');
+  }
+  if (v > MAX_SUPPORT_VERSION || v < MIN_SUPPORT_VERSION) {
+    throw new Error('not supported version');
+  }
+  return v;
 }

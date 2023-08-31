@@ -1,7 +1,6 @@
 import path from "node:path";
 import url from 'url';
 import { expect } from 'expect-webdriverio';
-import type { QAConfig } from "@qarify/types";
 import { SpecRunnerFramework } from "@qarify/types";
 
 import { loadConfig } from "./load-config.js";
@@ -12,6 +11,7 @@ const _baseDir = path.join(__dirname, '__mock');
 
 describe('load-config', () => {
   it('should load default config', async () => {
+    // load from file
     const baseDir = path.join(_baseDir, 'load-default-config');
     let res = await loadConfig(baseDir);
     expect(res).toEqual({
@@ -19,13 +19,14 @@ describe('load-config', () => {
       config: path.join(baseDir, '.qarify.json'),
     });
 
+    // load 
     const noConfigRootDir = '/';
     res = await loadConfig(noConfigRootDir);
     expect(res).toEqual(getDefaultQAConfig(noConfigRootDir));
   });
 
-  it('should load config in config file', async () => {
-    let res =await loadConfig(_baseDir, { config: 'qarify-bdd.json'});
+  it('should load config from specified config file', async () => {
+    let res = await loadConfig(_baseDir, { config: 'qarify-bdd.json'});
     expect(res).toEqual({
       ...getDefaultQAConfig(_baseDir),
       config: path.join(_baseDir, 'qarify-bdd.json'),
@@ -33,7 +34,7 @@ describe('load-config', () => {
     });
 
     // override with cli options
-    res =await loadConfig(_baseDir, { config: 'qarify-bdd.json', framework: SpecRunnerFramework.mocha_tdd});
+    res = await loadConfig(_baseDir, { config: 'qarify-bdd.json', framework: SpecRunnerFramework.mocha_tdd});
     expect(res).toEqual({
       ...getDefaultQAConfig(_baseDir),
       config: path.join(_baseDir, 'qarify-bdd.json'),
@@ -41,9 +42,9 @@ describe('load-config', () => {
     });
   });
 
-  it('should load config in package.json', async () => {
+  it('should load config from package.json', async () => {
     const baseDir = path.join(_baseDir, 'load-from-package');
-    let res =await loadConfig(baseDir, {});
+    let res = await loadConfig(baseDir, {});
     expect(res).toEqual({
       ...getDefaultQAConfig(baseDir),
       config: path.join(baseDir, 'package.json'),
@@ -51,12 +52,23 @@ describe('load-config', () => {
     });
     
     // override with cli options
-    res =await loadConfig(baseDir, { specs: [ "./specs/*.ts" ] });
+    res = await loadConfig(baseDir, { specs: [ "override.ts" ] });
     expect(res).toEqual({
       ...getDefaultQAConfig(baseDir),
       config: path.join(baseDir, 'package.json'),
-      specs: [ "./specs/*.ts" ], // <== value in cli options
+      specs: [ "override.ts" ], // <== value in cli options
     });
+  });
+
+  it('should throw error for invalid config file', async () => {
+    let res = loadConfig(_baseDir, { config: 'error-configs/qarify-invalid-version.json' });
+    await expect(res).rejects.toThrow(/invalid version/);
+
+    res = loadConfig(_baseDir, { config: 'error-configs/qarify-no-version.json' });
+    await expect(res).rejects.toThrow(/no version/);
+
+    res = loadConfig(_baseDir, { config: 'error-configs/qarify-not-supported-version.json' });
+    await expect(res).rejects.toThrow(/not supported version/);
   });
 
 });

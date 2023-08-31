@@ -1,5 +1,8 @@
 {
+  "version": "",
+
   "qarify": {
+    "version": "1.0",
     "specs": [ "./qa/specs/*.ts" ]
   }
 }

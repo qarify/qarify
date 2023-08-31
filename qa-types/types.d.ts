@@ -84,6 +84,9 @@ export type QARunnerOptions = {
 };
 
 export type QAConfig = {
+  // QAConfig version
+  version: string;
+
   // display name
   name: string;
 

@@ -1,6 +1,8 @@
 import path from 'node:path';
 import url from 'node:url';
 import { expect } from 'expect-webdriverio';
+import { setLogLevelName } from '@qarify/logger';
+
 import { runQArify } from './run-qarify.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
 
@@ -16,6 +18,10 @@ const allSpecFiles = [
 ];
 
 describe('run-qarify', () => {
+  before(() => {
+    setLogLevelName('silent');
+  });
+
   it('should run *js* spec files', async () => {
     const config = getDefaultQAConfig(_dataDir, {
       specs: allSpecFiles,
