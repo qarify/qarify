@@ -18,9 +18,6 @@
 		},
 		{
 			"path": "../qarify-examples"
-		},
-		{
-			"path": "../ti-client-driver/ti-expect"
 		}
 	],
 	"settings": {}

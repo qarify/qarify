@@ -18,6 +18,9 @@
     /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
 
+    /* Interop Constraints */
+    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+
     /* Completeness */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   }
