@@ -1,0 +1,66 @@
+import { getLogger } from '@qarify/logger';
+import { getDriver } from './driver.js';
+
+const log = getLogger('driver:page');
+
+type RectReturn = {
+  x: number,
+  y: number,
+  width: number,
+  height: number
+};
+
+let _pageSrc = '';
+let _screenshot = '';
+let _windowRect = {} as RectReturn;
+
+export async function getPageSource(
+  updateSessionId?: string,
+) {
+  if (updateSessionId) { 
+    try {
+      const driver = getDriver(updateSessionId);
+      if (!driver) {throw new Error('No Driver for specified session, ' + updateSessionId);}
+
+      _pageSrc = await driver.getPageSource();
+    } catch (error) {
+      log(error);
+      throw error;
+    }
+  }
+  return _pageSrc;  
+}
+
+export async function getPageScreenshot(
+  updateSessionId?: string,
+) {
+  if (updateSessionId) {
+    try {
+      const driver = getDriver(updateSessionId);
+      if (!driver) {throw new Error('No Driver for specified session, ' + updateSessionId);}
+
+      _screenshot = await driver.takeScreenshot();
+    } catch (error) {
+      log(error);
+      throw error;
+    }
+  }
+  return _screenshot;
+}
+
+export async function getPageWindowRect(
+  updateSessionId?: string,
+) {
+  if (updateSessionId) {
+    try {
+      const driver = getDriver(updateSessionId);
+      if (!driver) {throw new Error('No Driver for specified session, ' + updateSessionId);}
+
+      _windowRect = await driver.getWindowRect();
+    } catch (error) {
+      log(error);
+      throw error;
+    }
+  }
+  return _windowRect;
+}
