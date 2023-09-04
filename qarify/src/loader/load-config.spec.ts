@@ -18,11 +18,15 @@ describe('load-config', () => {
       ...getDefaultQAConfig(baseDir),
       config: path.join(baseDir, '.qarify.json'),
     });
+    // compare with global
+    expect(res).toEqual(qyconfig);
 
     // load 
     const noConfigRootDir = '/';
     res = await loadConfig(noConfigRootDir);
     expect(res).toEqual(getDefaultQAConfig(noConfigRootDir));
+    // compare with global
+    expect(res).toEqual(qyconfig);
   });
 
   it('should load config from specified config file', async () => {

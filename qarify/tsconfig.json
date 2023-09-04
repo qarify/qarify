@@ -5,6 +5,10 @@
     "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
     "checkJs": true,                                  /* Enable error reporting in type-checked JavaScript files. */
 
+    "types": [
+      "node", "mocha", "debug", "@qarify/globals"
+    ],
+
     /* Emit */
     "noEmit": true,                                   /* Disable emitting files from a compilation. */
   },
@@ -13,6 +17,6 @@
     "./types.d.ts",
   ],
   "exclude": [
-    "./tests"
+    "./dist"
   ]
 }

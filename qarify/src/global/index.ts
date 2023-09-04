@@ -1,3 +1,4 @@
+import { QAConfig } from "@qarify/types";
 import type { Expect } from "expect-webdriverio";
 type SupportedGlobals =
   | "browser"
@@ -5,7 +6,8 @@ type SupportedGlobals =
   | "multiremotebrowser"
   | "$"
   | "$$"
-  | "expect";
+  | "expect"
+  | "qyconfig";
 
 /**
  * As this file gets imported/used as ESM and CJS artifact we have to make sure
@@ -68,14 +70,23 @@ expect.extend = (...args: unknown[]) => {
   return expect.extend(...args);
 };
 
+export const config: QAConfig = new Proxy(
+  {} as any as QAConfig,
+  proxyHandler("qyconfig")
+);
+
 /**
  * allows to set global property to be imported and used later on
  * @param key global key
  * @param value actual value to be returned
- * @private
+ * @returns old value
  */
 export function _setGlobal(key: SupportedGlobals, value: any) {
+  const old = globals.get(key);
   globals.set(key, value);
-  // @ts-expect-error
+  
+  // @ts-expect-error set global variables
   globalThis[key] = value;
+
+  return old;
 }

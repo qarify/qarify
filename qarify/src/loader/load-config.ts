@@ -6,6 +6,7 @@ import { getLogger } from '@qarify/logger';
 
 import { MAX_SUPPORT_VERSION } from "../constants.js";
 import { isValidConfigVersion } from "../utils/helpers.js";
+import { _setGlobal } from "../global/index.js";
 
 const log = getLogger('utils:load-config');
 
@@ -140,6 +141,9 @@ export async function loadConfig(
     userConfig.tsconfig = path.join(baseDir, userConfig.tsconfig);
   }
   log('loaded config:', userConfig);
+
+  // set global config
+  _setGlobal('qyconfig', userConfig);
 
   return userConfig;
 }

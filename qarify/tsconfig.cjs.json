@@ -12,6 +12,8 @@
     "./src",
   ],
   "exclude": [
+    "./dist",
+    "./tests",
     "./src/**/*.mts",
     "./src/**/*.spec.ts",
     "./src/**/__mock",
