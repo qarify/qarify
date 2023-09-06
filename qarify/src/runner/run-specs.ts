@@ -1,6 +1,6 @@
 import Mocha, { type InterfaceContributions } from "mocha";
 import url from "node:url";
-import type { QAConfig, SpecRunnerFramework } from "@qarify/types";
+import type { QAConfig, QARunner, SpecRunnerFramework } from "@qarify/types";
 import { getLogger, isSilent } from '@qarify/logger';
 
 import { TestReporter } from "./reporter.js";
@@ -10,19 +10,22 @@ const FILE_PROTOCOL = "file://";
 const log = getLogger('runner:run-specs');
 
 export async function runSpecFiles(
-  files: string[],
-  config: QAConfig,
-  runnerId: string
+  runner: QARunner,
+  runnerId?: string,
 ) {
-  const mocha = await initFramework(files, config.framework, config.frameworkOptions, runnerId);
-  const failed = await runFramework(mocha);
+  const { specs, framework, frameworkOptions } = runner;
+  if (!runnerId) { runnerId = runner.runnerId; }
+  if (!runner.context) { runner.context = {}; }
+
+  runner.context!.framework = await initFramework(specs, framework, frameworkOptions, runnerId);
+  const failed = await runFramework(runner);
   return {
     runnerId,
     failed,
   };
 }
 
-export async function initFramework(
+async function initFramework(
   files: string[],
   framework: SpecRunnerFramework,
   mochaOptions: Mocha.MochaOptions | undefined,
@@ -73,23 +76,25 @@ function _disposeSuites(suite: Mocha.Suite) {
   suite.dispose();
 }
 
-export async function runFramework(mocha: Mocha, dispose = true) {
+async function runFramework(runner: QARunner, dispose = true) {
   let runtimeError;
+  const { framework } = runner.context!;
 
   log('run framework... dispose =', dispose);
   const result = await new Promise<number>((resolve) => {
     try {
-      const _runner = mocha.run((res) => {
+      const _runner = framework!.run((res) => {
         if (dispose) {
           _disposeSuites(_runner.suite);
           _runner.dispose();
           try {
-            mocha.dispose();
+            framework!.dispose();
           } catch {/* IGNORE */}
         }
         log('DONE with', res);
         resolve(res);
       });
+      runner.context!.instance = _runner;
     } catch (err: any) {
       log('EXCEPTION: ', err.message);
       runtimeError = err;

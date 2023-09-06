@@ -8,6 +8,11 @@ import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework } from './dist/inde
 
 export * from './dist/index.js';
 
+export type QATestAttach = {
+  type: string;
+  body: any;
+};
+
 export type ReportMessage = {
   runnerId: string;
   type: SpecRunnerEvent;
@@ -20,6 +25,7 @@ export type ReportMessage = {
     passed: number;
     failed: number;
   };
+  attached?: QATestAttach[];
 };
 
 export type TestSuiteNode = {
@@ -72,6 +78,9 @@ export interface QAFrameworkOption extends Omit<Mocha.MochaOptions, 'reporterOpt
 }
 
 export type QARunnerOptions = {
+  // runner id
+  runnerId: string;
+
   // specify driver name to run
   drivers?: string[];
 
@@ -148,4 +157,20 @@ export type CLIOptions = Partial<QAConfig> & {
   ci?: boolean;
 
   forceFork?: boolean;
+};
+
+export type QARunner = QAConfig & {
+  context?: {
+    framework?: Mocha;
+    instance?: Mocha.Runner;
+  };
+  runnerId: string;
+};
+
+export type QATestPlugin = {
+  
+};
+
+export type QAReportPlugin = {
+
 };

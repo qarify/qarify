@@ -12,7 +12,7 @@ const log = getLogger('nodejs:exec-qarify');
 export async function execQArify(
   files: string[],
   config: QAConfig,
-  options: QARunnerOptions = {},
+  options: QARunnerOptions,
   cliOptions: CLIOptions = {},
   execFileName = './nodejs/run-qarify.js', // <== based src root directory
 ) {

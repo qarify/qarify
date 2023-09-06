@@ -19,7 +19,7 @@ const log = getLogger('nodejs:run-qarify');
   /** @type {QAConfig} */
   const config = JSON.parse(args[0]);
   /** @type {QARunnerOptions} */
-  const options = args.length > 1 ? JSON.parse(args[1]) : {};
+  const options = args.length > 1 ? JSON.parse(args[1]) : { runnerId: 'QArify' };
   // apply cli options
   /** @type {CLIOptions} */
   const cliOptions = args.length > 2 ? JSON.parse(args[2]) : {};

@@ -17,22 +17,28 @@ describe('utils/helpers', function() {
       { id: '1', name: '1', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
       { id: '2', name: '2', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
     ];
-    const config = getDefaultQAConfig('.', { drivers: _drivers });
+    const config = getDefaultQAConfig('.', { drivers: [] });
+    const runnerId = 'test';
+    const options: QARunnerOptions = { runnerId };
   
-    let res = updateConfigWithRunnerOptions(config);
-    expect(res).toEqual(config);
-    
+    // should set one driver
+    let res = updateConfigWithRunnerOptions(config, [], { runnerId });
+    expect(res).toEqual({ ...config, runnerId, drivers: [{ name: 'no or existing' }] });
+
+    // drivers in config
+    config.drivers = _drivers;
+    res = updateConfigWithRunnerOptions(config, [], { runnerId });
+    expect(res).toEqual({ ...config, runnerId });
+
+    // driver filter in options
+    options.drivers = ['2'];
+    res = updateConfigWithRunnerOptions(config, [], options);
+    expect(res.drivers).toEqual(_drivers.filter((e) => e.name === '2'));
+
     // files
     const files = [ './spec.ts' ];
-    res = updateConfigWithRunnerOptions(config, files);
+    res = updateConfigWithRunnerOptions(config, files, { runnerId });
     expect(res.specs).toEqual(files);
-
-    // drivers in options
-    let options: QARunnerOptions = {
-      drivers: ['2'],
-    };
-    res = updateConfigWithRunnerOptions(config, undefined, options);
-    expect(res.drivers).toEqual(_drivers.filter((e) => e.name === '2'));
   });
 
   it('updateExecConfigWithRunOptions should update config', async function() {
@@ -79,7 +85,7 @@ describe('utils/helpers', function() {
 
     // override qaReporter
     frameworkOptions = { reporterOptions: { qaReporter: {} } };
-    let options: QARunnerOptions = { execReporter: ['execReporter'] as any, keepMainProcess: true };
+    let options: QARunnerOptions = { runnerId: '', execReporter: ['execReporter'] as any, keepMainProcess: true };
 
     res = updateExecConfig({ ...config, frameworkOptions }, [], options);
     expect(res).toEqual({ 
@@ -87,7 +93,7 @@ describe('utils/helpers', function() {
       nodeOptions: undefined,
       reporter: undefined,
       qaReporter: ['execReporter'],
-      options: { keepMainProcess: true },
+      options: { runnerId: '', keepMainProcess: true },
     });
   });
 

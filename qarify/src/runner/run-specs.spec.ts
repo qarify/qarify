@@ -31,7 +31,7 @@ describe('run-specs', () => {
     // we should set 'expect' manually
     setGlobalExpect();
 
-    const res = await runSpecFiles(specs, config, 'run-specs-test');
+    const res = await runSpecFiles({ ...config, specs, runnerId: 'run-specs-test' });
     expect(res).toBeDefined();
     expect(res.failed).toBe(1);
   });

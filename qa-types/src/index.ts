@@ -31,4 +31,5 @@ export enum SpecRunnerEvent {
   test_retry = 'test:retry',
   test_pending = 'test:pending',
   test_end = 'test:end',
+  test_attach = 'test:attach',
 };

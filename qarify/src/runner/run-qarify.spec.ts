@@ -28,7 +28,7 @@ describe('run-qarify', () => {
     });
     const specs = allSpecFiles.map(e => path.join(_dataDir, e));
 
-    const res = await runQArify(specs, config);
+    const res = await runQArify(specs, config, { runnerId: '' });
     expect(res.length).toBeTruthy();
     expect(res[0].failed).toBe(1);
   });

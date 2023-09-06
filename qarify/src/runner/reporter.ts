@@ -1,5 +1,5 @@
 import { MochaOptions, Runner, Stats, reporters } from "mocha";
-import type { QARunnerReporter, ReportMessage } from "@qarify/types";
+import type { QARunnerReporter, QATestAttach, ReportMessage } from "@qarify/types";
 import { SpecRunnerEvent } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 
@@ -25,7 +25,7 @@ const log = getLogger('runner:reporter');
 /**
  * map mocha events to SpecRunnerEvent
  */
-export const MochaRunnerEvent = {
+export const MochaEventMap = {
   'start': SpecRunnerEvent.run_start,
   'end': SpecRunnerEvent.run_end,
   'suite': SpecRunnerEvent.suite_start,
@@ -38,6 +38,7 @@ export const MochaRunnerEvent = {
   'fail': SpecRunnerEvent.test_fail,
   'retry': SpecRunnerEvent.test_retry,
   'pending': SpecRunnerEvent.test_pending,
+  [SpecRunnerEvent.test_attach]: SpecRunnerEvent.test_attach,
 } as const;
 
 export class TestReporter extends reporters.Base {
@@ -45,7 +46,7 @@ export class TestReporter extends reporters.Base {
   private isForked: boolean;
   private qaReporter?: QARunnerReporter;
   private qaReporterMessages?: string[];
-
+  private attached: QATestAttach[] = [];
   constructor(runner: Runner, options?: MochaOptions) {
     super(runner, options);
     const reporterOptions = (options && options.reporterOptions) || {};
@@ -62,17 +63,23 @@ export class TestReporter extends reporters.Base {
     this.report = this.report.bind(this);
     // listen runner events
     (
-      Object.keys(MochaRunnerEvent) as Array<keyof typeof MochaRunnerEvent>
-    ).forEach((e) => runner.on(e, this.report.bind(this, MochaRunnerEvent[e])));
+      Object.keys(MochaEventMap) as Array<keyof typeof MochaEventMap>
+    ).forEach((e) => runner.on(e, this.report.bind(this, MochaEventMap[e])));
   }
 
   /**
    * Invoked by test runner whenever any event's been emitted.
    */
-  report(type: SpecRunnerEvent, payload: any, err?: Error) {
-    const message = formatReportMessage(type, payload, err);
+  report(type: SpecRunnerEvent, payload: any, err?: Error, params?: any) {
+    if (type === SpecRunnerEvent.test_attach && params) {
+      this.attached.push(...params as Array<QATestAttach>);
+      return;
+    }
+
+    const message = formatReportMessage(type, payload, err, params);
     message.runnerId = this.runnerId;
     message.stats = { passed: this.stats.passes, failed: this.stats.failures };
+    if (this.attached.length) { message.attached = [...this.attached]; }
 
     if (this.isForked) {
       process.send && process.send(message);
@@ -83,10 +90,15 @@ export class TestReporter extends reporters.Base {
     } else {
       printMessage(type, message);
     }
+
+    if (type === SpecRunnerEvent.test_end && this.attached.length) {
+      // reset attach
+      this.attached.length = 0;
+    }
   }
 }
 
-export function formatReportMessage(type: SpecRunnerEvent, payload: any, err?: Error) {
+export function formatReportMessage(type: SpecRunnerEvent, payload: any, err?: Error, params?: any) {
   const message = {
     type,
   } as ReportMessage;
@@ -120,6 +132,13 @@ export function formatReportMessage(type: SpecRunnerEvent, payload: any, err?: E
       message.duration = payload.duration;
     }
   }
+
+  if (params) {
+    if (type === SpecRunnerEvent.test_attach) {
+      message.attached = params;
+    }
+  }
+
   if (err) {
     message.error = {
       name: err.name,

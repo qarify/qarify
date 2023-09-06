@@ -19,12 +19,12 @@ export async function qarify(options: CLIOptions, baseDir: string) {
 
     if (options.forceFork || (config.nodeOptions && config.nodeOptions.length)) {
       log('run child-process');
-      res = await execQArify(files, config, undefined, options);
+      res = await execQArify(files, config, { runnerId: 'qy-process' }, options);
       // await execQArify(files, config, { execReporter: new ConsoleReporter() });
     }
     else {
       log('run in-process');
-      res = await runQArify(files, config);
+      res = await runQArify(files, config, { runnerId: 'qy-in-process' });
     }
   } catch (e) {
     if (!isSilent()) {console.error(e);}

@@ -1,23 +1,24 @@
 import type {
-  CLIOptions, QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage
+  CLIOptions, QAConfig, QARunner, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage, QATestAttach
 } from "@qarify/types";
 import { SpecRunnerEvent, LogLevel } from "@qarify/types";
 import { setLogLevel, isSilent } from '@qarify/logger';
 
 import { isNode } from "./platform.js";
+import { getQARunner } from "../runner/runner.js";
+
 import { MAX_SUPPORT_VERSION, MIN_SUPPORT_VERSION } from "../constants.js";
 
 export function updateConfigWithRunnerOptions(
   config: QAConfig,
-  files?: string[],
-  options: QARunnerOptions = {},
-): QAConfig {
-  const { drivers: driverOption } = options;
-  const { drivers, specs, frameworkOptions: mochaOptions = {} } = config;
+  files: string[],
+  options: QARunnerOptions,
+): QARunner {
+  const { drivers: driverOption, runnerId } = options;
+  const { drivers } = config;
   
   // apply driverOption
   let _drivers: QADriver[] = [];
-  if (!files) { files = specs; }
 
   if (driverOption && driverOption.length) {
     if (drivers && drivers.length) {
@@ -28,14 +29,15 @@ export function updateConfigWithRunnerOptions(
       _drivers = drivers;
     } else {
       // add empty driver
-      _drivers.push({ name: '' } as QADriver);
+      _drivers.push({ name: 'no or existing' } as QADriver);
     }
   }
 
   return {
     ...config,
+    runnerId,
     drivers: _drivers,
-    specs: files,
+    specs: files || config.specs,
   };
 }
 
@@ -84,6 +86,8 @@ export function printMessage(type: SpecRunnerEvent, message: ReportMessage) {
     if (error) {
       error.stack ? console.error(error.stack) : console.error(error.message);
     }
+  } else {
+    // console.log(message);
   }
 }
 
@@ -125,4 +129,32 @@ export function isValidConfigVersion(ver: string) {
     throw new Error('not supported version');
   }
   return v;
+}
+
+export function getCurrentTest(ctx: Mocha.Context): Mocha.Test | undefined {
+  if (ctx) {
+    if (ctx.currentTest) { return ctx.currentTest; }
+    if (ctx.test) { return ctx.test as Mocha.Test; }
+  }
+  const runner = getQARunner();
+  if (runner && runner.context && runner.context.instance) { return runner.context.instance.test; }
+  return undefined;
+}
+
+export function sendAttachToReporter(test: Mocha.Test | undefined, attachment: QATestAttach[]) {
+  const runner = getQARunner();
+  if (!runner || !runner.context || !runner.context.instance) { return false; }
+
+  if (!test) { test = runner.context.instance.test; }
+  if (!test) { return false; }
+  const _test = {
+    title: test.title,
+    parent: test.parent,
+    file: test.file,
+    duration: test.duration,
+    speed: test.speed,
+    state: test.state,
+    type: SpecRunnerEvent.test_attach,
+  };
+  return runner.context.instance.emit(SpecRunnerEvent.test_attach, _test, undefined, attachment);
 }

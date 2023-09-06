@@ -23,7 +23,7 @@ describe('exec-qarify', () => {
     const specs = await prepareSpecs(config);
     expect(specs.length).toBeTruthy();
 
-    const res = await execQArify(specs, config, {}, {}, '../dist/nodejs/run-qarify.js'); // based src root
+    const res = await execQArify(specs, config, { runnerId: '' }, {}, '../dist/nodejs/run-qarify.js'); // based src root
     expect(res.length).toBeTruthy();
     expect(res[0].failed).toBe(1);
   });
@@ -38,7 +38,7 @@ describe('exec-qarify', () => {
     const specs = await prepareSpecs(config);
     expect(specs.length).toBeTruthy();
 
-    const res = await execQArify(specs, config, {}, {}, '../dist/nodejs/run-qarify.js'); // based src root
+    const res = await execQArify(specs, config, { runnerId: '' }, {}, '../dist/nodejs/run-qarify.js'); // based src root
     expect(res.length).toBeTruthy();
     expect(res[0].failed).toBe(1);
   });
@@ -57,7 +57,7 @@ describe('exec-qarify', () => {
     const specs = await prepareSpecs(config);
     expect(specs.length).toBeTruthy();
 
-    const res = await execQArify(specs, config, {}, {}, '../dist/nodejs/run-qarify.js'); // based src root
+    const res = await execQArify(specs, config, { runnerId: '' }, {}, '../dist/nodejs/run-qarify.js'); // based src root
     expect(res.length).toBeTruthy();
     expect(res[0].failed).toBe(1);
   });
