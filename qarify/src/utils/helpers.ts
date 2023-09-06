@@ -141,6 +141,46 @@ export function getCurrentTest(ctx: Mocha.Context): Mocha.Test | undefined {
   return undefined;
 }
 
+function toValidFileName(str: string) {
+  const invalidFileChars = [
+    "#", "%", "&", "{", "}", "/", "\\", '"', "'", "<", ">", "?", "*", " ", "$", "!", ":", "@", "+", "`", "|", "="
+  ];
+  const valid = [];
+  for (let i = 0; i < str.length; i ++) {
+    if (invalidFileChars.indexOf(str[i]) >= 0) {
+      valid.push('-');
+    } else {
+      valid.push(str[i]);
+    }
+  }
+  return valid.join('');
+}
+
+export function getTestPrefix(ctx: Mocha.Context, dir = 1): string[] | undefined {
+  let test: Mocha.Test | undefined = undefined;
+  if (ctx) {
+    if (ctx.currentTest) { test = ctx.currentTest; }
+    else if (ctx.test) { test = ctx.test as Mocha.Test; }
+  }
+  const runner = getQARunner();
+  if (!test && runner) {
+    if (runner && runner.context && runner.context.instance) {
+      test = runner.context.instance.test;
+    } else {
+      return undefined;
+    }
+  }
+  if (runner && test) {
+    if (dir === 1) {
+      return [toValidFileName(runner.runnerId || 'no-runner-id'), toValidFileName(test.fullTitle() || `no-title-${Date.now()}`)];
+    }
+    return [toValidFileName(`${runner.runnerId}_${test.fullTitle()}`)];
+  } else if (test) {
+    return [toValidFileName(`${test.fullTitle()}`)];
+  }
+  return undefined;
+}
+
 export function sendAttachToReporter(test: Mocha.Test | undefined, attachment: QATestAttach[]) {
   const runner = getQARunner();
   if (!runner || !runner.context || !runner.context.instance) { return false; }

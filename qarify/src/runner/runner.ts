@@ -12,6 +12,11 @@ let _runner: Readonly<QARunner> | undefined;
 
 export function getQARunner() { return _runner; }
 
+export function getQARunnerProp(name: keyof QARunner) {
+  if (!_runner) return undefined;
+  return _runner[name];
+}
+
 export async function runQARunner(
   runner: QARunner,
 ): Promise<QArifyResult[]> {
