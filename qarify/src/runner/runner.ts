@@ -5,6 +5,7 @@ import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { closeSession, makeSession } from "../driver/session.js";
 import { getDriver } from "../driver/driver.js";
+import { _setGlobal } from "../global/index.js";
 
 const log = getLogger('runner:runner');
 
@@ -34,7 +35,8 @@ export async function runQARunner(
       }
       log('no spec files');
     }
-
+    // set global
+    _setGlobal('qyrunner', _runner);
     // expect
     setGlobalExpect({
       wait: testOptions.waitforTimeout, // ms to wait for expectation to succeed
@@ -65,6 +67,7 @@ export async function runQARunner(
     throw e;
   } finally {
     _runner = undefined;
+    _setGlobal('qyrunner', undefined);
   }
 }
 

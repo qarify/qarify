@@ -1,4 +1,4 @@
-import { QAConfig } from "@qarify/types";
+import type { QARunner } from "@qarify/types";
 import type { Expect } from "expect-webdriverio";
 type SupportedGlobals =
   | "browser"
@@ -7,7 +7,7 @@ type SupportedGlobals =
   | "$"
   | "$$"
   | "expect"
-  | "qyconfig";
+  | "qyrunner";
 
 /**
  * As this file gets imported/used as ESM and CJS artifact we have to make sure
@@ -70,9 +70,9 @@ expect.extend = (...args: unknown[]) => {
   return expect.extend(...args);
 };
 
-export const config: QAConfig = new Proxy(
-  {} as any as QAConfig,
-  proxyHandler("qyconfig")
+export const qyrunner: QARunner = new Proxy(
+  {} as any as QARunner,
+  proxyHandler("qyrunner")
 );
 
 /**
