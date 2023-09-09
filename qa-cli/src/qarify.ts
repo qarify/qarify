@@ -34,5 +34,7 @@ export async function qarify(options: CLIOptions, baseDir: string) {
     const failed = res.reduce((a, e) => a + e.failed, 0);
     if (!isSilent()) {console.log(failed ? `\nFailed ${failed} test(s).` : '\nDone.', res);}
     process.exit(failed);
+  } else {
+    process.exit(0);
   }
 }

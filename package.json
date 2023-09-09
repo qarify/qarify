@@ -5,7 +5,7 @@
     "test:types": "lerna run test:types",
     "test": "lerna run test",
     "build": "lerna run build",
-    "e2e": "lerna run e2e",
+    "e2e": "lerna run --concurrency 1 e2e",
     "compile": "lerna run compile",
     "clean": "lerna run clean:build",
     "setup": "bash scripts/setup.sh",

@@ -6,6 +6,13 @@ import {
 } from "../../src/runner/index.js";
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
 import { QADriver, QARunner } from '@qarify/types';
+import { GLOBAL_RUNNER } from '../constants.js';
+import { _getGlobal } from '../global/index.js';
+
+// internal global
+declare global {
+  var __qyrunner__: QARunner
+}
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const _dataDir = path.join(__dirname, '__mock');
@@ -39,7 +46,7 @@ describe("runner", () => {
     expect(await runQARunner(qarunner)).toEqual([]);
   });
 
-  it("should set global qyrunner", async function() {
+  it("should unset global qyrunner", async function() {
     const qaconfig = getDefaultQAConfig('.');
     const qarunner: QARunner = {
       ...qaconfig,
@@ -47,7 +54,15 @@ describe("runner", () => {
       drivers: [{ name: 'runner test' } as QADriver],
       runnerId: 'test',
     };
+    // no global runner before test
+    expect(globalThis[GLOBAL_RUNNER]).toBeUndefined();
+    expect(_getGlobal(GLOBAL_RUNNER)).toBeUndefined();
+    // the global runner will be tested in the spec file
     const res = await runQARunner(qarunner);
     expect(res).toEqual([{ runnerId: res[0].runnerId, failed: 0 }]);
+
+    // no global runner after test
+    expect(globalThis[GLOBAL_RUNNER]).toBeUndefined();
+    expect(_getGlobal(GLOBAL_RUNNER)).toBeUndefined();
   });
 });

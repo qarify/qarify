@@ -1,5 +1,8 @@
-import type { QARunner } from "@qarify/types";
+import type { QAConfig, QARunner } from "@qarify/types";
 import type { Expect } from "expect-webdriverio";
+
+import { GLOBAL_RUNNER, GLOBAL_CONFIG } from '../constants.js';
+
 type SupportedGlobals =
   | "browser"
   | "driver"
@@ -7,7 +10,19 @@ type SupportedGlobals =
   | "$"
   | "$$"
   | "expect"
-  | "qyrunner";
+  | typeof GLOBAL_CONFIG
+  | typeof GLOBAL_RUNNER;
+
+declare module globalThis {
+  var browser: WebdriverIO.Browser;
+  var driver: WebdriverIO.Browser;
+  var multiremotebrowser: WebdriverIO.MultiRemoteBrowser;
+  var $: WebdriverIO.Browser["$"];
+  var $$: WebdriverIO.Browser["$$"];
+  var expect: Expect;
+  var __qaconfig__: QAConfig;
+  var __qyrunner__: QARunner;
+}
 
 /**
  * As this file gets imported/used as ESM and CJS artifact we have to make sure
@@ -70,9 +85,14 @@ expect.extend = (...args: unknown[]) => {
   return expect.extend(...args);
 };
 
-export const qyrunner: QARunner = new Proxy(
+// export const __qaconfig__: QAConfig = new Proxy(
+//   {} as any as QAConfig,
+//   proxyHandler(GLOBAL_CONFIG),
+// );
+
+export const __qyrunner__: QARunner = new Proxy(
   {} as any as QARunner,
-  proxyHandler("qyrunner")
+  proxyHandler(GLOBAL_RUNNER),
 );
 
 /**
@@ -84,9 +104,10 @@ export const qyrunner: QARunner = new Proxy(
 export function _setGlobal(key: SupportedGlobals, value: any) {
   const old = globals.get(key);
   globals.set(key, value);
-  
-  // @ts-expect-error set global variables
   globalThis[key] = value;
-
   return old;
+}
+
+export function _getGlobal(key: SupportedGlobals) {
+  return globalThis[key];
 }

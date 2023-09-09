@@ -1,10 +1,17 @@
 import path from "node:path";
 import url from 'url';
 import { expect } from 'expect-webdriverio';
-import { SpecRunnerFramework } from "@qarify/types";
+import { QAConfig, SpecRunnerFramework } from "@qarify/types";
 
 import { loadConfig } from "./load-config.js";
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
+import { GLOBAL_CONFIG } from "../constants.js";
+import { _getGlobal } from "../global/index.js";
+
+// internal global
+declare global {
+  var __qaconfig__: QAConfig
+}
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const _baseDir = path.join(__dirname, '__mock');
@@ -19,14 +26,14 @@ describe('load-config', () => {
       config: path.join(baseDir, '.qarify.json'),
     });
     // compare with global
-    expect(res).toEqual(qyconfig);
+    expect(res).toEqual(globalThis[GLOBAL_CONFIG]);
 
     // load 
     const noConfigRootDir = '/';
     res = await loadConfig(noConfigRootDir);
     expect(res).toEqual(getDefaultQAConfig(noConfigRootDir));
     // compare with global
-    expect(res).toEqual(qyconfig);
+    expect(res).toEqual(globalThis[GLOBAL_CONFIG]);
   });
 
   it('should load config from specified config file', async () => {
@@ -74,5 +81,12 @@ describe('load-config', () => {
     res = loadConfig(_baseDir, { config: 'error-configs/qarify-not-supported-version.json' });
     await expect(res).rejects.toThrow(/not supported version/);
   });
+
+  it('should set global variable', async () => {
+    const noConfigRootDir = '/';
+    const res = await loadConfig(noConfigRootDir);
+    expect(_getGlobal(GLOBAL_CONFIG)).toEqual(res);
+    expect(globalThis[GLOBAL_CONFIG]).toEqual(res);
+  })
 
 });

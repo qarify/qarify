@@ -5,4 +5,3 @@ declare var multiremotebrowser: WebdriverIO.MultiRemoteBrowser
 declare var expect: Expect
 declare var $: WebdriverIO.Browser['$']
 declare var $$: WebdriverIO.Browser['$$']
-declare var qyconfig: QAConfig

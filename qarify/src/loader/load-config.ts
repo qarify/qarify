@@ -4,7 +4,7 @@ import type { CLIOptions, QAConfig } from "@qarify/types";
 import { SpecRunnerFramework } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 
-import { MAX_SUPPORT_VERSION } from "../constants.js";
+import { MAX_SUPPORT_VERSION, GLOBAL_CONFIG } from "../constants.js";
 import { isValidConfigVersion } from "../utils/helpers.js";
 import { _setGlobal } from "../global/index.js";
 
@@ -143,7 +143,7 @@ export async function loadConfig(
   log('loaded config:', userConfig);
 
   // set global config
-  _setGlobal('qyconfig', userConfig);
+  _setGlobal(GLOBAL_CONFIG, userConfig);
 
   return userConfig;
 }

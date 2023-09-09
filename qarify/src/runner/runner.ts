@@ -1,6 +1,7 @@
 import type { QArifyResult, QADriver, QARunner } from "@qarify/types";
 import { getLogger, isSilent } from '@qarify/logger';
 
+import { GLOBAL_RUNNER } from "../constants.js";
 import { runSpecFiles } from "./run-specs.js";
 import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { closeSession, makeSession } from "../driver/session.js";
@@ -36,7 +37,7 @@ export async function runQARunner(
       log('no spec files');
     }
     // set global
-    _setGlobal('qyrunner', _runner);
+    _setGlobal(GLOBAL_RUNNER, _runner);
     // expect
     setGlobalExpect({
       wait: testOptions.waitforTimeout, // ms to wait for expectation to succeed
@@ -67,7 +68,7 @@ export async function runQARunner(
     throw e;
   } finally {
     _runner = undefined;
-    _setGlobal('qyrunner', undefined);
+    _setGlobal(GLOBAL_RUNNER, undefined);
   }
 }
 
