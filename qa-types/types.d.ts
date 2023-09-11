@@ -167,6 +167,40 @@ export type QARunner = QAConfig & {
   runnerId: string;
 };
 
+export type QAPageNodeAttribute = {
+  visible?: boolean;     // boolean
+  accessible?: boolean;  // boolean
+  x?: number;           // number
+  y?: number;           // number
+  width?: number;       // number
+  height?: number;      // number
+  axId?: string;
+  text?: string;
+  id?: string;
+  value?: string;
+  label?: string;       // legacy but used
+
+  //
+  // Legacy props
+  //
+  name?: string;
+  // e.g. [x1,y1,x2,y2]
+  bounds?: string;
+  type?: string;
+  enabled?: string;
+  index?: string;
+  'content-desc'?: string;
+  rntestid?: string;
+  'resource-id'?: string;
+  'class'?: string;
+};
+
+export type QAPageNode = {
+  tagName: string;
+  attributes: QAPageNodeAttribute;
+  children: QAPageNode[];
+};
+
 export type QATestPlugin = {
   
 };

@@ -23,7 +23,7 @@
     ]
   },
   "scripts": {
-    "test:unit": "mocha ./src/runner/*.spec.ts",
+    "test:unit": "mocha",
     "e2e": "mocha ./tests/e2e/**/*.spec.ts",
     "test": "mocha src/**/*.spec.ts",
     "test:types": "tsc --skipLibCheck",
@@ -40,6 +40,7 @@
     "@qarify/globals": "0.9.0",
     "@qarify/logger": "0.9.0",
     "@qarify/types": "0.9.0",
+    "@xmldom/xmldom": "~0.8.10",
     "debug": "^4.3.4",
     "glob": "^10.3.3",
     "mocha": "^10.2.0",

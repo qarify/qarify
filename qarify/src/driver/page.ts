@@ -1,5 +1,8 @@
 import { getLogger } from '@qarify/logger';
+import type { QAPageNode } from '@qarify/types';
+
 import { getDriver } from './driver.js';
+import { parsePageSrc } from './page-node.js';
 
 const log = getLogger('driver:page');
 
@@ -11,6 +14,7 @@ type RectReturn = {
 };
 
 let _pageSrc = '';
+let _pageNode: QAPageNode | undefined = undefined;
 let _screenshot = '';
 let _windowRect = {} as RectReturn;
 
@@ -29,6 +33,16 @@ export async function getPageSource(
     }
   }
   return _pageSrc;  
+}
+
+export async function getPageNode(
+  updateSessionId?: string,
+) {
+  if (updateSessionId) { 
+    await getPageSource(updateSessionId);
+    _pageNode = parsePageSrc(_pageSrc);
+  }
+  return _pageNode;
 }
 
 export async function getPageScreenshot(

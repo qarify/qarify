@@ -10,9 +10,9 @@ import { _setGlobal } from "../global/index.js";
 
 const log = getLogger('runner:runner');
 
-let _runner: Readonly<QARunner> | undefined;
+let _runner: QARunner | undefined;
 
-export function getQARunner() { return _runner; }
+export function getQARunner() { return _runner as Readonly<QARunner>; }
 
 export function getQARunnerProp(name: keyof QARunner) {
   if (!_runner) return undefined;

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UI width="1080" height="1857">
+  <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+    <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+      <View text="" x="0" y="63" width="1080" height="1794" visible="true">
+      </View>
+    </View>
+    <View text="" x="0" y="1857" width="1080" height="63" id="android:id/navigationBarBackground" visible="true"></View>
+  </View>
+</UI>

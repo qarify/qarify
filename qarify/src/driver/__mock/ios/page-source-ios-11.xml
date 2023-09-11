@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UI>
+  <App visible="true" accessible="false" x="0" y="0" width="390" height="844" axId="rn_sample" text="rn_sample">
+    <Window visible="true" accessible="false" x="0" y="0" width="390" height="844">
+      <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
+        <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
+          <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
+            <Element visible="true" accessible="false" x="0" y="0" width="390" height="844" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag">
+              <Element visible="true" accessible="false" x="0" y="0" width="390" height="844" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag">
+                <Element visible="true" accessible="false" x="0" y="0" width="390" height="844" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag">
+                  <Element visible="true" accessible="false" x="0" y="0" width="390" height="844" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag">
+                    <Element visible="false" accessible="false" x="0" y="0" width="390" height="44"></Element>
+                    <Element visible="true" accessible="false" x="0" y="0" width="390" height="844" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home Home Webview Login Forms Swipe Drag">
+                      <Element visible="true" accessible="false" x="0" y="0" width="390" height="754" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home">
+                        <Element visible="true" accessible="false" x="0" y="0" width="390" height="754" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home">
+                          <Element visible="true" accessible="false" x="0" y="0" width="390" height="754" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home">
+                            <Element visible="true" accessible="false" x="0" y="0" width="390" height="754" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page Home">
+                              <Element visible="true" accessible="false" x="0" y="0" width="390" height="91" axId="Home" text="Home">
+                                <Element visible="true" accessible="false" x="0" y="0" width="390" height="91">
+                                  <Element visible="true" accessible="false" x="0" y="0" width="390" height="91"></Element>
+                                </Element>
+                                <Element visible="true" accessible="false" x="0" y="0" width="390" height="91" axId="Home" text="Home">
+                                  <Element visible="false" accessible="false" x="0" y="0" width="390" height="47"></Element>
+                                  <Element visible="true" accessible="false" x="0" y="47" width="390" height="44" axId="Home" text="Home">
+                                    <Element visible="true" accessible="false" x="0" y="47" width="156" height="44"></Element>
+                                    <Element visible="true" accessible="false" x="171" y="47" width="48" height="44" axId="Home" text="Home">
+                                      <Element visible="true" accessible="true" x="171" y="58" width="49" height="22" axId="Home" text="Home"></Element>
+                                    </Element>
+                                    <Element visible="true" accessible="false" x="234" y="47" width="156" height="44"></Element>
+                                  </Element>
+                                </Element>
+                              </Element>
+                              <Element visible="true" accessible="false" x="0" y="91" width="390" height="663" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page">
+                                <Element visible="true" accessible="false" x="0" y="135" width="390" height="619" axId="Home-screen" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support Vertical scroll bar, 1 page Horizontal scroll bar, 1 page">
+                                  <Scrollable visible="true" accessible="false" x="0" y="135" width="390" height="619">
+                                    <Element visible="true" accessible="false" x="0" y="135" width="390" height="579" axId="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support" text="GREENLITE Demo app for GreenLite TI 󰀵 󰀲 Support">
+                                      <Element visible="true" accessible="false" x="0" y="135" width="390" height="450" axId="GREENLITE Demo app for GreenLite TI" text="GREENLITE Demo app for GreenLite TI">
+                                        <Element visible="true" accessible="false" x="70" y="235" width="250" height="250">
+                                          <Image visible="true" accessible="false" x="70" y="235" width="250" height="250" axId="/Users/admin/Library/Developer/CoreSimulator/Devices/669C8A2C-8D1A-429C-8F91-A9C9CDF5F99B/data/Containers/Data/Application/98A2F11C-FB13-4707-8D32-EF1D1244102C/Library/Application Support/.expo-internal/333e34a180460173b7d4b9f565c05cb6.png"></Image>
+                                        </Element>
+                                        <Element visible="true" accessible="false" x="77" y="485" width="236" height="80" axId="GREENLITE" text="GREENLITE">
+                                          <Text value="GREENLITE" visible="true" accessible="true" x="77" y="505" width="187" height="50" axId="GREENLITE" text="GREENLITE"></Text>
+                                          <Element visible="true" accessible="false" x="263" y="505" width="50" height="50">
+                                            <Image visible="true" accessible="false" x="263" y="505" width="50" height="50" axId="/Users/admin/Library/Developer/CoreSimulator/Devices/669C8A2C-8D1A-429C-8F91-A9C9CDF5F99B/data/Containers/Data/Application/98A2F11C-FB13-4707-8D32-EF1D1244102C/Library/Application Support/.expo-internal/6e27b1256d4a0cdd8dd34d030d530a95.png"></Image>
+                                          </Element>
+                                        </Element>
+                                        <Text value="Demo app for GreenLite TI" visible="true" accessible="true" x="103" y="565" width="184" height="20" axId="Demo app for GreenLite TI" text="Demo app for GreenLite TI"></Text>
+                                      </Element>
+                                      <Element visible="true" accessible="false" x="0" y="584" width="390" height="130" axId="󰀵 󰀲 Support" text="󰀵 󰀲 Support">
+                                        <Element visible="true" accessible="false" x="105" y="584" width="180" height="111" axId="󰀵 󰀲" text="󰀵 󰀲">
+                                          <Element visible="true" accessible="false" x="105" y="584" width="180" height="111" axId="󰀵 󰀲" text="󰀵 󰀲">
+                                            <Text value="󰀵" visible="true" accessible="true" x="105" y="594" width="91" height="91" axId="󰀵" text="󰀵"></Text>
+                                            <Text value="󰀲" visible="true" accessible="true" x="195" y="594" width="91" height="91" axId="󰀲" text="󰀲"></Text>
+                                          </Element>
+                                        </Element>
+                                        <Text value="Support" visible="true" accessible="true" x="166" y="694" width="58" height="21" axId="Support" text="Support"></Text>
+                                      </Element>
+                                    </Element>
+                                    <Element value="0%" visible="true" accessible="false" x="357" y="135" width="30" height="619" axId="Vertical scroll bar, 1 page" text="Vertical scroll bar, 1 page"></Element>
+                                    <Element value="0%" visible="true" accessible="false" x="0" y="721" width="390" height="30" axId="Horizontal scroll bar, 1 page" text="Horizontal scroll bar, 1 page"></Element>
+                                  </Scrollable>
+                                </Element>
+                              </Element>
+                            </Element>
+                          </Element>
+                        </Element>
+                        <Element visible="true" accessible="false" x="0" y="0" width="390" height="754">
+                          <Element visible="false" accessible="false" x="0" y="30000" width="390" height="754"></Element>
+                        </Element>
+                        <Element visible="true" accessible="false" x="0" y="0" width="390" height="754">
+                          <Element visible="false" accessible="false" x="0" y="30000" width="390" height="754"></Element>
+                        </Element>
+                        <Element visible="true" accessible="false" x="0" y="0" width="390" height="754">
+                          <Element visible="false" accessible="false" x="0" y="30000" width="390" height="754"></Element>
+                        </Element>
+                        <Element visible="true" accessible="false" x="0" y="0" width="390" height="754">
+                          <Element visible="false" accessible="false" x="0" y="30000" width="390" height="754"></Element>
+                        </Element>
+                        <Element visible="true" accessible="false" x="0" y="0" width="390" height="754">
+                          <Element visible="false" accessible="false" x="0" y="30000" width="390" height="754"></Element>
+                        </Element>
+                      </Element>
+                      <Element visible="true" accessible="false" x="0" y="754" width="390" height="90" axId="Home Webview Login Forms Swipe Drag" text="Home Webview Login Forms Swipe Drag">
+                        <Element visible="true" accessible="false" x="0" y="759" width="390" height="85"></Element>
+                        <Element value="tab list" visible="true" accessible="false" x="0" y="764" width="390" height="50" axId="Home Webview Login Forms Swipe Drag" text="Home Webview Login Forms Swipe Drag">
+                          <Button value="1" visible="true" accessible="true" x="0" y="764" width="65" height="50" axId="Home" text="Home"></Button>
+                          <Button visible="true" accessible="true" x="65" y="764" width="65" height="50" axId="Webview" text="Webview"></Button>
+                          <Button visible="true" accessible="true" x="130" y="764" width="65" height="50" axId="Login" text="Login"></Button>
+                          <Button visible="true" accessible="true" x="195" y="764" width="65" height="50" axId="Forms" text="Forms"></Button>
+                          <Button visible="true" accessible="true" x="260" y="764" width="65" height="50" axId="Swipe" text="Swipe"></Button>
+                          <Button visible="true" accessible="true" x="325" y="764" width="65" height="50" axId="Drag" text="Drag"></Button>
+                        </Element>
+                      </Element>
+                    </Element>
+                  </Element>
+                </Element>
+              </Element>
+            </Element>
+          </Element>
+        </Element>
+      </Element>
+    </Window>
+    <Window visible="false" accessible="false" x="0" y="0" width="390" height="844">
+      <Element visible="false" accessible="false" x="0" y="0" width="390" height="844">
+        <Element visible="false" accessible="false" x="0" y="0" width="390" height="844"></Element>
+        <Element visible="false" accessible="false" x="0" y="844" width="390" height="233"></Element>
+      </Element>
+    </Window>
+  </App>
+</UI>

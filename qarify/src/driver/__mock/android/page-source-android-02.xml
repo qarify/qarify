@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UI width="1080" height="1857">
+  <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+    <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+      <View text="" x="0" y="63" width="1080" height="1794" visible="true">
+        <View text="" x="0" y="63" width="1080" height="1794" id="com.greenlite.androidsample:id/action_bar_root" visible="true">
+          <View text="" x="0" y="63" width="1080" height="1794" id="android:id/content" visible="true">
+            <View text="" x="0" y="63" width="1080" height="1794" visible="true">
+              <View text="" x="0" y="63" width="1080" height="147" visible="true">
+                <View text="" x="0" y="63" width="1080" height="147" id="com.greenlite.androidsample:id/toolbar" visible="true">
+                  <androidx.appcompat.widget.LinearLayoutCompat text="" x="975" y="63" width="105" height="147" visible="true">
+                    <Image text="" x="975" y="73" width="105" height="126" axId="More options" visible="true"></Image>
+                  </androidx.appcompat.widget.LinearLayoutCompat>
+                  <Button text="" x="0" y="63" width="147" height="147" axId="Navigate up" visible="true"></Button>
+                  <Text text="Detail View" x="189" y="101" width="274" height="71" visible="true"></Text>
+                </View>
+              </View>
+              <View text="" x="0" y="210" width="1080" height="1647" visible="true">
+                <View text="" x="0" y="210" width="1080" height="1647" id="com.greenlite.androidsample:id/nav_host_fragment_content_main" visible="true">
+                  <View text="" x="0" y="210" width="1080" height="1647" visible="true">
+                    <Text text="Detail Information. Arg: %1$s" x="302" y="700" width="477" height="51" axId="body-text" id="com.greenlite.androidsample:id/textview_second" visible="true"></Text>
+                    <Button text="SHOW MAIN VIEW" x="322" y="1241" width="436" height="126" axId="show-main-view-button" id="com.greenlite.androidsample:id/button_second" visible="true"></Button>
+                  </View>
+                </View>
+              </View>
+              <Button text="" x="891" y="1668" width="147" height="147" id="com.greenlite.androidsample:id/fab" visible="true"></Button>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View text="" x="0" y="1857" width="1080" height="63" id="android:id/navigationBarBackground" visible="true"></View>
+  </View>
+</UI>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UI>
+  <App visible="true" accessible="false" x="0" y="0" width="390" height="844" axId="iossample" text="iossample">
+    <Window visible="true" accessible="false" x="0" y="0" width="390" height="844">
+      <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
+      </Element>
+    </Window>
+    <Window visible="false" accessible="false" x="0" y="0" width="390" height="844">
+      <Element visible="false" accessible="false" x="0" y="0" width="390" height="844">
+      </Element>
+    </Window>
+  </App>
+</UI>
