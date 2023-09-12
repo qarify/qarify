@@ -56,7 +56,7 @@ function _getTitle(tagName: string, attributes: QAPageNodeAttribute) {
 
 export const _getPageDoc = () => _pageDoc;
 
-export function isUnique(attrName: string, attrValue: string) {
+export function isUniqueAttribute(attrName: string, attrValue: string) {
   // If no sourceXML provided, assume it's unique
   if (!_pageDoc) {
     return true;
