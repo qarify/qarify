@@ -1,9 +1,18 @@
 import type { QAPageNode, QAPageNodeAttribute } from '@qarify/types';
 import { DOMParser } from '@xmldom/xmldom';
+import XPath from 'xpath';
 
 let _pageDoc: Document | undefined = undefined;
 
-export function parsePageSrc(pageSrc: string): QAPageNode {
+// Attributes on nodes that we know are unique to the node
+const UNIQUE_XPATH_ATTRIBUTES = ['axId', 'accessibility-id', 'name', 'id', 'content-desc'];
+
+type PageParserOptions = {
+  xpath?: boolean;
+  title?: boolean;
+};
+
+export function parsePageSrc(pageSrc: string, { xpath, title }: PageParserOptions = {} ): QAPageNode {
   _pageDoc = new DOMParser().parseFromString(pageSrc);
 
   // get the first child element node in the doc. some drivers write their xml differently so we
@@ -27,13 +36,104 @@ export function parsePageSrc(pageSrc: string): QAPageNode {
     return {
       tagName: xmlNode.tagName,
       attributes,
+      path,
       children: _childNodesOf(xmlNode).map((childNode, childIndex) =>
         translateRecursively(childNode, path, childIndex)
       ),
+      ...(xpath ? {xpath: getOptimalXPath(_pageDoc!, xmlNode, UNIQUE_XPATH_ATTRIBUTES)} : {}),
+      ...(title ? {title: _getTitle(xmlNode.tagName, attributes)} : {}),
     };
   };
 
   return firstChild ? translateRecursively(firstChild) : ({} as QAPageNode);
+}
+
+function _getTitle(tagName: string, attributes: QAPageNodeAttribute) {
+  const { name, text } = attributes;
+  const moreTitle = text ? ` [text=${text}]` : name ? ` [name=${name}]` : '';
+  return `${tagName}${moreTitle.length > 20 ? (moreTitle.substring(0, 20) + '...') : moreTitle}`;
+}
+
+export const _getPageDoc = () => _pageDoc;
+
+export function isUnique(attrName: string, attrValue: string) {
+  // If no sourceXML provided, assume it's unique
+  if (!_pageDoc) {
+    return true;
+  }
+  // eslint-disable-next-line no-useless-escape
+  return (XPath.select(`/\/*[@${attrName}="${attrValue.replace(/"/g, '')}"]`, _pageDoc)as Array<Node>).length < 2;
+}
+
+/**
+ * Get an optimal XPath for a DOMNode
+ * @param doc
+ * @param domNode
+ */
+export function getOptimalXPath(
+  doc: Document,
+  domNode?: Element,
+  uniqueAttributes = UNIQUE_XPATH_ATTRIBUTES
+): string | undefined {
+  try {
+    // BASE CASE #1: If this isn't an element, we're above the root, return empty string
+    if (!domNode || !domNode.tagName || domNode.nodeType !== 1) {
+      return '';
+    }
+
+    // BASE CASE #2: If this node has a unique attribute, return an absolute XPath with that attribute
+    for (const attrName of uniqueAttributes) {
+      const attrValue = domNode.getAttribute(attrName);
+      if (attrValue) {
+        let xpath = `//${domNode.tagName || '*'}[@${attrName}="${attrValue}"]`;
+        let othersWithAttr;
+
+        // If the XPath does not parse, move to the next unique attribute
+        try {
+          othersWithAttr = XPath.select(xpath, doc);
+        } catch (ign) {
+          continue;
+        }
+
+        // If the attribute isn't actually unique, get it's index too
+        if (othersWithAttr && (othersWithAttr as Node[]).length > 1) {
+          const index = (othersWithAttr as Node[]).indexOf(domNode);
+          xpath = `(${xpath})[${index + 1}]`;
+        }
+        return xpath;
+      }
+    }
+
+    // Get the relative xpath of this node using tagName
+    let xpath = `/${domNode.tagName}`;
+
+    // If this node has siblings of the same tagName, get the index of this node
+    if (domNode.parentNode) {
+      // Get the siblings
+      const childNodes = Array.prototype.slice
+        .call(domNode.parentNode.childNodes, 0)
+        .filter((childNode) => childNode.nodeType === 1 && childNode.tagName === domNode.tagName);
+
+      // If there's more than one sibling, append the index
+      if (childNodes.length > 1) {
+        const index = childNodes.indexOf(domNode);
+        xpath += `[${index + 1}]`;
+      }
+    }
+
+    // Make a recursive call to this nodes parents and prepend it to this xpath
+    return getOptimalXPath(doc, domNode.parentNode as Element, uniqueAttributes) + xpath;
+  } catch (error) {
+    // If there's an unexpected exception, abort and don't get an XPath
+    console.error(
+      `The most optimal XPATH could not be determined because an error was thrown: '${JSON.stringify(
+        error,
+        null,
+        2
+      )}'`
+    );
+    return undefined;
+  }
 }
 
 export function findPageNode(node: QAPageNode, path: string) {
@@ -87,7 +187,6 @@ export function findPageNodeWindowSize(node: QAPageNode) {
   return undefined;
 }
 
-
 const boolean_props = ['visible', 'accessible'] as Array<QAPageNodeAttribute>;
 const number_props = ['x', 'y', 'width', 'height'] as Array<QAPageNodeAttribute>;
 
@@ -101,7 +200,7 @@ function _castAttributeType(name: QAPageNodeAttribute, value: string) {
   }
 }
 
-function _childNodesOf(xmlNode: Document | HTMLElement | Element): Element[] {
+export function _childNodesOf(xmlNode: Document | HTMLElement | Element): Element[] {
   if (!xmlNode || !xmlNode.hasChildNodes()) {
     return [];
   }

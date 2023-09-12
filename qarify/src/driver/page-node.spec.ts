@@ -1,11 +1,13 @@
 import fs from 'fs';
 import url from 'url';
+import path from 'path';
 import { expect } from 'expect';
+import XPath from 'xpath';
 
 import {
-  parsePageSrc, findPageNode, findPageNodePlatform, findPageNodeWindowSize
+  parsePageSrc, findPageNode, findPageNodePlatform, findPageNodeWindowSize,
+  getOptimalXPath, _getPageDoc,
 } from './page-node.js';
-import path from 'path';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -24,7 +26,7 @@ const android_src = {
   '01': loadPageSrc('android', 'page-source-android-01.xml').toString(),
 };
 
-describe('xml2js on *ios*', () => {
+describe('page-node on *ios*', () => {
   // it('should save to xml', () => {
   //   fs.writeFileSync(
   //     path.join(__dirname, '__mock', 'ios', 'page-source-ios-scroll.xml'),
@@ -56,9 +58,25 @@ describe('xml2js on *ios*', () => {
     expect(findPageNodePlatform(node)).toBe('ios');
     expect(findPageNodeWindowSize(node)).toBeDefined();
   });
+
+  it('should get optimal xpath', () => {
+    parsePageSrc(ios_src['00']);
+    const doc = _getPageDoc()!;
+
+    let res = getOptimalXPath(doc);
+    expect(res).toBe('');
+
+    let ele = XPath.select('//UI/App/Window/Element', doc) as Node[];
+    res = getOptimalXPath(doc, ele[0] as Element);
+    expect(res).toBe('//App[@axId=\"iossample\"]/Window[1]/Element');
+
+    ele = XPath.select('//UI/App/Window/Element/PickerInput', doc) as Node[];
+    res = getOptimalXPath(doc, ele[0] as Element);
+    expect(res).toBe('//PickerInput[@axId=\"Dropdown picker\"]');    
+  });
 });
 
-describe('xml2js on *android*', () => {
+describe('page-node on *android*', () => {
   it('should parse xml', () => {
     const res = parsePageSrc(android_src['00']);
     expect(res).toBeDefined();

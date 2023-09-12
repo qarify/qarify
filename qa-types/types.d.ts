@@ -197,8 +197,11 @@ export type QAPageNodeAttribute = {
 
 export type QAPageNode = {
   tagName: string;
+  path: string;
   attributes: QAPageNodeAttribute;
   children: QAPageNode[];
+  xpath?: string;
+  title?: string;
 };
 
 export type QATestPlugin = {
