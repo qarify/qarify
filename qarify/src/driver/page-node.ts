@@ -165,18 +165,18 @@ export function findPageNodePlatform(node: QAPageNode) {
   return 'unknown';
 }
 
-export function findPageNodeWindowSize(node: QAPageNode) {
+export function findPageNodeWindowSize(node: QAPageNode): { width: number, height: number } | undefined {
   let res = findPageNode(node, '');
   if (res && res.tagName === 'UI' && res.children && res.children.length) {
     const tagName = res.children[0].tagName;
-    if (tagName === 'App') {
+    if (tagName === 'App' && res.children[0].attributes.width && res.children[0].attributes.height) {
       // props from 'App' tag
       return {
         width: res.children[0].attributes.width,
         height: res.children[0].attributes.height,
       };
     }
-    if (tagName === 'View') {
+    if (tagName === 'View' && res.attributes.width && res.attributes.height) {
       // props from 'UI' tag
       return {
         width: res.attributes.width,
@@ -214,3 +214,54 @@ export function _childNodesOf(xmlNode: Document | HTMLElement | Element): Elemen
   }
   return result as Element[];
 };
+
+type FilterPageNodeOptions = {
+  hasText?: boolean;
+  hasValue?: boolean;
+  hasAxId?: boolean;
+  attributes?: Partial<QAPageNodeAttribute>;
+};
+type QAPageNodeAttributeKeys = Array<keyof QAPageNodeAttribute>;
+function _filterPageNode(nodes: QAPageNode[], options: FilterPageNodeOptions, attrKeys: QAPageNodeAttributeKeys, res: QAPageNode[]) {
+  const {
+    hasText, hasValue, hasAxId, attributes,
+  } = options;
+
+  for (const item of nodes) {
+    const { attributes: attr } = item;
+    let match = !!attr;
+
+    if (match && typeof hasText !== 'undefined') {
+      match = hasText ? !!attr.text : !attr.text;
+    }
+    if (match && typeof hasValue !== 'undefined') {
+      match = hasValue ? !!attr.value : !attr.value;
+    }
+    if (match && typeof hasAxId !== 'undefined') {
+      match = hasAxId ? !!attr.axId : !attr.axId;
+    }
+    if (match && attrKeys.length && attributes) {
+      for (const key of attrKeys) {
+        if (attributes[key] === item.attributes[key]) {
+          continue;
+        }
+        match = false;
+        break;
+      }
+    }
+    if (match) {
+      res.push(item);
+    }
+    if (item.children && item.children.length) {
+      _filterPageNode(item.children, options, attrKeys, res);
+    }
+  }
+  return res;
+}
+
+export function filterPageNode(node: QAPageNode, options: FilterPageNodeOptions) {
+  const res: QAPageNode[] = [];
+  const attrKeys = (options && options.attributes ? Object.keys(options.attributes) : []) as QAPageNodeAttributeKeys;
+  if (!node.children || !node.children.length) { return res; }
+  return _filterPageNode(node.children, options || {}, attrKeys, res);
+}
