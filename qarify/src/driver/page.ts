@@ -37,10 +37,13 @@ export async function getPageSource(
 
 export async function getPageNode(
   updateSessionId?: string,
+  onlyUpdateNoCache = false,
 ) {
   if (updateSessionId) { 
-    await getPageSource(updateSessionId);
-    _pageNode = parsePageSrc(_pageSrc);
+    if (!onlyUpdateNoCache || (onlyUpdateNoCache && !_pageNode)) {
+      await getPageSource(updateSessionId);
+      _pageNode = parsePageSrc(_pageSrc);
+    }
   }
   return _pageNode;
 }

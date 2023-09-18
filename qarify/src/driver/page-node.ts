@@ -300,6 +300,6 @@ function _filterPageNode(nodes: QAPageNode[], options: FilterPageNodeOptions, at
 export function filterPageNode(node: QAPageNode, options: FilterPageNodeOptions) {
   const res: QAPageNode[] = [];
   const attrKeys = (options && options.attributes ? Object.keys(options.attributes) : []) as QAPageNodeAttributeKeys;
-  if (!node.children || !node.children.length) { return res; }
+  if (!node || !node.children || !node.children.length) { return res; }
   return _filterPageNode(node.children, options || {}, attrKeys, res);
 }
