@@ -23,7 +23,7 @@
     ]
   },
   "scripts": {
-    "test:unit": "mocha",
+    "test:unit": "mocha src/driver/page-node.spec.ts",
     "e2e": "mocha ./tests/e2e/**/*.spec.ts",
     "test": "mocha src/**/*.spec.ts",
     "test:types": "tsc --skipLibCheck",

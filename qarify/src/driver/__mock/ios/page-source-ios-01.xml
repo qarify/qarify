@@ -13,14 +13,18 @@
                       <Text value="Main View" visible="true" accessible="true" x="15" y="94" width="164" height="42" axId="Main View" text="Main View"></Text>
                     </Nav>
                     <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
-                      <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
+                      <Scrollable visible="true" accessible="false" x="0" y="135" width="390" height="619">
                         <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
-                          <Element visible="false" accessible="false" x="0" y="0" width="390" height="844">
-                            <Text value="SwiftUI" visible="true" accessible="true" x="167" y="456" width="56" height="21" axId="SwiftUI" text="SwiftUI"></Text>
-                            <Button visible="true" accessible="true" x="129" y="476" width="132" height="21" axId="Show Detail View" text="Show Detail View"></Button>
+                          <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
+                            <Element visible="false" accessible="false" x="0" y="0" width="390" height="844">
+                              <Text value="SwiftUI" visible="true" accessible="true" x="167" y="456" width="56" height="21" axId="SwiftUI" text="SwiftUI"></Text>
+                              <Button visible="true" accessible="true" x="129" y="476" width="132" height="21" axId="Show Detail View" text="Show Detail View"></Button>
+                            </Element>
                           </Element>
                         </Element>
-                      </Element>
+                        <Element value="10%" visible="true" accessible="false" x="357" y="135" width="30" height="619" axId="Vertical scroll bar, 3 pages" text="Vertical scroll bar, 3 pages"></Element>
+                        <Element value="0%" visible="true" accessible="false" x="0" y="721" width="390" height="30" axId="Horizontal scroll bar, 1 page" text="Horizontal scroll bar, 1 page"></Element>
+                      </Scrollable>
                     </Element>
                   </Element>
                 </Element>

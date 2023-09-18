@@ -204,6 +204,11 @@ export type QAPageNode = {
   title?: string;
 };
 
+export type QAPageRefreshOptions = {
+  parsing?: boolean,
+  screenshot?: boolean
+};
+
 export type QATestPlugin = {
   
 };

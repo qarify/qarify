@@ -1,5 +1,5 @@
 import { getLogger } from '@qarify/logger';
-import type { QAPageNode } from '@qarify/types';
+import type { QAPageNode, QAPageRefreshOptions } from '@qarify/types';
 
 import { getDriver } from './driver.js';
 import { parsePageSrc } from './page-node.js';
@@ -60,6 +60,22 @@ export async function getPageScreenshot(
     }
   }
   return _screenshot;
+}
+
+export async function refreshPage(sessionId: string, options: QAPageRefreshOptions) {
+  if (options.parsing) {
+    await getPageNode(sessionId);
+  } else {
+    await getPageSource(sessionId);
+  }
+  if (options.screenshot) {
+    await getPageScreenshot(sessionId);
+  }
+  return {
+    source: _pageSrc,
+    node: _pageNode,
+    screenshot: _screenshot,
+  };
 }
 
 export async function getPageWindowRect(

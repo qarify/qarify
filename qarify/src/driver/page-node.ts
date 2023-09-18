@@ -187,6 +187,37 @@ export function findPageNodeWindowSize(node: QAPageNode): { width: number, heigh
   return undefined;
 }
 
+export function findPageNodeScrollPosition(node: QAPageNode): { verticalValue: number, verticalPages: number, horizontalValue: number, horizontalPages: number } {
+  let horizontalValue = 0;
+  let verticalValue = 0;
+  let horizontalPages = 1;
+  let verticalPages = 1;
+  const scrollBarEle = filterPageNode(node, {
+    hasValue: true, hasAxId: true, hasText: true,
+    attributes: {
+      axId: /^(vertical|horizontal) scroll bar,/i,
+    }
+  });
+  if (scrollBarEle && scrollBarEle.length) {
+    const verticalNode = scrollBarEle.find((e) => e.attributes.axId?.toLowerCase().startsWith('vertical'));
+    if (verticalNode) {
+      verticalValue = parseInt(verticalNode.attributes.value!);
+      verticalPages = parseInt(verticalNode.attributes.axId?.split(',')[1]!)
+    }
+    const horizontalNode = scrollBarEle.find((e) => e.attributes.axId?.toLowerCase().startsWith('horizontal'));
+    if (horizontalNode) {
+      horizontalValue = parseInt(horizontalNode.attributes.value!);
+      horizontalPages = parseInt(horizontalNode.attributes.axId?.split(',')[1]!)
+    }
+  }
+  return {
+    verticalValue,
+    verticalPages,
+    horizontalValue,
+    horizontalPages,
+  }
+}
+
 const boolean_props = ['visible', 'accessible'] as Array<QAPageNodeAttribute>;
 const number_props = ['x', 'y', 'width', 'height'] as Array<QAPageNodeAttribute>;
 
@@ -215,12 +246,16 @@ export function _childNodesOf(xmlNode: Document | HTMLElement | Element): Elemen
   return result as Element[];
 };
 
+type AttrName = keyof QAPageNodeAttribute;
 type FilterPageNodeOptions = {
-  hasText?: boolean;
-  hasValue?: boolean;
-  hasAxId?: boolean;
-  attributes?: Partial<QAPageNodeAttribute>;
+  hasText?: boolean,
+  hasValue?: boolean,
+  hasAxId?: boolean,
+  attributes?: {
+    [Attr in AttrName]?: QAPageNodeAttribute[Attr] extends (string|undefined) ? (string | RegExp) : QAPageNodeAttribute[Attr]
+  },
 };
+
 type QAPageNodeAttributeKeys = Array<keyof QAPageNodeAttribute>;
 function _filterPageNode(nodes: QAPageNode[], options: FilterPageNodeOptions, attrKeys: QAPageNodeAttributeKeys, res: QAPageNode[]) {
   const {
@@ -242,7 +277,10 @@ function _filterPageNode(nodes: QAPageNode[], options: FilterPageNodeOptions, at
     }
     if (match && attrKeys.length && attributes) {
       for (const key of attrKeys) {
-        if (attributes[key] === item.attributes[key]) {
+        if (attributes[key] instanceof RegExp && (attributes[key] as RegExp).test(item.attributes[key] as string)) {
+          continue;
+        }
+        else if (attributes[key] === item.attributes[key]) {
           continue;
         }
         match = false;

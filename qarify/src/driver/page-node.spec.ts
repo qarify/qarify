@@ -6,7 +6,7 @@ import XPath from 'xpath';
 
 import {
   parsePageSrc, findPageNode, findPageNodePlatform, findPageNodeWindowSize,
-  getOptimalXPath, _getPageDoc,
+  getOptimalXPath, _getPageDoc, findPageNodeScrollPosition,
 } from './page-node.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -74,6 +74,28 @@ describe('page-node on *ios*', () => {
     res = getOptimalXPath(doc, ele[0] as Element);
     expect(res).toBe('//PickerInput[@axId=\"Dropdown picker\"]');    
   });
+
+  it('findPageNodeScrollPosition()', () => {
+    // no scroll values
+    let node = parsePageSrc(ios_src['00']);
+    let res = findPageNodeScrollPosition(node);
+    expect(res).toEqual({
+      verticalValue: 0,
+      verticalPages: 1,
+      horizontalValue: 0,
+      horizontalPages: 1,
+    });
+    
+    // has scroll values
+    node = parsePageSrc(ios_src['01']);
+    res = findPageNodeScrollPosition(node);
+    expect(res).toEqual({
+      verticalValue: 10,
+      verticalPages: 3,
+      horizontalValue: 0,
+      horizontalPages: 1,
+    });
+  })
 });
 
 describe('page-node on *android*', () => {
