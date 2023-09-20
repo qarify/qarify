@@ -17,6 +17,7 @@
     "./types.d.ts",
   ],
   "exclude": [
-    "./dist"
+    "./dist",
+    "**/__mock/**"
   ]
 }

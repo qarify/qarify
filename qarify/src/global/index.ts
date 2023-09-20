@@ -1,3 +1,4 @@
+import '@wdio/protocols';
 import type { QAConfig, QARunner } from "@qarify/types";
 import type { Expect } from "expect-webdriverio";
 

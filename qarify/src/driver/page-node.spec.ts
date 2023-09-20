@@ -1,7 +1,7 @@
 import fs from 'fs';
 import url from 'url';
 import path from 'path';
-import { expect } from 'expect';
+import { expect } from 'expect-webdriverio';
 import XPath from 'xpath';
 
 import {
