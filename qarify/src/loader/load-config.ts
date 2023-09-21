@@ -5,7 +5,7 @@ import { SpecRunnerFramework } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 
 import { MAX_SUPPORT_VERSION, GLOBAL_CONFIG } from "../constants.js";
-import { isValidConfigVersion } from "../utils/helpers.js";
+import { isValidConfigVersion, validateConfigValues } from "../utils/helpers.js";
 import { _setGlobal } from "../global/index.js";
 
 const log = getLogger('utils:load-config');
@@ -140,6 +140,10 @@ export async function loadConfig(
   if (userConfig.tsconfig && !path.isAbsolute(userConfig.tsconfig)) {
     userConfig.tsconfig = path.join(baseDir, userConfig.tsconfig);
   }
+
+  // validate values
+  validateConfigValues(userConfig);
+
   log('loaded config:', userConfig);
 
   // set global config

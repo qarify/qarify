@@ -1,10 +1,9 @@
 import { expect } from 'expect-webdriverio';
-import type { QADriver, QAFrameworkOption, QARunnerOptions } from '@qarify/types';
+import type { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, SpecRunnerFramework } from '@qarify/types';
 
 import {
   updateConfigWithRunnerOptions, updateExecConfig,
-  configVersionToNumber,
-  isValidConfigVersion,
+  validateConfigValues, configVersionToNumber, isValidConfigVersion,
 } from "./helpers.js";
 import { TestReporter } from '../runner/reporter.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
@@ -95,6 +94,34 @@ describe('utils/helpers', function() {
       qaReporter: ['execReporter'],
       options: { runnerId: '', keepMainProcess: true },
     });
+  });
+
+  it('validateConfigValues', () => {
+    const config = {} as QAConfig;
+    expect(() => validateConfigValues(config)).toThrow(/no version/);
+    config.version = '1.0';
+
+    expect(() => validateConfigValues(config)).toThrow(/no root directory/);
+    config.rootDir = '/';
+
+    expect(() => validateConfigValues(config)).toThrow(/no cache directory/);
+    config.cacheDir = '/';
+
+    expect(() => validateConfigValues(config)).toThrow(/no framework/);
+    config.framework = 'invalid' as SpecRunnerFramework;
+    expect(() => validateConfigValues(config)).toThrow(/invalid framework/);
+    config.framework = 'mocha-bdd' as SpecRunnerFramework;
+
+    expect(() => validateConfigValues(config)).toThrow(/no test options/);
+    config.testOptions = {};
+
+    config.scriptFramework = {};
+    // @ts-ignore
+    config.scriptFramework.type = 'invalid';
+    expect(() => validateConfigValues(config)).toThrow(/invalid script framework/);
+    config.scriptFramework.type = 'qyaction';
+
+    expect(validateConfigValues(config)).toBe(undefined)
   });
 
   it('configVersionToNumber', () => {

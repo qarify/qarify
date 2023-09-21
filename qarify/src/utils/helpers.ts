@@ -1,7 +1,7 @@
 import type {
   CLIOptions, QAConfig, QARunner, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage, QATestAttach
 } from "@qarify/types";
-import { SpecRunnerEvent, LogLevel } from "@qarify/types";
+import { SpecRunnerEvent, LogLevel, SpecRunnerFramework } from "@qarify/types";
 import { setLogLevel, isSilent } from '@qarify/logger';
 
 import { isNode } from "./platform.js";
@@ -129,6 +129,35 @@ export function isValidConfigVersion(ver: string) {
     throw new Error('not supported version');
   }
   return v;
+}
+
+export function validateConfigValues(config: QAConfig) {
+  if (!config.version) {
+    throw new Error('no version');
+  }
+  if (!config.rootDir) {
+    throw new Error('no root directory');
+  }
+  if (!config.cacheDir) {
+    throw new Error('no cache directory');
+  }
+  if (!config.framework) {
+    throw new Error('no framework');
+  }
+  if (Object.values(SpecRunnerFramework).indexOf(config.framework) < 0) {
+    throw new Error('invalid framework');
+  }
+  if (!config.testOptions) {
+    throw new Error('no test options');
+  }
+  if (config.scriptFramework) {
+    if (config.scriptFramework.type) {
+      if ((['qyaction', 'wdio'] as Array<Exclude<QAConfig['scriptFramework'], undefined>['type']>)
+      .indexOf(config.scriptFramework.type) < 0) {
+        throw new Error('invalid script framework type');
+      }
+    }
+  }
 }
 
 export function getCurrentTest(ctx: Mocha.Context): Mocha.Test | undefined {

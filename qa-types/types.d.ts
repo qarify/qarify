@@ -148,6 +148,12 @@ export type QAConfig = {
 
   // whether to ignore no spec files to run
   ignoreNoFiles?: boolean;
+
+  // script framework
+  scriptFramework?: {
+    // script type. default value is qyaction
+    type?: 'qyaction' | 'wdio';
+  };
 };
 
 export type CLIOptions = Partial<QAConfig> & {
