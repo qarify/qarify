@@ -1,10 +1,12 @@
-import { MochaOptions, Runner, Stats, reporters } from "mocha";
+import type { MochaOptions, Runner, } from "mocha";
+import { reporters } from "mocha";
 import type { QARunnerReporter, QATestAttach, ReportMessage } from "@qarify/types";
 import { SpecRunnerEvent } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 
 import { printMessage } from "../utils/helpers.js";
 
+const Base = reporters ? reporters.Base : Mocha.reporters.Base;
 const log = getLogger('runner:reporter');
 
 // const {
@@ -41,7 +43,7 @@ export const MochaEventMap = {
   [SpecRunnerEvent.test_attach]: SpecRunnerEvent.test_attach,
 } as const;
 
-export class TestReporter extends reporters.Base {
+export class TestReporter extends Base {
   private runnerId: string;
   private isForked: boolean;
   private qaReporter?: QARunnerReporter;

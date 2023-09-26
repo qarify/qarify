@@ -6,7 +6,7 @@
     "noEmit": false,
     "sourceMap": false,
     "declaration": true,
-    "removeComments": true,
+    // "removeComments": true,
   },
   "include": [
     "./src",

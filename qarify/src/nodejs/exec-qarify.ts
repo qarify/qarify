@@ -1,4 +1,4 @@
-import {SendHandle, Serializable, spawn} from 'node:child_process';
+import {type SendHandle, type Serializable, spawn} from 'node:child_process';
 import path from 'node:path';
 import type { CLIOptions, QAConfig, QARunnerOptions, QArifyResult, ReportMessage } from "@qarify/types";
 import { SpecRunnerEvent } from '@qarify/types';

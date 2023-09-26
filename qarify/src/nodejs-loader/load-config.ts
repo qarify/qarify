@@ -72,7 +72,7 @@ export async function loadConfig(
     if (configFile.endsWith(".json")) {
       userConfig = JSON.parse(fs.readFileSync(configFile, "utf-8"));
     } else {
-      userConfig = (await import(path.resolve(configFile))).default;
+      userConfig = (await import(/*@vite-ignore*/path.resolve(configFile))).default;
     }
     baseDir = path.dirname(configFile);
   } else {
