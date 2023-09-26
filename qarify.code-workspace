@@ -20,7 +20,10 @@
 			"path": "../qarify-examples"
 		},
 		{
-			"path": "../ti-client-driver"
+			"path": "../ti-client-driver/ti-wdio"
+		},
+		{
+			"path": "../ti-client-driver/ti-expect"
 		}
 	],
 	"settings": {}
