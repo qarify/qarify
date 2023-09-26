@@ -17,5 +17,6 @@
     "./src/**/*.cts",
     "./src/**/*.spec.ts",
     "./src/**/__mock",
+    "./src/**/*.browser.ts",
   ]
 }

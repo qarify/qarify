@@ -1,5 +1,5 @@
 import Mocha, { type InterfaceContributions } from "mocha";
-import url from "node:url";
+import url from "url";
 import type { QAConfig, QARunner, SpecRunnerFramework } from "@qarify/types";
 import { getLogger, isSilent } from '@qarify/logger';
 

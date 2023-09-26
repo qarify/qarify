@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from "path";
 import type { QAConfig } from "@qarify/types";
 
-import { findAllFiles, mapFilesInConfig } from "../utils/path-helpers.js";
+import { findAllFiles, mapFilesInConfig } from "./path-helpers.js";
 import { findSpecFiles } from './find-spec-files.js';
 import { execAsync } from './exec-async.js';
 

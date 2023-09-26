@@ -22,7 +22,7 @@ export default defineConfig(async ({ mode }) => {
         lib: {
             name: packageName,
             entry: [
-                resolve(baseDir, 'src/index.ts'),
+                resolve(baseDir, 'src/index.browser.ts'),
             ],
             formats: ['umd'],
         },
@@ -66,7 +66,7 @@ export default defineConfig(async ({ mode }) => {
         build,
         plugins: [
             tsconfigPaths({
-                projects: [join(baseDir, 'tsconfig.build.json')],
+                projects: [join(baseDir, 'tsconfig.json')],
             }),
             ...polyfill,
         ],
