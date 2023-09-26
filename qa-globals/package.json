@@ -12,6 +12,7 @@
   "type": "module",
   "types": "./types.d.ts",
   "main": "./dist/__cjs/index.js",
+  "browser": "./dist/__browser/index.umd.cjs",
   "exports": {
     ".": [
       {
@@ -27,6 +28,7 @@
     "compile": "tsc -b ./tsconfig.build.json ./tsconfig.cjs.json",
     "compile:esm": "tsc -b ./tsconfig.build.json",
     "compile:cjs": "tsc -b ./tsconfig.cjs.json",
+    "compile:browser": "vite build --emptyOutDir --force",
     "clean:build": "rimraf dist",
     "build": "run-s clean:build compile"
   },
