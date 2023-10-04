@@ -31,12 +31,12 @@ export function getLogLevel() {
 export function getLogNamespace() {
   return _logNamespace;
 }
+
 /**
- * bind logger to console.log
- * By default, logger is bound to console.error.
+ * bind log to the specified logger
  */
-export function bindConsoleLog() {
-  _logger.log = console.log.bind(console);
+export function bindLogger(logger: debug.Debugger, name: 'log' | 'warn' | 'error') {
+  logger.log = console[name].bind(console);
 }
 
 export const isSilent = () => _logLevel === LogLevel.silent;
@@ -69,6 +69,9 @@ export function getLogger(name?: string, level: LogGetterName = 'debug') {
   const ns = `${RootNS}:${key}`;
   if (!_cache[key]) {
     _cache[key] = _logger.extend(key);
+    // bind logger to console.log
+    // By default, logger is bound to console.error.
+    _cache[key].log = console.log.bind(console);
   }
   if (debug.enabled(_ns_prefix[level]) && !debug.enabled(ns)) {
     debug.enable(ns);
