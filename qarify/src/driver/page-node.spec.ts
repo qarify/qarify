@@ -6,8 +6,9 @@ import XPath from 'xpath';
 
 import {
   parsePageSrc, findPageNode, findPageNodePlatform, findPageNodeWindowSize,
-  getOptimalXPath, _getPageDoc, findPageNodeScrollPosition,
+  getOptimalXPath, _getPageDoc, findPageNodeScrollPosition, getLocators,
 } from './page-node.js';
+import { QAPageNodeAttribute, QAPageNodeSelector } from '@qarify/types';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -55,6 +56,9 @@ describe('page-node on *ios*', () => {
     res = findPageNode(node, '0.0.0'); // element
     expect(res?.tagName).toBe('Element');
 
+    res = findPageNode(node, '0.0.0.0'); // PickerInput
+    expect(res?.tagName).toBe('PickerInput');
+
     expect(findPageNodePlatform(node)).toBe('ios');
     expect(findPageNodeWindowSize(node)).toBeDefined();
   });
@@ -73,6 +77,29 @@ describe('page-node on *ios*', () => {
     ele = XPath.select('//UI/App/Window/Element/PickerInput', doc) as Node[];
     res = getOptimalXPath(doc, ele[0] as Element);
     expect(res).toBe('//PickerInput[@axId=\"Dropdown picker\"]');    
+  });
+
+  it('should get locators(selectors)', () => {
+    const pageNode = parsePageSrc(ios_src['00'], { xpath: true });
+
+    let res: Array<QAPageNodeSelector>;
+
+    let ele = findPageNode(pageNode, '0'); // App
+    expect(ele?.xpath).toBe('//App[@axId="iossample"]');
+
+    res = getLocators(ele!.attributes);
+    expect(res[0]).toEqual({
+      strategy: 'axId',
+      locator: 'iossample'
+    });
+
+    ele = findPageNode(pageNode, '0.0.0.0'); // PickerInput
+    expect(ele?.xpath).toBe('//PickerInput[@axId="Dropdown picker"]');
+    res = getLocators(ele!.attributes);
+    expect(res[0]).toEqual({
+      strategy: 'axId',
+      locator: 'Dropdown picker'
+    });
   });
 
   it('findPageNodeScrollPosition()', () => {

@@ -4,7 +4,7 @@
 import type { AttachOptions } from 'webdriver';
 import type { Capabilities } from '@wdio/types';
 
-import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework } from './dist/index.js';
+import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework, FindStrategy } from './dist/index.js';
 
 export * from './dist/index.js';
 
@@ -221,4 +221,9 @@ export type QATestPlugin = {
 
 export type QAReportPlugin = {
 
+};
+
+export type QAPageNodeSelector = {
+  strategy: FindStrategy,
+  locator: string,
 };

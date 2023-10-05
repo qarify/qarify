@@ -1,6 +1,7 @@
-import type { QAPageNode, QAPageNodeAttribute } from '@qarify/types';
+import type { QAPageNode, QAPageNodeAttribute, QAPageNodeSelector } from '@qarify/types';
 import { DOMParser } from '@xmldom/xmldom';
 import XPath from 'xpath';
+import { STRATEGY_MAPPINGS } from '../constants.js';
 
 let _pageDoc: Document | undefined = undefined;
 
@@ -302,4 +303,18 @@ export function filterPageNode(node: QAPageNode, options: FilterPageNodeOptions)
   const attrKeys = (options && options.attributes ? Object.keys(options.attributes) : []) as QAPageNodeAttributeKeys;
   if (!node || !node.children || !node.children.length) { return res; }
   return _filterPageNode(node.children, options || {}, attrKeys, res);
+}
+
+export function getLocators(attributes: QAPageNodeAttribute) {
+  const res = [] as Array<QAPageNodeSelector>;
+  for (const [attr, strategy] of STRATEGY_MAPPINGS) {
+    const locator = attributes[attr] as string;
+    if (locator && isUniqueAttribute(attr, locator)) {
+      res.push({
+        strategy,
+        locator,
+      });
+    }
+  }
+  return res;
 }

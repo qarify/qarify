@@ -1,0 +1,91 @@
+# appium api
+# - https://appium.github.io/appium/docs/en/2.0/reference/commands/appium_base_driver-1._appium_base_driver/
+
+@BASE_URL=http://localhost:4723
+
+#
+# get current server status
+#
+GET {{BASE_URL}}/status
+###
+
+#
+# create ios session without default app
+#
+# @name ios_session
+POST {{BASE_URL}}/session HTTP/1.1
+content-type: application/json
+
+{
+  "capabilities": {
+    "alwaysMatch": {
+      "platformName": "iOS",
+      "appium:automationName": "XCUITest",
+      "appium:deviceName": "iPhone 14",
+      "appium:platformVersion": "16.4",
+      "appium:orientation": "PORTRAIT"
+    }
+  }
+}
+###
+
+#@ios_session_id = {{ios_session.response.body.value.sessionId}}
+
+#
+# get all sessions
+# @name get_sessions
+GET {{BASE_URL}}/sessions
+###
+@ios_session_id = {{get_sessions.response.body.value[0].id}}
+
+
+#
+# get session info
+#
+GET {{BASE_URL}}/session/{{ios_session_id}}
+###
+
+#
+# launch app with deep link
+#
+POST {{BASE_URL}}/session/{{ios_session_id}}/execute/sync
+
+{
+  "script":"mobile:deepLink",
+  "args":[{
+    "url":"exp://127.0.0.1:19000/--/main/home"
+  }]
+}
+###
+
+#
+# launch app with bundle id
+#
+POST {{BASE_URL}}/session/{{ios_session_id}}/execute/sync
+
+{
+  "script":"mobile:launchApp",
+  "args":[{
+    "bundleId":"com.apple.Preferences"
+  }]
+}
+###
+
+#
+# terminate app
+#
+POST {{BASE_URL}}/session/{{ios_session_id}}/execute/sync
+
+{
+  "script":"mobile:terminateApp",
+  "args":[{
+    "bundleId":"com.apple.Preferences"
+  }]
+}
+###
+
+#
+# delete session
+#
+DELETE {{BASE_URL}}/session/{{ios_session_id}}
+###

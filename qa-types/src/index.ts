@@ -33,3 +33,17 @@ export enum SpecRunnerEvent {
   test_end = 'test:end',
   test_attach = 'test:attach',
 };
+
+export enum FindStrategy {
+  XPath = 'xpath',
+  AccessibilityId = 'axId',
+  // AccessibilityId = 'accessibility id',
+  Id = 'id',
+  Name = 'name',
+  ClassName = 'class name',
+  AndroidUIAutomator = '-android uiautomator',
+  AndroidDataMatcher = '-android datamatcher',
+  AndroidViewTag = '-android viewtag',
+  IosUIAutomation = '-ios predicate string',
+  IosClassChain = '-ios class chain',
+}
