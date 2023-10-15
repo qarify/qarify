@@ -53,8 +53,9 @@ function getPageSource(sessionId) {
       // console.log('>>> data.value:');
       // console.log(data.value);
       (!fs.existsSync(OUTDIR)) && fs.mkdirSync(OUTDIR);
-      fs.writeFileSync(path.join(OUTDIR, `${sessionId}.xml`), data.value);
-
+      const filePath = path.join(OUTDIR, `${sessionId}.xml`);
+      fs.writeFileSync(filePath, data.value);
+      console.log('>>> Done: save to', filePath);
       console.log('>>> Elapsed:', `${((Date.now() - startTime) / 1000)}s`);
     });
   }).on('error', err => {
