@@ -3,59 +3,263 @@ import { DOMParser } from '@xmldom/xmldom';
 import XPath from 'xpath';
 import { STRATEGY_MAPPINGS } from '../constants.js';
 
+type QAPageNodeAttrName = keyof QAPageNodeAttribute;
+
 let _pageDoc: Document | undefined = undefined;
+export const getPageDoc = () => _pageDoc;
+
+let _pageSrcFormat: PageSrcFormat = 'universal';
+export const getPageSrcFormat = () => _pageSrcFormat;
 
 // Attributes on nodes that we know are unique to the node
 const UNIQUE_XPATH_ATTRIBUTES = ['axId', 'accessibility-id', 'name', 'id', 'content-desc'];
+
+type PageSrcFormat = 'universal' | 'ios' | 'android'; //typeof PAGE_SRC_FORMAT[number];
+const PAGE_SRC_FORMAT: Array<PageSrcFormat> = ['universal', 'ios', 'android'];
+
+type CastFunc<T=any> = (value: string) => T;
+const _toInt = (value: string) => value ? parseInt(value, 10) : 0;
+const _toBoolean = (value: string) => value === 'true';
+const _toString = (value: string) => value;
+
+type PageSrcProps = {
+  universal: 'visible' | 'enabled' | 'accessible' | 'x' | 'y' | 'width' | 'height' | 'value' | 'axId' | 'text' | 'id',
+  ios:       'visible' | 'enabled' | 'accessible' | 'x' | 'y' | 'width' | 'height' | 'value' | 'name' | 'label',
+  android: 'displayed' | 'enabled' | 'checked' | 'selected' | 'bounds' | 'scrollable' | 'text',
+};
+type PropMap = {
+  [format in PageSrcFormat]: {
+    [name in PageSrcProps[format][number]]: [QAPageNodeAttrName, CastFunc]
+  }
+};
+
+// type UniversalFormatProps = keyof PropMap['universal'];
+// type IosFormatProps = keyof PropMap['ios'];
+// type AndroidFormatProps = keyof PropMap['android'];
+
+const PROP_MAP: PropMap = {
+  'universal': {
+    'visible': ['visible', _toBoolean],
+    'enabled': ['enabled', _toBoolean],
+    'accessible': ['accessible', _toBoolean],
+    'x': ['x', _toInt],
+    'y': ['y', _toInt],
+    'width': ['width', _toInt],
+    'height': ['height', _toInt],
+    'value': ['value', _toString],
+    'axId': ['axId', _toString],
+    'text': ['text', _toString],
+    'id': ['id', _toString],
+  },
+  'ios': {
+    'name': ['axId', _toString],
+    'label': ['axId', _toString],
+    'visible': ['visible', _toBoolean],
+    'enabled': ['enabled', _toBoolean],
+    'accessible': ['accessible', _toBoolean],
+    'x': ['x', _toInt],
+    'y': ['y', _toInt],
+    'width': ['width', _toInt],
+    'height': ['height', _toInt],
+    'value': ['value', _toString],
+  },
+  'android': {
+    'displayed': ['visible', _toBoolean],
+    'enabled': ['enabled', _toBoolean],
+    'checked': ['value', _toBoolean],
+    // 'bounds': using parser
+    'text': ['text', _toString],
+  },
+};
 
 type PageParserOptions = {
   xpath?: boolean;
   title?: boolean;
 };
 
-export function parsePageSrc(pageSrc: string, { xpath, title }: PageParserOptions = {} ): QAPageNode {
+export const PAGE_TAG_MAP: { [format in PageSrcFormat]: Record<string,string> } = {
+  'universal': {
+    'ROOT': 'UI',
+    'App': 'App',
+  },
+  'ios': {
+    'ROOT': 'AppiumAUT',  
+    'App': 'XCUIElementTypeApplication',
+  },
+  'android': {
+    'ROOT': 'hierarchy',
+    'App': 'android.widget.FrameLayout',
+  },
+};
+
+const ACCESSIBLE_TAGS = {
+  'android.view.View': ['text', 'resource-id'],
+  'android.widget.TextView': [],
+  'android.widget.Button': [],
+  'android.widget.CheckBox': [],
+  'android.widget.RadioButton': [],
+  'android.widget.ImageButton': [],
+  'android.widget.EditText': [],
+  'android.widget.ImageView': [],
+};
+const ACCESSIBLE_TAGS_KEYS = Object.keys(ACCESSIBLE_TAGS);
+
+function _isAccessible(tagName: string, attributes: QAPageNodeAttribute) {
+  if (ACCESSIBLE_TAGS_KEYS.indexOf(tagName) < 0) {
+    return false;
+  }
+  if (!attributes.visible) { return false; }
+
+  if (tagName === 'android.view.View') {
+    for (const prop of (ACCESSIBLE_TAGS['android.view.View'] as Array<QAPageNodeAttrName>)) {
+      if (!attributes[prop]) { return false; }
+    }
+  }
+
+  return true;
+}
+
+function _isControllableTag(tag: string) {
+  const PAGE_TAGS = {
+    'universal': {
+      'UI': 'ROOT',
+      'App': 'App',
+      'Window': 'Window',
+      'View': 'View',
+      'ScrollView': 'ScrollView',
+      'Button': 'Button',
+    },
+    'ios': {
+      'AppiumAUT': 'ROOT',  
+      'XCUIElementTypeApplication': 'App', // name="" label="" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0"
+      'XCUIElementTypeWindow': 'Window',   // enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0"
+      'XCUIElementTypeOther': 'Element',   // name="" label="" enabled="true" visible="true" accessible="false" x="0" y="0" width="390" height="844" index="0"
+      'XCUIElementTypeStaticText': 'Text', // value="" name="" label="" enabled="true" visible="false" accessible="true" x="-252" y="68" width="252" height="22" index="0"
+      'XCUIElementTypeButton': 'Button',   // value="" name="" label="" enabled="true" visible="false" accessible="true" x="-268" y="107" width="256" height="56" index="0"
+      'XCUIElementTypeScrollView': 'ScrollView,HorizontalScroll', // enabled="true" visible="true" accessible="false" x="0" y="111" width="390" height="733" index="0"
+      'XCUIElementTypeTextField': 'TextField', // value="" name="" label="" enabled="true" visible="true" accessible="true" x="48" y="183" width="334" height="56" index="0"
+      'XCUIElementTypeSecureTextField': 'SecureTextField', // value="" name="" label="" enabled="true" visible="true" accessible="true" x="8" y="408" width="334" height="65" index="0"
+      'XCUIElementTypeNavigationBar': 'Nav',
+      'XCUIElementTypeImage': 'Image',     // enabled="true" visible="true" accessible="false" x="8" y="115" width="183" height="187" index="0"
+    },
+    'android': {
+      'hierarchy': 'ROOT',
+      'android.widget.FrameLayout': 'App',
+      'android.widget.LinearLayout': 'View',
+      'android.view.View': 'View',
+      'android.view.ViewGroup': 'View',
+      'androidx.appcompat.widget.LinearLayoutCompat': 'View',
+      'android.widget.ImageButton': 'ImageButton',
+      'android.widget.ImageView': 'Image',
+      'android.widget.TextView': 'Text', // text="" resource-id="" checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[42,457][944,520]" displayed="true"
+      'android.widget.Button': 'Button',   // text="" content-desc="" resource-id="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[26,95][131,200]" displayed="true"
+      'android.widget.CheckBox': 'CheckBox', // text="" content-desc="" checkable="true" checked="true" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[0,420][1080,557]" displayed="true"
+      'android.widget.RadioButton': 'Radio', // text="" content-desc="" checkable="true" checked="true" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[944,394][1038,489]" displayed="true"
+      'android.widget.ScrollView': 'ScrollView', // text="" checkable="false" checked="false" clickable="false" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="true" selected="false" bounds="[0,231][1080,1857]" displayed="true"
+      'android.widget.HorizontalScrollView': 'HorizontalScroll', // text="" checkable="false" checked="false" clickable="false" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="true" selected="false" bounds="[0,373][1080,1024]" displayed="true"
+      'android.widget.EditText': 'TextField', // text="" resource-id="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="true" password="false" scrollable="false" selected="false" bounds="[126,420][1059,567]" displayed="true" hint=""
+    },
+  };
+  
+  // @ts-ignore
+  if (PAGE_TAGS[_pageSrcFormat][tag]) {
+    return true
+  }
+  console.log('>>> Uncontrolled tag:', tag);
+  return false;
+}
+
+export function parsePageSrc(pageSrc: string, options: PageParserOptions = {} ): QAPageNode {
   _pageDoc = new DOMParser().parseFromString(pageSrc);
 
   // get the first child element node in the doc. some drivers write their xml differently so we
   // first try to find an element as a direct descendend of the doc, then look for one in
   // documentElement
   const firstChild = _childNodesOf(_pageDoc)[0] || _childNodesOf(_pageDoc.documentElement)[0];
+  if (!firstChild) {
+    return {} as QAPageNode;
+  }
+  // page src format
+  _pageSrcFormat = _getSrcFormat(firstChild)!;
+  if (!_pageSrcFormat) {
+    return {} as QAPageNode;
+  }
 
-  const translateRecursively = (xmlNode: Element, parentPath = '', index?: number): QAPageNode => {
-    const attributes = {} as QAPageNodeAttribute;
-    for (let attrIdx = 0; attrIdx < xmlNode.attributes.length; attrIdx += 1) {
-      const attr = xmlNode.attributes.item(attrIdx);
-      if (attr) {
+  return _translateRecursively(firstChild, options);
+}
+
+function _getSrcFormat(root: Element) {
+  for (const f of PAGE_SRC_FORMAT) {
+    if (PAGE_TAG_MAP[f]['ROOT'] === root.tagName) {
+      return f;
+    }
+  }
+  return undefined;
+}
+
+function _translateRecursively (xmlNode: Element, options: PageParserOptions = {}, parentPath = '', index?: number): QAPageNode {
+  const { attributes, tagName } = xmlNode;
+
+  // print unknown tags
+  // _isControllableTag(tagName);
+
+  // attributes
+  const nodeAttrs = {} as QAPageNodeAttribute;
+  for (let attrIdx = 0; attrIdx < attributes.length; attrIdx += 1) {
+    const attr = attributes.item(attrIdx);
+    if (attr) {
+      const name = attr.name;
+      const caster = PROP_MAP[_pageSrcFormat][name];
+      if (caster) {
+        nodeAttrs[caster[0]] = caster[1](attr.value)
+      } else {
         // @ts-ignore
-        attributes[attr.name as AttributeName] = _castAttributeType(attr.name as AttributeName, attr.value);
+        nodeAttrs[name] = attr.value;
       }
     }
-    // 'label' is legacy prop but use it with 'text'
-    if ('text' in attributes) { attributes.label = attributes.text; }
-    const path = index === undefined ? '' : `${!parentPath ? '' : `${parentPath}.`}${index}`;
+  }
+  if (_pageSrcFormat === 'android') {
+    // android has no 'accessible' attribute.
+    nodeAttrs['accessible'] = _isAccessible(tagName, nodeAttrs);
+    if (nodeAttrs['bounds']) {
+      // '[left,top],[right,bottom]'
+      const vals = nodeAttrs['bounds'].split('[');
+      if (vals.length >= 3) {
+        const lt = vals[1].split(',').map(e => parseInt(e));
+        const rb = vals[2].split(',').map(e => parseInt(e));
+        if (lt.length >= 2 && rb.length >= 2) {
+          nodeAttrs.x = lt[0];
+          nodeAttrs.y = lt[1];
+          nodeAttrs.width = rb[0] - lt[0];
+          nodeAttrs.height = rb[1] - lt[1];
+        }
+      }
+      if (!('x' in nodeAttrs)) {
+        nodeAttrs.x = nodeAttrs.y = nodeAttrs.width = nodeAttrs.height = 0;
+      }
+    }
+  }
+  // 'label' is legacy prop but use it with 'text'
+  const path = index === undefined ? '' : `${!parentPath ? '' : `${parentPath}.`}${index}`;
+  const { xpath, title } = options;
 
-    return {
-      tagName: xmlNode.tagName,
-      attributes,
-      path,
-      children: _childNodesOf(xmlNode).map((childNode, childIndex) =>
-        translateRecursively(childNode, path, childIndex)
-      ),
-      ...(xpath ? {xpath: getOptimalXPath(_pageDoc!, xmlNode, UNIQUE_XPATH_ATTRIBUTES)} : {}),
-      ...(title ? {title: _getTitle(xmlNode.tagName, attributes)} : {}),
-    };
+  return {
+    tagName: tagName,
+    attributes: nodeAttrs,
+    path,
+    children: _childNodesOf(xmlNode).map((childNode, childIndex) =>
+      _translateRecursively(childNode, options, path, childIndex)
+    ),
+    ...(xpath ? {xpath: getOptimalXPath(_pageDoc!, xmlNode, UNIQUE_XPATH_ATTRIBUTES)} : {}),
+    ...(title ? {title: _getTitle(tagName, nodeAttrs)} : {}),
   };
-
-  return firstChild ? translateRecursively(firstChild) : ({} as QAPageNode);
-}
+};
 
 function _getTitle(tagName: string, attributes: QAPageNodeAttribute) {
   const { name, text } = attributes;
   const moreTitle = text ? ` [text=${text}]` : name ? ` [name=${name}]` : '';
   return `${tagName}${moreTitle.length > 20 ? (moreTitle.substring(0, 20) + '...') : moreTitle}`;
 }
-
-export const _getPageDoc = () => _pageDoc;
 
 export function isUniqueAttribute(attrName: string, attrValue: string) {
   // If no sourceXML provided, assume it's unique
@@ -152,36 +356,47 @@ export function findPageNode(node: QAPageNode, path: string) {
   return cur;
 }
 
-export function findPageNodePlatform(node: QAPageNode) {
-  let res = findPageNode(node, '');
-  if (res && res.tagName === 'UI' && res.children && res.children.length) {
-    const tagName = res.children[0].tagName;
-    if (tagName === 'App') {
-      return 'ios';
-    }
-    if (tagName === 'View') {
-      return 'android';
+export function isValidRootNode(rootNode: QAPageNode) {
+  if (!_pageSrcFormat || !PAGE_TAG_MAP[_pageSrcFormat]['ROOT']) { return false; }
+  return rootNode && rootNode.tagName === PAGE_TAG_MAP[_pageSrcFormat]['ROOT'] && rootNode.children && rootNode.children.length;
+}
+
+export function findPageNodePlatform(rootNode: QAPageNode) {
+  if (isValidRootNode(rootNode)) {
+    if (_pageSrcFormat === 'universal') {
+      // check the first child of the rootNode
+      // ios: UI > App
+      // android: UI > View
+      const tagName = rootNode.children[0].tagName;
+      if (tagName === PAGE_TAG_MAP[_pageSrcFormat]['App']) {
+        return 'ios';
+      }
+      if (tagName === PAGE_TAG_MAP[_pageSrcFormat]['View']) {
+        return 'android';
+      }
+    } else {
+      return _pageSrcFormat; // ios | android
     }
   }
   return 'unknown';
 }
 
-export function findPageNodeWindowSize(node: QAPageNode): { width: number, height: number } | undefined {
-  let res = findPageNode(node, '');
-  if (res && res.tagName === 'UI' && res.children && res.children.length) {
-    const tagName = res.children[0].tagName;
-    if (tagName === 'App' && res.children[0].attributes.width && res.children[0].attributes.height) {
-      // props from 'App' tag
+export function findPageNodeWindowSize(rootNode: QAPageNode): { width: number, height: number } | undefined {
+  if (isValidRootNode(rootNode)) {
+    if ('width' in rootNode.attributes && 'height' in rootNode.attributes) {
+      // android(universal) has width and height in the root node
       return {
-        width: res.children[0].attributes.width,
-        height: res.children[0].attributes.height,
+        width: rootNode.attributes.width!,
+        height: rootNode.attributes.height!,
       };
     }
-    if (tagName === 'View' && res.attributes.width && res.attributes.height) {
-      // props from 'UI' tag
+    const tagName = rootNode.children[0].tagName;
+    if (tagName === PAGE_TAG_MAP[_pageSrcFormat]['App'] && rootNode.children[0].attributes.width && rootNode.children[0].attributes.height) {
+      // ios(its universal) has width and height in the 'App' node
+      // props from 'App' tag
       return {
-        width: res.attributes.width,
-        height: res.attributes.height,
+        width: rootNode.children[0].attributes.width,
+        height: rootNode.children[0].attributes.height,
       };
     }
   }
@@ -219,19 +434,6 @@ export function findPageNodeScrollPosition(node: QAPageNode): { verticalValue: n
   }
 }
 
-const boolean_props = ['visible', 'accessible'] as Array<QAPageNodeAttribute>;
-const number_props = ['x', 'y', 'width', 'height'] as Array<QAPageNodeAttribute>;
-
-function _castAttributeType(name: QAPageNodeAttribute, value: string) {
-  if (number_props.indexOf(name) >= 0) {
-    return value ? parseInt(value, 10) : 0;
-  } else if (boolean_props.indexOf(name) >= 0) {
-    return value === 'true';
-  } else {
-    return value;
-  }
-}
-
 export function _childNodesOf(xmlNode: Document | HTMLElement | Element): Element[] {
   if (!xmlNode || !xmlNode.hasChildNodes()) {
     return [];
@@ -247,13 +449,12 @@ export function _childNodesOf(xmlNode: Document | HTMLElement | Element): Elemen
   return result as Element[];
 };
 
-type AttrName = keyof QAPageNodeAttribute;
 type FilterPageNodeOptions = {
   hasText?: boolean,
   hasValue?: boolean,
   hasAxId?: boolean,
   attributes?: {
-    [Attr in AttrName]?: QAPageNodeAttribute[Attr] extends (string|undefined) ? (string | RegExp) : QAPageNodeAttribute[Attr]
+    [Attr in QAPageNodeAttrName]?: QAPageNodeAttribute[Attr] extends (string|undefined) ? (string | RegExp) : QAPageNodeAttribute[Attr]
   },
 };
 

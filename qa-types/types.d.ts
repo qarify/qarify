@@ -175,6 +175,7 @@ export type QARunner = QAConfig & {
 
 export type QAPageNodeAttribute = {
   visible?: boolean;     // boolean
+  enabled?: boolean;     // boolean
   accessible?: boolean;  // boolean
   x?: number;           // number
   y?: number;           // number
@@ -193,7 +194,6 @@ export type QAPageNodeAttribute = {
   // e.g. [x1,y1,x2,y2]
   bounds?: string;
   type?: string;
-  enabled?: string;
   index?: string;
   'content-desc'?: string;
   rntestid?: string;

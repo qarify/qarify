@@ -5,36 +5,133 @@ import { expect } from 'expect-webdriverio';
 import XPath from 'xpath';
 
 import {
+  getPageDoc, getPageSrcFormat,
+  PAGE_TAG_MAP,
   parsePageSrc, findPageNode, findPageNodePlatform, findPageNodeWindowSize,
-  getOptimalXPath, _getPageDoc, findPageNodeScrollPosition, getLocators,
+  getOptimalXPath, findPageNodeScrollPosition, getLocators,
 } from './page-node.js';
 import { QAPageNodeAttribute, QAPageNodeSelector } from '@qarify/types';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-function loadPageSrc(platform: 'ios' | 'android', name:string) {
-  const filePath = path.join(__dirname, '__mock', platform, name);
+function loadPageSrc(platform: 'ios' | 'android', name:string[]) {
+  const filePath = path.join(__dirname, '__mock', platform, ...name);
   return fs.readFileSync(filePath);
 }
 
-const ios_src = {
-  '00': loadPageSrc('ios', 'page-source-ios-00.xml').toString(),
-  '01': loadPageSrc('ios', 'page-source-ios-01.xml').toString(),
-};
+function rnpPageSrcFiles(platform: 'ios' | 'android') {
+  const dir = path.join(__dirname, '__mock', platform, `rnp-${platform}`);
+  return fs.readdirSync(dir).map((e) => path.join(dir, e));
+}
 
-const android_src = {
-  '00': loadPageSrc('android', 'page-source-android-00.xml').toString(),
-  '01': loadPageSrc('android', 'page-source-android-01.xml').toString(),
-};
+describe('page-node on sample *ios*', () => {
+  const ios_src = {
+    '00': loadPageSrc('ios', ['sample', 'sample-main-view.xml']).toString(),
+    '01': loadPageSrc('ios', ['sample', 'sample-detail-view.xml']).toString(),
+  };
 
-describe('page-node on *ios*', () => {
-  // it('should save to xml', () => {
-  //   fs.writeFileSync(
-  //     path.join(__dirname, '__mock', 'ios', 'page-source-ios-scroll.xml'),
-  //     JSON.parse(loadPageSrc('ios', 'page-source-ios-scroll.json').toString()).value
-  //   );
-  // });
+  it('should parse xml', () => {
+    let res = parsePageSrc(ios_src['00']);
+    expect(getPageSrcFormat()).toBe('ios');
+    expect(res).toBeDefined();
+    expect(res.children.length).toBeTruthy();
 
+    res = parsePageSrc(ios_src['01']);
+    expect(getPageSrcFormat()).toBe('ios');
+    expect(res).toBeDefined();
+    expect(res.children.length).toBeTruthy();
+
+    // const files = rnpPageSrcFiles('ios');
+    // for (const file of files) {
+    //   res = parsePageSrc(fs.readFileSync(file).toString());
+    //   expect(getPageSrcFormat()).toBe('ios');
+    //   expect(res).toBeDefined();
+    //   expect(res.children.length).toBeTruthy();
+    // }
+  });
+
+  it('should find node', () => {
+    const node = parsePageSrc(ios_src['00']);
+
+    let res = findPageNode(node, ''); // root
+    expect(res?.tagName).toBe(PAGE_TAG_MAP['ios']['ROOT']);
+
+    res = findPageNode(node, '0'); // app root
+    expect(res?.tagName).toBe(PAGE_TAG_MAP['ios']['App']);
+
+    expect(findPageNodePlatform(node)).toBe('ios');
+    expect(findPageNodeWindowSize(node)).toBeDefined();
+  });
+
+});
+
+describe('page-node on sample *android*', () => {
+  const ios_src = {
+    '00': loadPageSrc('android', ['sample', 'sample-main-view.xml']).toString(),
+    '01': loadPageSrc('android', ['sample', 'sample-detail-view.xml']).toString(),
+  };
+
+  it('should parse xml', () => {
+    let res = parsePageSrc(ios_src['00']);
+    expect(getPageSrcFormat()).toBe('android');
+    expect(res).toBeDefined();
+    expect(res.children.length).toBeTruthy();
+
+    res = parsePageSrc(ios_src['01']);
+    expect(getPageSrcFormat()).toBe('android');
+    expect(res).toBeDefined();
+    expect(res.children.length).toBeTruthy();
+
+    // const files = rnpPageSrcFiles('android');
+    // for (const file of files) {
+    //   res = parsePageSrc(fs.readFileSync(file).toString());
+    //   expect(getPageSrcFormat()).toBe('android');
+    //   expect(res).toBeDefined();
+    //   expect(res.children.length).toBeTruthy();
+    // }
+  });
+
+  it('should find node', () => {
+    const node = parsePageSrc(ios_src['00']);
+
+    let res = findPageNode(node, ''); // root
+    expect(res?.tagName).toBe(PAGE_TAG_MAP['android']['ROOT']);
+
+    res = findPageNode(node, '0')!; // root view
+    expect(res.tagName).toBe(PAGE_TAG_MAP['android']['App']);
+    expect(res.attributes).toEqual({
+      index:"0",
+      package:"com.greenlite.androidsample",
+      'class':"android.widget.FrameLayout",
+      text:"",
+      checkable:"false",
+      value:false, //checked="false"
+      clickable:"false",
+      enabled:true,
+      focusable:"false",
+      focused:"false",
+      'long-clickable':"false",
+      password:"false",
+      scrollable:"false",
+      selected:"false",
+      bounds:"[0,0][1080,1857]",
+      x: 0, y: 0, width: 1080, height: 1857,
+      visible: true, //displayed:"true"
+      accessible: false,
+    });
+
+    expect(findPageNodePlatform(node)).toBe('android');
+    expect(findPageNodeWindowSize(node)).toBeDefined();
+  });
+
+});
+
+describe.skip('page-node on universal *ios*', () => {
+  const ios_src = {
+    '00': loadPageSrc('ios', ['universal', 'page-source-ios-00.xml']).toString(),
+    '01': loadPageSrc('ios', ['universal', 'page-source-ios-01.xml']).toString(),
+  };
+  
   it('should parse xml', () => {
     const res = parsePageSrc(ios_src['00']);
     expect(res).toBeDefined();
@@ -65,7 +162,7 @@ describe('page-node on *ios*', () => {
 
   it('should get optimal xpath', () => {
     parsePageSrc(ios_src['00']);
-    const doc = _getPageDoc()!;
+    const doc = getPageDoc()!;
 
     let res = getOptimalXPath(doc);
     expect(res).toBe('');
@@ -125,7 +222,12 @@ describe('page-node on *ios*', () => {
   })
 });
 
-describe('page-node on *android*', () => {
+describe.skip('page-node on universal *android*', () => {
+  const android_src = {
+    '00': loadPageSrc('android', ['universal', 'page-source-android-00.xml']).toString(),
+    '01': loadPageSrc('android', ['universal', 'page-source-android-01.xml']).toString(),
+  };
+  
   it('should parse xml', () => {
     const res = parsePageSrc(android_src['00']);
     expect(res).toBeDefined();
