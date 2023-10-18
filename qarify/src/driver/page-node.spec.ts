@@ -24,109 +24,7 @@ function rnpPageSrcFiles(platform: 'ios' | 'android') {
   return fs.readdirSync(dir).map((e) => path.join(dir, e));
 }
 
-describe('page-node on sample *ios*', () => {
-  const ios_src = {
-    '00': loadPageSrc('ios', ['sample', 'sample-main-view.xml']).toString(),
-    '01': loadPageSrc('ios', ['sample', 'sample-detail-view.xml']).toString(),
-  };
-
-  it('should parse xml', () => {
-    let res = parsePageSrc(ios_src['00']);
-    expect(getPageSrcFormat()).toBe('ios');
-    expect(res).toBeDefined();
-    expect(res.children.length).toBeTruthy();
-
-    res = parsePageSrc(ios_src['01']);
-    expect(getPageSrcFormat()).toBe('ios');
-    expect(res).toBeDefined();
-    expect(res.children.length).toBeTruthy();
-
-    // const files = rnpPageSrcFiles('ios');
-    // for (const file of files) {
-    //   res = parsePageSrc(fs.readFileSync(file).toString());
-    //   expect(getPageSrcFormat()).toBe('ios');
-    //   expect(res).toBeDefined();
-    //   expect(res.children.length).toBeTruthy();
-    // }
-  });
-
-  it('should find node', () => {
-    const node = parsePageSrc(ios_src['00']);
-
-    let res = findPageNode(node, ''); // root
-    expect(res?.tagName).toBe(PAGE_TAG_MAP['ios']['ROOT']);
-
-    res = findPageNode(node, '0'); // app root
-    expect(res?.tagName).toBe(PAGE_TAG_MAP['ios']['App']);
-
-    expect(findPageNodePlatform(node)).toBe('ios');
-    expect(findPageNodeWindowSize(node)).toBeDefined();
-  });
-
-});
-
-describe('page-node on sample *android*', () => {
-  const ios_src = {
-    '00': loadPageSrc('android', ['sample', 'sample-main-view.xml']).toString(),
-    '01': loadPageSrc('android', ['sample', 'sample-detail-view.xml']).toString(),
-  };
-
-  it('should parse xml', () => {
-    let res = parsePageSrc(ios_src['00']);
-    expect(getPageSrcFormat()).toBe('android');
-    expect(res).toBeDefined();
-    expect(res.children.length).toBeTruthy();
-
-    res = parsePageSrc(ios_src['01']);
-    expect(getPageSrcFormat()).toBe('android');
-    expect(res).toBeDefined();
-    expect(res.children.length).toBeTruthy();
-
-    // const files = rnpPageSrcFiles('android');
-    // for (const file of files) {
-    //   res = parsePageSrc(fs.readFileSync(file).toString());
-    //   expect(getPageSrcFormat()).toBe('android');
-    //   expect(res).toBeDefined();
-    //   expect(res.children.length).toBeTruthy();
-    // }
-  });
-
-  it('should find node', () => {
-    const node = parsePageSrc(ios_src['00']);
-
-    let res = findPageNode(node, ''); // root
-    expect(res?.tagName).toBe(PAGE_TAG_MAP['android']['ROOT']);
-
-    res = findPageNode(node, '0')!; // root view
-    expect(res.tagName).toBe(PAGE_TAG_MAP['android']['App']);
-    expect(res.attributes).toEqual({
-      index:"0",
-      package:"com.greenlite.androidsample",
-      'class':"android.widget.FrameLayout",
-      text:"",
-      checkable:"false",
-      value:false, //checked="false"
-      clickable:"false",
-      enabled:true,
-      focusable:"false",
-      focused:"false",
-      'long-clickable':"false",
-      password:"false",
-      scrollable:"false",
-      selected:"false",
-      bounds:"[0,0][1080,1857]",
-      x: 0, y: 0, width: 1080, height: 1857,
-      visible: true, //displayed:"true"
-      accessible: false,
-    });
-
-    expect(findPageNodePlatform(node)).toBe('android');
-    expect(findPageNodeWindowSize(node)).toBeDefined();
-  });
-
-});
-
-describe.skip('page-node on universal *ios*', () => {
+describe('page-node on universal *ios*', () => {
   const ios_src = {
     '00': loadPageSrc('ios', ['universal', 'page-source-ios-00.xml']).toString(),
     '01': loadPageSrc('ios', ['universal', 'page-source-ios-01.xml']).toString(),
@@ -136,6 +34,7 @@ describe.skip('page-node on universal *ios*', () => {
     const res = parsePageSrc(ios_src['00']);
     expect(res).toBeDefined();
     expect(res.children.length).toBeTruthy();
+    expect(getPageSrcFormat()).toBe('universal');
   });
 
   it('should find node', () => {
@@ -222,7 +121,7 @@ describe.skip('page-node on universal *ios*', () => {
   })
 });
 
-describe.skip('page-node on universal *android*', () => {
+describe('page-node on universal *android*', () => {
   const android_src = {
     '00': loadPageSrc('android', ['universal', 'page-source-android-00.xml']).toString(),
     '01': loadPageSrc('android', ['universal', 'page-source-android-01.xml']).toString(),
@@ -232,6 +131,7 @@ describe.skip('page-node on universal *android*', () => {
     const res = parsePageSrc(android_src['00']);
     expect(res).toBeDefined();
     expect(res.children.length).toBeTruthy();
+    expect(getPageSrcFormat()).toBe('universal');
   });
 
   it('should find node', () => {
@@ -249,4 +149,106 @@ describe.skip('page-node on universal *android*', () => {
     expect(findPageNodePlatform(node)).toBe('android');
     expect(findPageNodeWindowSize(node)).toBeDefined();
   });
+});
+
+describe.skip('page-node on sample *ios*', () => {
+  const ios_src = {
+    '00': loadPageSrc('ios', ['sample', 'sample-main-view.xml']).toString(),
+    '01': loadPageSrc('ios', ['sample', 'sample-detail-view.xml']).toString(),
+  };
+
+  it('should parse xml', () => {
+    let res = parsePageSrc(ios_src['00']);
+    expect(getPageSrcFormat()).toBe('ios');
+    expect(res).toBeDefined();
+    expect(res.children.length).toBeTruthy();
+
+    res = parsePageSrc(ios_src['01']);
+    expect(getPageSrcFormat()).toBe('ios');
+    expect(res).toBeDefined();
+    expect(res.children.length).toBeTruthy();
+
+    // const files = rnpPageSrcFiles('ios');
+    // for (const file of files) {
+    //   res = parsePageSrc(fs.readFileSync(file).toString());
+    //   expect(getPageSrcFormat()).toBe('ios');
+    //   expect(res).toBeDefined();
+    //   expect(res.children.length).toBeTruthy();
+    // }
+  });
+
+  it('should find node', () => {
+    const node = parsePageSrc(ios_src['00']);
+
+    let res = findPageNode(node, ''); // root
+    expect(res?.tagName).toBe(PAGE_TAG_MAP['ios']['ROOT']);
+
+    res = findPageNode(node, '0'); // app root
+    expect(res?.tagName).toBe(PAGE_TAG_MAP['ios']['App']);
+
+    expect(findPageNodePlatform(node)).toBe('ios');
+    expect(findPageNodeWindowSize(node)).toBeDefined();
+  });
+
+});
+
+describe.skip('page-node on sample *android*', () => {
+  const ios_src = {
+    '00': loadPageSrc('android', ['sample', 'sample-main-view.xml']).toString(),
+    '01': loadPageSrc('android', ['sample', 'sample-detail-view.xml']).toString(),
+  };
+
+  it('should parse xml', () => {
+    let res = parsePageSrc(ios_src['00']);
+    expect(getPageSrcFormat()).toBe('android');
+    expect(res).toBeDefined();
+    expect(res.children.length).toBeTruthy();
+
+    res = parsePageSrc(ios_src['01']);
+    expect(getPageSrcFormat()).toBe('android');
+    expect(res).toBeDefined();
+    expect(res.children.length).toBeTruthy();
+
+    // const files = rnpPageSrcFiles('android');
+    // for (const file of files) {
+    //   res = parsePageSrc(fs.readFileSync(file).toString());
+    //   expect(getPageSrcFormat()).toBe('android');
+    //   expect(res).toBeDefined();
+    //   expect(res.children.length).toBeTruthy();
+    // }
+  });
+
+  it('should find node', () => {
+    const node = parsePageSrc(ios_src['00']);
+
+    let res = findPageNode(node, ''); // root
+    expect(res?.tagName).toBe(PAGE_TAG_MAP['android']['ROOT']);
+
+    res = findPageNode(node, '0')!; // root view
+    expect(res.tagName).toBe(PAGE_TAG_MAP['android']['App']);
+    expect(res.attributes).toEqual({
+      index:"0",
+      package:"com.greenlite.androidsample",
+      'class':"android.widget.FrameLayout",
+      text:"",
+      checkable:"false",
+      value:false, //checked="false"
+      clickable:"false",
+      enabled:true,
+      focusable:"false",
+      focused:"false",
+      'long-clickable':"false",
+      password:"false",
+      scrollable:"false",
+      selected:"false",
+      bounds:"[0,0][1080,1857]",
+      x: 0, y: 0, width: 1080, height: 1857,
+      visible: true, //displayed:"true"
+      accessible: false,
+    });
+
+    expect(findPageNodePlatform(node)).toBe('android');
+    expect(findPageNodeWindowSize(node)).toBeDefined();
+  });
+
 });

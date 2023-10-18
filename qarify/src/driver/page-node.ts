@@ -370,8 +370,7 @@ export function findPageNodePlatform(rootNode: QAPageNode) {
       const tagName = rootNode.children[0].tagName;
       if (tagName === PAGE_TAG_MAP[_pageSrcFormat]['App']) {
         return 'ios';
-      }
-      if (tagName === PAGE_TAG_MAP[_pageSrcFormat]['View']) {
+      } else {
         return 'android';
       }
     } else {
