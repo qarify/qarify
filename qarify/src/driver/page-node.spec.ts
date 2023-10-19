@@ -19,8 +19,8 @@ function loadPageSrc(platform: 'ios' | 'android', name:string[]) {
   return fs.readFileSync(filePath);
 }
 
-function rnpPageSrcFiles(platform: 'ios' | 'android') {
-  const dir = path.join(__dirname, '__mock', platform, `rnp-${platform}`);
+function rnpPageSrcFiles(platform: 'ios' | 'android', format: 'universal' | 'ios' | 'android') {
+  const dir = path.join(__dirname, '__mock', platform, `rnp-${format}`);
   return fs.readdirSync(dir).map((e) => path.join(dir, e));
 }
 
@@ -31,10 +31,24 @@ describe('page-node on universal *ios*', () => {
   };
   
   it('should parse xml', () => {
-    const res = parsePageSrc(ios_src['00']);
+    let res = parsePageSrc(ios_src['00']);
     expect(res).toBeDefined();
     expect(res.children.length).toBeTruthy();
     expect(getPageSrcFormat()).toBe('universal');
+    expect(findPageNodePlatform(res)).toBe('ios');
+    expect(findPageNodeWindowSize(res)).toEqual({
+      width:390, height:844
+    });
+
+    const files = rnpPageSrcFiles('ios', 'universal');
+    for (const file of files) {
+      res = parsePageSrc(fs.readFileSync(file).toString());
+      expect(getPageSrcFormat()).toBe('universal');
+      expect(res).toBeDefined();
+      expect(res.children.length).toBeTruthy();
+      expect(findPageNodePlatform(res)).toBe('ios');
+      expect(findPageNodeWindowSize(res)).toBeDefined();
+    }
   });
 
   it('should find node', () => {
@@ -54,9 +68,6 @@ describe('page-node on universal *ios*', () => {
 
     res = findPageNode(node, '0.0.0.0'); // PickerInput
     expect(res?.tagName).toBe('PickerInput');
-
-    expect(findPageNodePlatform(node)).toBe('ios');
-    expect(findPageNodeWindowSize(node)).toBeDefined();
   });
 
   it('should get optimal xpath', () => {
@@ -132,6 +143,10 @@ describe('page-node on universal *android*', () => {
     expect(res).toBeDefined();
     expect(res.children.length).toBeTruthy();
     expect(getPageSrcFormat()).toBe('universal');
+    expect(findPageNodePlatform(res)).toBe('android');
+    expect(findPageNodeWindowSize(res)).toEqual({
+      width:1080, height:1857
+    });
   });
 
   it('should find node', () => {
@@ -153,8 +168,8 @@ describe('page-node on universal *android*', () => {
 
 describe.skip('page-node on sample *ios*', () => {
   const ios_src = {
-    '00': loadPageSrc('ios', ['sample', 'sample-main-view.xml']).toString(),
-    '01': loadPageSrc('ios', ['sample', 'sample-detail-view.xml']).toString(),
+    '00': loadPageSrc('ios', ['sample-ios', 'sample-main-view.xml']).toString(),
+    '01': loadPageSrc('ios', ['sample-ios', 'sample-detail-view.xml']).toString(),
   };
 
   it('should parse xml', () => {
@@ -168,7 +183,7 @@ describe.skip('page-node on sample *ios*', () => {
     expect(res).toBeDefined();
     expect(res.children.length).toBeTruthy();
 
-    // const files = rnpPageSrcFiles('ios');
+    // const files = rnpPageSrcFiles('ios', 'ios');
     // for (const file of files) {
     //   res = parsePageSrc(fs.readFileSync(file).toString());
     //   expect(getPageSrcFormat()).toBe('ios');
@@ -194,8 +209,8 @@ describe.skip('page-node on sample *ios*', () => {
 
 describe.skip('page-node on sample *android*', () => {
   const ios_src = {
-    '00': loadPageSrc('android', ['sample', 'sample-main-view.xml']).toString(),
-    '01': loadPageSrc('android', ['sample', 'sample-detail-view.xml']).toString(),
+    '00': loadPageSrc('android', ['sample-android', 'sample-main-view.xml']).toString(),
+    '01': loadPageSrc('android', ['sample-android', 'sample-detail-view.xml']).toString(),
   };
 
   it('should parse xml', () => {
@@ -209,7 +224,7 @@ describe.skip('page-node on sample *android*', () => {
     expect(res).toBeDefined();
     expect(res.children.length).toBeTruthy();
 
-    // const files = rnpPageSrcFiles('android');
+    // const files = rnpPageSrcFiles('android', 'android');
     // for (const file of files) {
     //   res = parsePageSrc(fs.readFileSync(file).toString());
     //   expect(getPageSrcFormat()).toBe('android');
