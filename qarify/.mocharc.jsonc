@@ -9,6 +9,7 @@
   //   "no-warnings",
   //   "loader=ts-node/esm"
 	// ]
+  "timeout": 30000,
   "ignore": [
     "**/__mock/**"
   ]

@@ -2,12 +2,12 @@ import { expect } from 'expect-webdriverio';
 import { QADriverSession } from '@qarify/types';
 
 import { getPageNode, makeSession, closeSession, getDriver } from "../../src/driver/index.js";
-import { localDriver } from '../helper/default-qaconfig.js';
+import { localIosDriver } from '../helper/default-qaconfig.js';
 
 describe("page", () => {
   let session: QADriverSession | undefined = undefined;
   before(async () => {
-    session = await makeSession(localDriver);
+    session = await makeSession(localIosDriver);
   });
 
   after(async () => {

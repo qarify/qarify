@@ -4,7 +4,7 @@ import { expect } from 'expect-webdriverio';
 import {
   runQARunner,
 } from "../../src/runner/index.js";
-import { localDriver, getDefaultQAConfig } from '../helper/default-qaconfig.js';
+import { localIosDriver, getDefaultQAConfig } from '../helper/default-qaconfig.js';
 import type { QARunner } from '@qarify/types';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -22,7 +22,7 @@ describe("runner", () => {
     this.timeout(10000); // 10s
     const qaconfig = getDefaultQAConfig(_dataDir, {
       specs: allSpecFiles.map(e => path.join(_dataDir, e)),
-      drivers: [localDriver],
+      drivers: [localIosDriver],
     });
     const qarunner: QARunner = {
       ...qaconfig,
