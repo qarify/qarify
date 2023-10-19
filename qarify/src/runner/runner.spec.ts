@@ -3,7 +3,7 @@ import url from 'node:url';
 import { expect } from 'expect-webdriverio';
 import {
   runQARunner,
-} from "../../src/runner/index.js";
+} from "./runner.js";
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
 import { QADriver, QARunner } from '@qarify/types';
 import { GLOBAL_RUNNER } from '../constants.js';

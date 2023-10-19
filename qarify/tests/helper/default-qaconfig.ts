@@ -18,7 +18,7 @@ export const getDefaultQAConfig = (baseDir: string, override: Partial<QAConfig> 
   ...override,
 });
 
-export const localDriver: QADriver = {
+export const localIosDriver: QADriver = {
   id: 'local-server',
   name: "Local Server",
   protocol: "http",
@@ -26,10 +26,28 @@ export const localDriver: QADriver = {
   port: 4723,
   path: "/",
   capabilities: {
-    platformName: "iOS",
+    "platformName": "iOS",
     "appium:automationName": "XCUITest",
     "appium:deviceName": "iPhone 14",
     "appium:platformVersion": "16.4",
     "appium:orientation": "PORTRAIT",
   },
+  ignore: [],
+};
+
+export const localAndroidDriver: QADriver = {
+  id: 'local-server',
+  name: "Local Server",
+  protocol: "http",
+  hostname: "127.0.0.1",
+  port: 4723,
+  path: "/",
+  capabilities: {
+    "platformName": "android",
+    "appium:automationName": "UiAutomator2",
+    "appium:avd": "Pixel_API_33",
+    "appium:platformVersion": "13.0",
+    "appium:orientation": "PORTRAIT"
+  },
+  ignore: [],
 };

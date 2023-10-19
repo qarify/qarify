@@ -3,6 +3,7 @@ import type {
 } from "@qarify/types";
 import { SpecRunnerEvent, LogLevel, SpecRunnerFramework } from "@qarify/types";
 import { setLogLevel, isSilent } from '@qarify/logger';
+import { minimatch } from "minimatch";
 
 import { isNode } from "./platform.js";
 import { getQARunner } from "../runner/runner.js";
@@ -226,4 +227,27 @@ export function sendAttachToReporter(test: Mocha.Test | undefined, attachment: Q
     type: SpecRunnerEvent.test_attach,
   };
   return runner.context.instance.emit(SpecRunnerEvent.test_attach, _test, undefined, attachment);
+}
+
+/**
+ * filter spec files
+ * @param specs file path array
+ * @param ignore ignore pattern array
+ * @returns 
+ */
+export function filterSpecs(specs: string[], ignore?: string[]): string[] {
+  if (ignore && ignore.length) {
+    const res = [] as string[];
+    specs.forEach((s) => {
+      for (const i of ignore) {
+        if (minimatch(s, i)) {
+          return;
+        }
+      }
+      res.push(s);
+    });
+    return res;
+  } else {
+    return specs;
+  }
 }

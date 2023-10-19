@@ -52,6 +52,9 @@ export type QADriver = {
   path: string;
   capabilities: any;
   session?: QADriverSession;
+  // spec filter. e.g. [ '*.ios.ts' ]
+  // See https://www.npmjs.com/package/minimatch
+  ignore?: string[];
 };
 
 export type QArifyResult = {

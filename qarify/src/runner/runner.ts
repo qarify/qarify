@@ -7,6 +7,7 @@ import { setGlobalExpect, setGlobalDriver } from "./set-globals.js";
 import { closeSession, makeSession } from "../driver/session.js";
 import { getDriver } from "../driver/driver.js";
 import { _setGlobal } from "../global/index.js";
+import { filterSpecs } from '../utils/index.js';
 
 const log = getLogger('runner:runner');
 
@@ -19,23 +20,31 @@ export function getQARunnerProp(name: keyof QARunner) {
   return _runner[name];
 }
 
+const _checkSpecsEmpty = (specs: string[], ignoreNoFiles?: boolean) => {
+  if (!specs || !specs.length) {
+    if (!ignoreNoFiles) {
+      throw new Error('No spec files. Check the "specs" property in the QArify config');
+    }
+    if (!isSilent()) {
+      console.warn('No spec files');
+    } else {
+      log('No spec files');
+    }
+    return false;
+  }
+  return true;
+}
+
 export async function runQARunner(
   runner: QARunner,
 ): Promise<QArifyResult[]> {
-  _runner = runner;
-  try {
-    if (!runner.context) { runner.context = {}; }
-    const { testOptions, drivers, name, specs, runnerId } = runner;
+  // clone
+  _runner = structuredClone(runner);
 
-    if (!specs || !specs.length) {
-      if (!runner.ignoreNoFiles) {
-        throw new Error('No spec files. Check the "specs" property in the QArify config');
-      }
-      if (!isSilent()) {
-        console.warn('No spec files');
-      }
-      log('no spec files');
-    }
+  try {
+    if (!_runner.context) { _runner.context = {}; }
+    const { testOptions, drivers, name, specs, runnerId, ignoreNoFiles } = _runner;
+    _checkSpecsEmpty(specs, ignoreNoFiles);
     // set global
     _setGlobal(GLOBAL_RUNNER, _runner);
     // expect
@@ -48,21 +57,26 @@ export async function runQARunner(
     const _isMultiremote = false;
 
     for (const driver of drivers) {
-      log(`run "${name}" with ${driver.name} driver`);
+      const { name: driverName, capabilities, ignore, session } = driver;
+      log(`run "${name}" with ${driverName} driver`);
       
-      const _browser = driver.capabilities ? await _makeConnection(driver, _isMultiremote) : null;
+      const _browser = capabilities ? await _makeConnection(driver, _isMultiremote) : null;
       if (_browser) {
         setGlobalDriver(_browser, _isMultiremote);
       }
 
-      res.push(await runSpecFiles(runner, `${runnerId}:${driver.name}`));
+      const filteredSpecs = filterSpecs(specs, ignore);
+      if (_checkSpecsEmpty(filteredSpecs, ignoreNoFiles)) {
+        _runner.specs = filteredSpecs;
+        res.push(await runSpecFiles(_runner, `${runnerId}:${driverName}`));
+      }
 
-      if (_browser && !driver.session) {
+      if (_browser && !session) {
         closeSession(_browser.sessionId);
         // await _browser.deleteSession();
       }
     }
-
+    // return result
     return res;
   } catch (e) {
     throw e;

@@ -4,6 +4,7 @@ import type { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, SpecRunner
 import {
   updateConfigWithRunnerOptions, updateExecConfig,
   validateConfigValues, configVersionToNumber, isValidConfigVersion,
+  filterSpecs,
 } from "./helpers.js";
 import { TestReporter } from '../runner/reporter.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
@@ -154,5 +155,18 @@ describe('utils/helpers', function() {
     
     const lowerVersion = `${(MIN_SUPPORT_VERSION / 10000).toFixed(0)}.${(MIN_SUPPORT_VERSION % 1000) - 1}`;
     expect(() => isValidConfigVersion(lowerVersion)).toThrow(/not supported version/);
+  });
+
+  it('filterSpecs', () => {
+    let spec = ['0.js', '1.ts', '2.android.ts', '3.ios.ts'];
+    // no filter
+    expect(filterSpecs(spec, undefined)).toEqual(spec);
+    expect(filterSpecs(spec, [])).toEqual(spec);
+    // ignore js
+    expect(filterSpecs(spec, ['*.js'])).toEqual(['1.ts', '2.android.ts', '3.ios.ts']);
+    // ignore ts
+    expect(filterSpecs(spec, ['*.ts'])).toEqual(['0.js']);
+    // ignore android
+    expect(filterSpecs(spec, ['*.android.ts'])).toEqual(['0.js', '1.ts', '3.ios.ts']);
   });
 });
