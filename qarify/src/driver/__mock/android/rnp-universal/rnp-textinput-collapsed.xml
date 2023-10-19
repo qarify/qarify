@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UI width="1080" height="1857">
+  <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+    <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+      <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+        <View text="" x="0" y="0" width="1080" height="1857" id="com.callstack.reactnativepaperexample:id/action_bar_root" visible="true">
+          <View text="" x="0" y="0" width="1080" height="1857" id="android:id/content" visible="true">
+            <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+              <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                  <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                    <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                      <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                        <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                          <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                            <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                              <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                  <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                    <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                      <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                        <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                          <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                            <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                              <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                                <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                                  <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                                    <View text="" x="0" y="0" width="1080" height="231" visible="true">
+                                                      <View text="" x="0" y="0" width="1080" height="231" visible="true">
+                                                        <View text="" x="0" y="0" width="1080" height="231" id="appbar-header-root-layer" visible="true">
+                                                          <View text="" x="0" y="63" width="1080" height="168" id="appbar-header" visible="true">
+                                                            <View text="" x="26" y="95" width="105" height="105" id="icon-button-container" visible="true">
+                                                              <Button text="" x="26" y="95" width="105" height="105" axId="Back" id="icon-button" visible="true">
+                                                                <View text="" x="47" y="116" width="63" height="63" id="cross-fade-icon-current" visible="true">
+                                                                  <Text text="&amp;#983117;" x="47" y="116" width="63" height="63" visible="true"></Text>
+                                                                </View>
+                                                              </Button>
+                                                            </View>
+                                                            <View text="" x="147" y="110" width="923" height="74" id="appbar-content" visible="true">
+                                                              <View text="TextInput" x="147" y="110" width="923" height="74" id="appbar-content-title-text" visible="true"></View>
+                                                            </View>
+                                                          </View>
+                                                        </View>
+                                                      </View>
+                                                    </View>
+                                                    <Scrollable text="" x="0" y="231" width="1080" height="1626" visible="true">
+                                                      <View text="" x="0" y="231" width="1080" height="1176" visible="true">
+                                                        <View text="" x="0" y="231" width="1080" height="168" visible="true">
+                                                          <Button text="" x="0" y="231" width="1080" height="168" axId="Flat inputs" visible="true">
+                                                            <View text="" x="0" y="268" width="1017" height="94" visible="true">
+                                                              <Text text="Flat inputs" x="42" y="287" width="891" height="57" visible="true"></Text>
+                                                              <Text text="&amp;#983360;" x="954" y="284" width="63" height="63" visible="true"></Text>
+                                                            </View>
+                                                          </Button>
+                                                        </View>
+                                                        <View text="" x="0" y="399" width="1080" height="168" visible="true">
+                                                          <Button text="" x="0" y="399" width="1080" height="168" axId="Outlined inputs" visible="true">
+                                                            <View text="" x="0" y="436" width="1017" height="94" visible="true">
+                                                              <Text text="Outlined inputs" x="42" y="455" width="891" height="57" visible="true"></Text>
+                                                              <Text text="&amp;#983360;" x="954" y="452" width="63" height="63" visible="true"></Text>
+                                                            </View>
+                                                          </Button>
+                                                        </View>
+                                                        <View text="" x="0" y="567" width="1080" height="168" visible="true">
+                                                          <Button text="" x="0" y="567" width="1080" height="168" axId="Disabled inputs" visible="true">
+                                                            <View text="" x="0" y="604" width="1017" height="94" visible="true">
+                                                              <Text text="Disabled inputs" x="42" y="623" width="891" height="57" visible="true"></Text>
+                                                              <Text text="&amp;#983360;" x="954" y="620" width="63" height="63" visible="true"></Text>
+                                                            </View>
+                                                          </Button>
+                                                        </View>
+                                                        <View text="" x="0" y="735" width="1080" height="168" visible="true">
+                                                          <Button text="" x="0" y="735" width="1080" height="168" axId="Dense inputs" visible="true">
+                                                            <View text="" x="0" y="772" width="1017" height="94" visible="true">
+                                                              <Text text="Dense inputs" x="42" y="791" width="891" height="57" visible="true"></Text>
+                                                              <Text text="&amp;#983360;" x="954" y="788" width="63" height="63" visible="true"></Text>
+                                                            </View>
+                                                          </Button>
+                                                        </View>
+                                                        <View text="" x="0" y="903" width="1080" height="168" visible="true">
+                                                          <Button text="" x="0" y="903" width="1080" height="168" axId="Multiline inputs" visible="true">
+                                                            <View text="" x="0" y="940" width="1017" height="94" visible="true">
+                                                              <Text text="Multiline inputs" x="42" y="959" width="891" height="57" visible="true"></Text>
+                                                              <Text text="&amp;#983360;" x="954" y="956" width="63" height="63" visible="true"></Text>
+                                                            </View>
+                                                          </Button>
+                                                        </View>
+                                                        <View text="" x="0" y="1071" width="1080" height="168" visible="true">
+                                                          <Button text="" x="0" y="1071" width="1080" height="168" axId="Inputs with helpers" visible="true">
+                                                            <View text="" x="0" y="1108" width="1017" height="94" visible="true">
+                                                              <Text text="Inputs with helpers" x="42" y="1127" width="891" height="57" visible="true"></Text>
+                                                              <Text text="&amp;#983360;" x="954" y="1124" width="63" height="63" visible="true"></Text>
+                                                            </View>
+                                                          </Button>
+                                                        </View>
+                                                        <View text="" x="0" y="1239" width="1080" height="168" visible="true">
+                                                          <Button text="" x="0" y="1239" width="1080" height="168" axId="Custom inputs" visible="true">
+                                                            <View text="" x="0" y="1276" width="1017" height="94" visible="true">
+                                                              <Text text="Custom inputs" x="42" y="1295" width="891" height="57" visible="true"></Text>
+                                                              <Text text="&amp;#983360;" x="954" y="1292" width="63" height="63" visible="true"></Text>
+                                                            </View>
+                                                          </Button>
+                                                        </View>
+                                                      </View>
+                                                    </Scrollable>
+                                                  </View>
+                                                </View>
+                                              </View>
+                                            </View>
+                                          </View>
+                                        </View>
+                                        <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                          <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                            <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                              <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                                <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                                  <View text="" x="0" y="0" width="1080" height="1857" visible="true">
+                                                    <View text="" x="0" y="0" width="1080" height="231" visible="true">
+                                                      <View text="" x="0" y="0" width="1080" height="231" visible="true">
+                                                        <View text="" x="0" y="0" width="1080" height="231" id="appbar-header-root-layer" visible="true">
+                                                          <View text="" x="0" y="63" width="1080" height="168" id="appbar-header" visible="true">
+                                                            <View text="" x="26" y="95" width="105" height="105" id="icon-button-container" visible="true">
+                                                              <Button text="" x="26" y="95" width="105" height="105" axId="" id="icon-button" visible="true">
+                                                                <View text="" x="47" y="116" width="63" height="63" id="cross-fade-icon-current" visible="true">
+                                                                  <Text text="&amp;#983900;" x="47" y="116" width="63" height="63" visible="true"></Text>
+                                                                </View>
+                                                              </Button>
+                                                            </View>
+                                                            <View text="" x="147" y="110" width="923" height="74" id="appbar-content" visible="true">
+                                                              <View text="Examples" x="147" y="110" width="923" height="74" id="appbar-content-title-text" visible="true"></View>
+                                                            </View>
+                                                          </View>
+                                                        </View>
+                                                      </View>
+                                                    </View>
+                                                    <Scrollable text="" x="0" y="231" width="1080" height="1626" visible="true">
+                                                      <View text="" x="0" y="231" width="1080" height="1051" visible="true">
+                                                        <View text="" x="0" y="231" width="1080" height="132" visible="true">
+                                                          <View text="" x="0" y="231" width="1080" height="131" axId="Banner" visible="true">
+                                                            <Text text="Banner" x="42" y="268" width="975" height="57" visible="true"></Text>
+                                                          </View>
+                                                          <View text="" x="0" y="362" width="1080" height="1" visible="true"></View>
+                                                        </View>
+                                                        <View text="" x="0" y="363" width="1080" height="131" visible="true">
+                                                          <View text="" x="0" y="363" width="1080" height="130" axId="Checkbox Item" visible="true">
+                                                            <Text text="Checkbox Item" x="42" y="400" width="975" height="57" visible="true"></Text>
+                                                          </View>
+                                                        </View>
+                                                        <View text="" x="0" y="494" width="1080" height="132" visible="true">
+                                                          <View text="" x="0" y="494" width="1080" height="131" axId="Dialog" visible="true">
+                                                            <Text text="Dialog" x="42" y="531" width="975" height="57" visible="true"></Text>
+                                                          </View>
+                                                          <View text="" x="0" y="625" width="1080" height="1" visible="true"></View>
+                                                        </View>
+                                                        <View text="" x="0" y="626" width="1080" height="131" visible="true">
+                                                          <View text="" x="0" y="626" width="1080" height="130" axId="Radio Button Group" visible="true">
+                                                            <Text text="Radio Button Group" x="42" y="663" width="975" height="57" visible="true"></Text>
+                                                          </View>
+                                                        </View>
+                                                        <View text="" x="0" y="757" width="1080" height="132" visible="true">
+                                                          <View text="" x="0" y="757" width="1080" height="131" axId="Segmented Buttons" visible="true">
+                                                            <Text text="Segmented Buttons" x="42" y="794" width="975" height="57" visible="true"></Text>
+                                                          </View>
+                                                          <View text="" x="0" y="888" width="1080" height="1" visible="true"></View>
+                                                        </View>
+                                                        <View text="" x="0" y="889" width="1080" height="131" visible="true">
+                                                          <View text="" x="0" y="889" width="1080" height="130" axId="Surface" visible="true">
+                                                            <Text text="Surface" x="42" y="926" width="975" height="57" visible="true"></Text>
+                                                          </View>
+                                                        </View>
+                                                        <View text="" x="0" y="1020" width="1080" height="132" visible="true">
+                                                          <View text="" x="0" y="1020" width="1080" height="131" axId="Typography" visible="true">
+                                                            <Text text="Typography" x="42" y="1057" width="975" height="57" visible="true"></Text>
+                                                          </View>
+                                                          <View text="" x="0" y="1151" width="1080" height="1" visible="true"></View>
+                                                        </View>
+                                                        <View text="" x="0" y="1152" width="1080" height="130" visible="true">
+                                                          <View text="" x="0" y="1152" width="1080" height="130" axId="TextInput" visible="true">
+                                                            <Text text="TextInput" x="42" y="1189" width="975" height="57" visible="true"></Text>
+                                                          </View>
+                                                        </View>
+                                                      </View>
+                                                    </Scrollable>
+                                                  </View>
+                                                </View>
+                                              </View>
+                                            </View>
+                                          </View>
+                                        </View>
+                                      </View>
+                                      <View text="" x="0" y="0" width="1080" height="231" visible="true"></View>
+                                    </View>
+                                  </View>
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View text="" x="0" y="1857" width="1080" height="63" id="android:id/navigationBarBackground" visible="true"></View>
+  </View>
+</UI>

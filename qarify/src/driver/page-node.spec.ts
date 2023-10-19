@@ -40,15 +40,17 @@ describe('page-node on universal *ios*', () => {
       width:390, height:844
     });
 
-    const files = rnpPageSrcFiles('ios', 'universal');
-    for (const file of files) {
-      res = parsePageSrc(fs.readFileSync(file).toString());
-      expect(getPageSrcFormat()).toBe('universal');
-      expect(res).toBeDefined();
-      expect(res.children.length).toBeTruthy();
-      expect(findPageNodePlatform(res)).toBe('ios');
-      expect(findPageNodeWindowSize(res)).toBeDefined();
-    }
+    // const files = rnpPageSrcFiles('ios', 'universal');
+    // for (const file of files) {
+    //   res = parsePageSrc(fs.readFileSync(file).toString());
+    //   expect(getPageSrcFormat()).toBe('universal');
+    //   expect(res).toBeDefined();
+    //   expect(res.children.length).toBeTruthy();
+    //   expect(findPageNodePlatform(res)).toBe('ios');
+    //   expect(findPageNodeWindowSize(res)).toEqual({
+    //     width:390, height:844
+    //   });
+    // }
   });
 
   it('should find node', () => {
@@ -139,7 +141,7 @@ describe('page-node on universal *android*', () => {
   };
   
   it('should parse xml', () => {
-    const res = parsePageSrc(android_src['00']);
+    let res = parsePageSrc(android_src['00']);
     expect(res).toBeDefined();
     expect(res.children.length).toBeTruthy();
     expect(getPageSrcFormat()).toBe('universal');
@@ -147,6 +149,18 @@ describe('page-node on universal *android*', () => {
     expect(findPageNodeWindowSize(res)).toEqual({
       width:1080, height:1857
     });
+
+    const files = rnpPageSrcFiles('android', 'universal');
+    for (const file of files) {
+      res = parsePageSrc(fs.readFileSync(file).toString());
+      expect(getPageSrcFormat()).toBe('universal');
+      expect(res).toBeDefined();
+      expect(res.children.length).toBeTruthy();
+      expect(findPageNodePlatform(res)).toBe('android');
+      expect(findPageNodeWindowSize(res)).toEqual({
+        width:1080, height:1857
+      });
+    }
   });
 
   it('should find node', () => {

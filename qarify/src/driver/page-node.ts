@@ -125,9 +125,18 @@ function _isControllableTag(tag: string) {
       'UI': 'ROOT',
       'App': 'App',
       'Window': 'Window',
+
       'View': 'View',
-      'ScrollView': 'ScrollView',
+      'Scrollable': 'Scrollable', // text="" x="0" y="231" width="1080" height="1626" visible="true"
       'Button': 'Button',
+      'CheckBox': 'CheckBox',
+      'SwitchInput': 'SwitchInput',
+      'Text': 'Text',
+      'TextInput': 'TextInput',
+      'Element': 'Element',
+      'Nav': 'Nav',
+      'Image': 'Image',
+      'PickerInput': 'PickerInput',
     },
     'ios': {
       'AppiumAUT': 'ROOT',  
