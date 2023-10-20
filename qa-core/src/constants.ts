@@ -10,10 +10,10 @@ export const MIN_SUPPORT_VERSION = 10000; //'1.0';
 // Map of the optimal strategies.
 export const STRATEGY_MAPPINGS: [keyof QAPageNodeAttribute, FindStrategy][] = [
   ['axId', FindStrategy.AccessibilityId],
-  ['name', FindStrategy.AccessibilityId],
-  // ['content-desc', FindStrategy.AccessibilityId],
-  ['id', FindStrategy.Id],
+  ['content-desc', FindStrategy.AccessibilityId],
   ['rntestid', FindStrategy.Id],
+  ['name', FindStrategy.AccessibilityId],
+  ['id', FindStrategy.Id],
   ['resource-id', FindStrategy.Id],
   ['class', FindStrategy.ClassName],
   ['type', FindStrategy.ClassName],

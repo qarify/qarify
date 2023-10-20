@@ -202,6 +202,7 @@ export type QAPageNodeAttribute = {
   rntestid?: string;
   'resource-id'?: string;
   'class'?: string;
+  rntestid?: string;
 };
 
 export type QAPageNode = {

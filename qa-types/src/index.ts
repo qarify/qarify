@@ -36,8 +36,8 @@ export enum SpecRunnerEvent {
 
 export enum FindStrategy {
   XPath = 'xpath',
-  AccessibilityId = 'axId',
-  // AccessibilityId = 'accessibility id',
+  // AccessibilityId = 'axId',
+  AccessibilityId = 'accessibility id',
   Id = 'id',
   Name = 'name',
   ClassName = 'class name',

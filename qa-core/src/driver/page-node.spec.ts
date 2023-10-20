@@ -3,14 +3,14 @@ import url from 'url';
 import path from 'path';
 import { expect } from 'expect-webdriverio';
 import XPath from 'xpath';
+import { FindStrategy, type QAPageNodeSelector } from '@qarify/types';
 
 import {
   getPageDoc, getPageSrcFormat,
   PAGE_TAG_MAP,
-  parsePageSrc, findPageNode, findPageNodePlatform, findPageNodeWindowSize,
+  parsePageSrc, findPageNode, findPageNodePlatform, findPageWindowSize,
   getOptimalXPath, findPageNodeScrollPosition, getLocators,
 } from './page-node.js';
-import { QAPageNodeAttribute, QAPageNodeSelector } from '@qarify/types';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -36,7 +36,7 @@ describe('page-node on universal *ios*', () => {
     expect(res.children.length).toBeTruthy();
     expect(getPageSrcFormat()).toBe('universal');
     expect(findPageNodePlatform(res)).toBe('ios');
-    expect(findPageNodeWindowSize(res)).toEqual({
+    expect(findPageWindowSize(res)).toEqual({
       width:390, height:844
     });
 
@@ -98,7 +98,7 @@ describe('page-node on universal *ios*', () => {
 
     res = getLocators(ele!.attributes);
     expect(res[0]).toEqual({
-      strategy: 'axId',
+      strategy: FindStrategy.AccessibilityId,
       locator: 'iossample'
     });
 
@@ -106,7 +106,7 @@ describe('page-node on universal *ios*', () => {
     expect(ele?.xpath).toBe('//PickerInput[@axId="Dropdown picker"]');
     res = getLocators(ele!.attributes);
     expect(res[0]).toEqual({
-      strategy: 'axId',
+      strategy: FindStrategy.AccessibilityId,
       locator: 'Dropdown picker'
     });
   });
@@ -146,7 +146,7 @@ describe('page-node on universal *android*', () => {
     expect(res.children.length).toBeTruthy();
     expect(getPageSrcFormat()).toBe('universal');
     expect(findPageNodePlatform(res)).toBe('android');
-    expect(findPageNodeWindowSize(res)).toEqual({
+    expect(findPageWindowSize(res)).toEqual({
       width:1080, height:1857
     });
 
@@ -157,7 +157,7 @@ describe('page-node on universal *android*', () => {
       expect(res).toBeDefined();
       expect(res.children.length).toBeTruthy();
       expect(findPageNodePlatform(res)).toBe('android');
-      expect(findPageNodeWindowSize(res)).toEqual({
+      expect(findPageWindowSize(res)).toEqual({
         width:1080, height:1857
       });
     }
@@ -176,7 +176,7 @@ describe('page-node on universal *android*', () => {
     expect(res?.tagName).toBe('View');
 
     expect(findPageNodePlatform(node)).toBe('android');
-    expect(findPageNodeWindowSize(node)).toBeDefined();
+    expect(findPageWindowSize(node)).toBeDefined();
   });
 });
 
@@ -216,7 +216,7 @@ describe.skip('page-node on sample *ios*', () => {
     expect(res?.tagName).toBe(PAGE_TAG_MAP['ios']['App']);
 
     expect(findPageNodePlatform(node)).toBe('ios');
-    expect(findPageNodeWindowSize(node)).toBeDefined();
+    expect(findPageWindowSize(node)).toBeDefined();
   });
 
 });
@@ -277,7 +277,7 @@ describe.skip('page-node on sample *android*', () => {
     });
 
     expect(findPageNodePlatform(node)).toBe('android');
-    expect(findPageNodeWindowSize(node)).toBeDefined();
+    expect(findPageWindowSize(node)).toBeDefined();
   });
 
 });

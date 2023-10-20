@@ -1,5 +1,6 @@
 import type { Capabilities, Options } from '@wdio/types';
 import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
+// import WebDriver, { type Client } from 'webdriver';
 import type { QADriver, QADriverSession } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 import {
@@ -7,6 +8,9 @@ import {
 } from './driver.js';
 
 export const MJPEG_URL_CAP = 'mjpegScreenshotUrl' as const;
+
+// const remote = WebDriver.newSession;
+// const attach = WebDriver.attachToSession;
 
 const log = getLogger('driver:session');
 
@@ -48,8 +52,15 @@ export async function makeSession(
     let driver = getDriver(session.sessionId);
     if (driver) {
       log(`found existing driver, ${qadriver.name}`);
+      // try to connect
     } else {
-      log(`make connection, ${qadriver.name} with session,`, session);
+      log(`try to make new connection with driver, ${qadriver.name}`);
+      // @ts-ignore
+      delete session.sessionId;
+      driver = await remote({ ...session, logLevel: 'error' })
+    }
+    if (!driver) {
+      log(`attach connection, ${qadriver.name} with session,`, session);
       driver = await attach({ ...session, capabilities } as AttachOptions);
     }
 

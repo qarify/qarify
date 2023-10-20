@@ -389,7 +389,7 @@ export function findPageNodePlatform(rootNode: QAPageNode) {
   return 'unknown';
 }
 
-export function findPageNodeWindowSize(rootNode: QAPageNode): { width: number, height: number } | undefined {
+export function findPageWindowSize(rootNode: QAPageNode): { width: number, height: number } | undefined {
   if (isValidRootNode(rootNode)) {
     if ('width' in rootNode.attributes && 'height' in rootNode.attributes) {
       // android(universal) has width and height in the root node

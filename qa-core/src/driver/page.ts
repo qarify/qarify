@@ -48,6 +48,10 @@ export async function getPageNode(
   return _pageNode;
 }
 
+export function getPageNodeSync() {
+  return _pageNode;
+}
+
 export async function getPageScreenshot(
   updateSessionId?: string,
 ) {
