@@ -214,8 +214,14 @@ export type QAPageNode = {
   title?: string;
 };
 
+export type PageParserOptions = {
+  xpath?: boolean;
+  title?: boolean;
+};
+
 export type QAPageRefreshOptions = {
   parsing?: boolean,
+  parserOptions: PageParserOptions;
   screenshot?: boolean
 };
 

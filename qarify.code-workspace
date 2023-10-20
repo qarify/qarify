@@ -14,7 +14,7 @@
 			"path": "qa-types"
 		},
 		{
-			"path": "qarify"
+			"path": "qa-core"
 		},
 		{
 			"path": "../qarify-web/qaweb-remote-screen"
@@ -23,13 +23,7 @@
 			"path": "../qarify-web"
 		},
 		{
-			"path": "../qarify-core"
-		},
-		{
 			"path": "../qarify-vsce"
-		},
-		{
-			"path": "../qarify-examples"
 		}
 	],
 	"settings": {}

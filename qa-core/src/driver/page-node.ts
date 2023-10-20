@@ -1,4 +1,4 @@
-import type { QAPageNode, QAPageNodeAttribute, QAPageNodeSelector } from '@qarify/types';
+import type { QAPageNode, QAPageNodeAttribute, QAPageNodeSelector, PageParserOptions } from '@qarify/types';
 import { DOMParser } from '@xmldom/xmldom';
 import XPath from 'xpath';
 import { STRATEGY_MAPPINGS } from '../constants.js';
@@ -70,11 +70,6 @@ const PROP_MAP: PropMap = {
     // 'bounds': using parser
     'text': ['text', _toString],
   },
-};
-
-type PageParserOptions = {
-  xpath?: boolean;
-  title?: boolean;
 };
 
 export const PAGE_TAG_MAP: { [format in PageSrcFormat]: Record<string,string> } = {
@@ -178,7 +173,7 @@ function _isControllableTag(tag: string) {
   return false;
 }
 
-export function parsePageSrc(pageSrc: string, options: PageParserOptions = {} ): QAPageNode {
+export function parsePageSrc(pageSrc: string, options: PageParserOptions = {}): QAPageNode {
   _pageDoc = new DOMParser().parseFromString(pageSrc);
 
   // get the first child element node in the doc. some drivers write their xml differently so we
