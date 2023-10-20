@@ -17,7 +17,7 @@ PACKAGE_DIR_NAMES=(
     qa-types
     qa-logger
     qa-globals
-    qarify
+    qa-core
     qa-cli
 )
 
@@ -137,7 +137,7 @@ function _do_jobs() {
         echo ">>> Uninking $name"
         if [[ ! "$jobs" =~ "d" ]]; then
             #echo "npm unlink $name"
-            npm unlink $name
+            npm unlink $name --force
             res="$?"
             ls -al "$NPM_GLOBAL_DIR/$name"
         fi

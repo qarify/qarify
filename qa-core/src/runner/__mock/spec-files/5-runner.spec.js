@@ -1,4 +1,4 @@
-import { _getGlobal, GLOBAL_RUNNER } from "qarify";
+import { _getGlobal, GLOBAL_RUNNER } from "@qarify/core";
 
 test('global runner variable should be set', () => {
   expect(__qyrunner__).toBeDefined();

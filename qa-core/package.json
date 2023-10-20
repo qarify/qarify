@@ -1,5 +1,5 @@
 {
-  "name": "qarify",
+  "name": "@qarify/core",
   "version": "0.9.0",
   "description": "QArify Core",
   "private": false,

@@ -97,3 +97,15 @@ export async function getPageWindowRect(
   }
   return _windowRect;
 }
+
+export async function findPageElement(sessionId: string, using: string, value: string) {
+  try {
+    const driver = getDriver(sessionId);
+    if (!driver) {throw new Error('No Driver for specified session, ' + sessionId);}
+
+    return await driver.findElement(using, value);
+  } catch (error) {
+    log(error);
+    throw error;
+  }
+}

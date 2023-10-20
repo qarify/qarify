@@ -17,13 +17,19 @@
 			"path": "qarify"
 		},
 		{
+			"path": "../qarify-web/qaweb-remote-screen"
+		},
+		{
+			"path": "../qarify-web"
+		},
+		{
+			"path": "../qarify-core"
+		},
+		{
+			"path": "../qarify-vsce"
+		},
+		{
 			"path": "../qarify-examples"
-		},
-		{
-			"path": "../ti-client-driver/ti-wdio"
-		},
-		{
-			"path": "../ti-client-driver/ti-expect"
 		}
 	],
 	"settings": {}

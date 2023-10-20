@@ -6,7 +6,7 @@ import path from 'node:path';
 import type { CLIInitOptions } from './cli.js';
 import {
   loadConfig, applyInitialCLIOptions
-} from "qarify";
+} from "@qarify/core";
 import { QAConfig } from '@qarify/types';
 
 const DEFAULT_CONFIG_FILE_NAME = '.qarify.json';
