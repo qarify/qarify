@@ -48,26 +48,28 @@ export async function makeSession(
 ): Promise<QADriverSession> {
   const { capabilities, session } = qadriver;
 
-  if (session) {
+  if (session && session.sessionId) {
+    //
+    // use existing session
+    //
     let driver = getDriver(session.sessionId);
     if (driver) {
       log(`found existing driver, ${qadriver.name}`);
       // try to connect
     } else {
-      log(`try to make new connection with driver, ${qadriver.name}`);
-      // @ts-ignore
-      delete session.sessionId;
-      driver = await remote({ ...session, logLevel: 'error' })
-    }
-    if (!driver) {
-      log(`attach connection, ${qadriver.name} with session,`, session);
+      log(`attach connection with session of ${qadriver.name}, ${session.sessionId}`);
       driver = await attach({ ...session, capabilities } as AttachOptions);
     }
-
     return _buildSession(driver, qadriver);
   }
 
-  log(`make connection, ${qadriver.name} w/o session`);
+  //
+  // make new session
+  //
+  if (session) {
+    delete qadriver.session;
+  }
+  log(`make new connection with ${qadriver.name}`);
   if (!isMultiremote) {
     let driver = await remote(qadriver);
     return _buildSession(driver, qadriver);
