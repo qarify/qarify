@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { LogLevel } from '@qarify/types';
+import { LogLevel, LogLevelName } from '@qarify/types';
 
 const RootNS = 'qarify';
 
@@ -9,7 +9,6 @@ enum _ns_prefix {
   error = `E`,
 }
 
-export type LogLevelName = keyof typeof LogLevel;
 export type LogGetterName = Exclude<LogLevelName, 'silent'>
 
 type LoggerCache = {

@@ -8,6 +8,8 @@ import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework, FindStrategy } fro
 
 export * from './dist/index.js';
 
+export type LogLevelName = keyof typeof LogLevel;
+
 export type QATestAttach = {
   type: string;
   body: any;
