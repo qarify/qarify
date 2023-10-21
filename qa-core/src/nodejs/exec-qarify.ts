@@ -12,7 +12,7 @@ const log = getLogger('nodejs:exec-qarify');
 export async function execQArify(
   files: string[],
   config: QAConfig,
-  options: QARunnerOptions,
+  runnerOptions: QARunnerOptions,
   cliOptions: CLIOptions = {},
   execFileName = './nodejs/run-qarify.js', // <== based src root directory
 ) {
@@ -22,7 +22,7 @@ export async function execQArify(
 
     const {
       config: _config, nodeOptions, reporter, qaReporter, options: _options
-    } = updateExecConfig(config, files, options);
+    } = updateExecConfig(config, files, runnerOptions);
 
     const rawConfig = JSON.stringify(_config);
     const rawOptions = JSON.stringify(_options);
@@ -84,7 +84,7 @@ export async function execQArify(
     });
 
     proc.on('exit', (code, signal) => {
-      log('child process is terminating, keepMainProcess =', !!options.keepMainProcess, `, code=${code}, signal=${signal}`);
+      log('child process is terminating, keepMainProcess =', !!runnerOptions.keepMainProcess, `, code=${code}, signal=${signal}`);
       if (code || signal) {
         reject(code || 1);
       } else {

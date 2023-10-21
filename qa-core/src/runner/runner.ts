@@ -71,6 +71,9 @@ export async function runQARunner(
         res.push(await runSpecFiles(_runner, `${runnerId}:${driverName}`));
       }
 
+      //
+      // (!session === true) means driver has a connected session.
+      // do not close the session in a driver
       if (_browser && !session) {
         closeSession(_browser.sessionId);
         // await _browser.deleteSession();

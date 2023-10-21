@@ -1,5 +1,5 @@
 import type {
-  CLIOptions, QAConfig, QARunner, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage, QATestAttach
+  CLIOptions, QAConfig, QARunner, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage, QATestAttach, QAReporterOptions, QARunnerReporter,
 } from "@qarify/types";
 import { SpecRunnerEvent, LogLevel, SpecRunnerFramework } from "@qarify/types";
 import { setLogLevel, isSilent } from '@qarify/logger';
@@ -22,15 +22,18 @@ export function updateConfigWithRunnerOptions(
   let _drivers: QADriver[] = [];
 
   if (driverOption && driverOption.length) {
+    // filter qaconfig.drivers with options.drivers
     if (drivers && drivers.length) {
-      _drivers.push(...drivers.filter((e) => driverOption.find((n) => n === e.name)));
+      _drivers.push(...drivers.filter((e) => driverOption.find((n) => n === e.id)));
     }
   } else {
+    // options.drivers is not specified.
+    // use all qaconfig.drivers
     if (drivers && drivers.length) {
       _drivers = drivers;
     } else {
-      // add empty driver
-      _drivers.push({ name: 'no or existing' } as QADriver);
+      // add dummy driver
+      _drivers.push({ name: '_dummy driver_' } as QADriver);
     }
   }
 
@@ -46,7 +49,13 @@ export function updateExecConfig(
   config: QAConfig,
   files?: string[],
   options?: QARunnerOptions,
-) {
+): {
+  config: QAConfig,
+  nodeOptions: QAConfig['nodeOptions'],
+  reporter: QAFrameworkOption['reporter'],
+  qaReporter: QAReporterOptions['qaReporter'],
+  options: Partial<QARunnerOptions>,
+} {
   const { nodeOptions, specs, ..._config } = config;
   const frameworkOptions = config.frameworkOptions || {} as QAFrameworkOption;
   const { reporter, reporterOptions, ..._frameworkOptions } = frameworkOptions;
@@ -159,6 +168,18 @@ export function validateConfigValues(config: QAConfig) {
       }
     }
   }
+  if (config.drivers && config.drivers.length) {
+    for (const d of config.drivers) {
+      if (!d.id) {
+        throw new Error(`invalid driver id`);
+      }
+    }
+    const uniqueSet = new Set(config.drivers.map((e) => e.id));
+    if (uniqueSet.size !== config.drivers.length) {
+      throw new Error('duplicated driver id');
+    }
+  }
+  return true;
 }
 
 export function getCurrentTest(ctx: Mocha.Context): Mocha.Test | undefined {

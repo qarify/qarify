@@ -46,6 +46,8 @@ export type QADriverSession = Omit<AttachOptions, 'capabilities'> & {
 };
 
 export type QADriver = {
+  // driver id
+  // it should be unique value within config scope.
   id: string;
   name: string;
   protocol: "http" | "https";
@@ -86,7 +88,9 @@ export type QARunnerOptions = {
   // runner id
   runnerId: string;
 
-  // specify driver name to run
+  // array of driver id to be used to run specs
+  // it must be one of qaconfig.drivers
+  // if not specified, use all qaconfig.drivers
   drivers?: string[];
 
   // execQArify()로 실행 시 사용되는 report

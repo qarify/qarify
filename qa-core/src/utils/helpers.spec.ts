@@ -20,10 +20,10 @@ describe('utils/helpers', function() {
     const config = getDefaultQAConfig('.', { drivers: [] });
     const runnerId = 'test';
     const options: QARunnerOptions = { runnerId };
-  
+
     // should set one driver
     let res = updateConfigWithRunnerOptions(config, [], { runnerId });
-    expect(res).toEqual({ ...config, runnerId, drivers: [{ name: 'no or existing' }] });
+    expect(res).toEqual({ ...config, runnerId, drivers: [{ name: '_dummy driver_' }] });
 
     // drivers in config
     config.drivers = _drivers;
@@ -122,7 +122,17 @@ describe('utils/helpers', function() {
     expect(() => validateConfigValues(config)).toThrow(/invalid script framework/);
     config.scriptFramework.type = 'qyaction';
 
-    expect(validateConfigValues(config)).toBe(undefined)
+    // drivers
+    // @ts-ignore
+    config.drivers = [ { name: '' } ];
+    expect(() => validateConfigValues(config)).toThrow(/invalid driver id/);
+    // @ts-ignore
+    config.drivers = [ { id: '1' }, { id: '1' } ];
+    expect(() => validateConfigValues(config)).toThrow(/duplicated driver id/);
+
+    // @ts-ignore
+    config.drivers = [ { id: '1' }, { id: '2' } ];
+    expect(validateConfigValues(config)).toBe(true);
   });
 
   it('configVersionToNumber', () => {
