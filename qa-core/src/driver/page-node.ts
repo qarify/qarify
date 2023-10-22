@@ -2,6 +2,7 @@ import type { QAPageNode, QAPageNodeAttribute, QAPageNodeSelector, PageParserOpt
 import { DOMParser } from '@xmldom/xmldom';
 import XPath from 'xpath';
 import { STRATEGY_MAPPINGS } from '../constants.js';
+import { lengthenNodePath, shortenNodePath } from '../utils/helpers.js';
 
 type QAPageNodeAttrName = keyof QAPageNodeAttribute;
 
@@ -250,7 +251,7 @@ function _translateRecursively (xmlNode: Element, options: PageParserOptions = {
   return {
     tagName: tagName,
     attributes: nodeAttrs,
-    path,
+    path: shortenNodePath(path),
     children: _childNodesOf(xmlNode).map((childNode, childIndex) =>
       _translateRecursively(childNode, options, path, childIndex)
     ),
@@ -350,7 +351,7 @@ export function findPageNode(node: QAPageNode, path: string) {
 
   if (!path) {return node;}
 
-  const indicies = path.split('.').map((e) => parseInt(e, 10));
+  const indicies = lengthenNodePath(path).split('.').map((e) => parseInt(e, 10));
   let cur = node;
   for (let i = 0; i < indicies.length; i += 1) {
     if (!cur.children || indicies[i] >= cur.children.length ) {return null;}

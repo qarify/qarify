@@ -4,7 +4,7 @@ import type { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, SpecRunner
 import {
   updateConfigWithRunnerOptions, updateExecConfig,
   validateConfigValues, configVersionToNumber, isValidConfigVersion,
-  filterSpecs,
+  filterSpecs, shortenNodePath, lengthenNodePath,
 } from "./helpers.js";
 import { TestReporter } from '../runner/reporter.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
@@ -178,5 +178,19 @@ describe('utils/helpers', function() {
     expect(filterSpecs(spec, ['*.ts'])).toEqual(['0.js']);
     // ignore android
     expect(filterSpecs(spec, ['*.android.ts'])).toEqual(['0.js', '1.ts', '3.ios.ts']);
+  });
+
+  it('shorten/lengthen node path', () => {
+    expect(shortenNodePath('')).toBe('');
+    expect(shortenNodePath('0')).toBe('0');
+    expect(shortenNodePath('0.0')).toBe('0_2');
+    expect(shortenNodePath('0.0.0')).toBe('0_3');
+    expect(shortenNodePath('0.0.1.2.2.3.4.4.4.4')).toBe('0_2.1.2_2.3.4_4');
+
+    expect(lengthenNodePath('')).toBe('');
+    expect(lengthenNodePath('0')).toBe('0');
+    expect(lengthenNodePath('0_2')).toBe('0.0');
+    expect(lengthenNodePath('0_3')).toBe('0.0.0');
+    expect(lengthenNodePath('0_2.1.2_2.3.4_4')).toBe('0.0.1.2.2.3.4.4.4.4');
   });
 });
