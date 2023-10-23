@@ -81,3 +81,28 @@ export function getLogger(name?: string, level: LogGetterName = 'debug') {
 export function disableLogger() {
   debug.disable();
 }
+
+function _humanize(ms: number): string;
+function _humanize(ms: string): number;
+function _humanize(ms: number | string): string | number {
+  if (typeof ms === 'string') { ms = parseInt(ms); }
+  if (ms < 1000) {
+    return `${ms}ms`;
+  }
+  // add comma
+  const res: string[] = [];
+  const s = `${ms}`;
+  let n = s.length;
+  do {
+    res.push(s.substring(n - 3 < 0 ? 0 : n - 3, n));
+  } while ((n -= 3) > 0);
+  return `${res.reverse().join(',')}ms`;
+}
+
+/**
+ * update logger output
+ * @param inMilliseconds use comma milliseconds
+ */
+export function loggerOutputFormat({ inMilliseconds } = { inMilliseconds: true }) {
+  if (inMilliseconds) { debug.humanize = _humanize; }
+}
