@@ -29,7 +29,7 @@
     "e2e:file": "mocha ./tests/e2e/page.spec.ts",
     "test": "mocha src/**/*.spec.ts",
     "test:types": "tsc --skipLibCheck",
-    "compile": "tsc -b ./tsconfig.build.json",
+    "compile": "tsc -b ./tsconfig.build.json ./tsconfig.cjs.json",
     "compile:esm": "tsc -b ./tsconfig.build.json",
     "compile:cjs": "tsc -b ./tsconfig.cjs.json",
     "compile:browser": "vite build --emptyOutDir --force",
