@@ -1,18 +1,27 @@
 {
-	"folders": [
-		{
-			"name": "root",
-			"path": "."
-		},
-		{
-			"path": "qa-types"
-		},
-		{
-			"path": "qa-core"
-		},
-		{
-			"path": "../../ws-howto/howto-react-native-ui/rnp-example"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "name": "root",
+      "path": "."
+    },
+    {
+      "path": "qa-types"
+    },
+    {
+      "path": "qa-core"
+    },
+    {
+      "path": "../../ws-howto/howto-react-native-ui/rnp-example"
+    },
+    {
+      "path": "../qarify-core"
+    }
+  ],
+  "settings": {
+    "markdownlint.config": {
+      "MD012": false, // no multiple blanks
+      "MD022": false, // title empty lines
+      "MD032": false, // list empty lines
+    }
+  }
 }
