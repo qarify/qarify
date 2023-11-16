@@ -1,7 +1,8 @@
 import { expect } from 'expect-webdriverio';
 import { QADriverSession } from '@qarify/types';
 
-import { getPageNode, makeSession, closeSession, getDriver } from "../../src/driver/index.js";
+import { makeSession, closeSession } from "../../src/driver/index.js";
+import { getPageNode } from "../../src/page/index.js";
 import { localIosDriver } from '../helper/default-qaconfig.js';
 
 describe("page", () => {

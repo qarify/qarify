@@ -1,7 +1,7 @@
 import { getLogger } from '@qarify/logger';
 import type { QAPageNode, QAPageRefreshOptions, PageParserOptions } from '@qarify/types';
 
-import { getDriver } from './driver.js';
+import { getDriver } from '../driver/index.js';
 import { parsePageSrc  } from './page-node.js';
 
 const log = getLogger('driver:page');
