@@ -6,13 +6,42 @@ import * as url from 'url';
 
 console.log('>>> Get page source via appium request.');
 
+const GET_SESSIONS_URL = `http://127.0.0.1:4723/sessions`;
+const NEW_SESSION_URL = `http://127.0.0.1:4723/session`;
+const CAPs = {
+  'ios': {
+    "capabilities": {
+      "alwaysMatch": {
+        "platformName": "iOS",
+        "appium:automationName": "XCUITest",
+        "appium:deviceName": "iPhone 14",
+        "appium:platformVersion": "16.4",
+        "appium:orientation": "PORTRAIT"
+      }
+    }
+  },
+  'android': {
+    "capabilities": {
+      "alwaysMatch": {
+        "platformName": "android",
+        "appium:automationName": "UiAutomator2",
+        "appium:avd": "Pixel_API_33",
+        "appium:platformVersion": "13.0",
+        "appium:orientation": "PORTRAIT"
+      }
+    }
+  },
+}
+const capForNewSession = CAPs['ios']
+
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const OUTDIR = path.join(__dirname, 'output');
+
+
 const startTime = Date.now();
 
 // get session id
-const SESSIONS_URL = `http://127.0.0.1:4723/sessions`;
-http.get(SESSIONS_URL, (res) => {
+http.get(GET_SESSIONS_URL, (res) => {
   let rawData = [];
   if (res.statusCode !== 200) {
     console.log('!!! Error Status Code:', res.statusCode);
@@ -26,9 +55,26 @@ http.get(SESSIONS_URL, (res) => {
 
   res.on('end', async () => {
     const data = JSON.parse(Buffer.concat(rawData).toString());
-    if (data.value.length) {
-      console.log('>>> response sessions:', data.value.map((e) => [e.id, e.capabilities.platformName]));
-      for (const session of data.value) {
+    const sessions = [];
+    let deleteSession = false;
+    if (!data.value.length) {
+      if (capForNewSession) {
+        try {
+          const session = await newSession(capForNewSession)
+          sessions.push({ id: session.value.sessionId, platformName: session.value.capabilities.platformName })
+          deleteSession = true;
+        } catch (e) {
+          console.error('!!! Error on newSession:', e);
+        }
+      }
+    } else {
+      data.value.forEach(
+        (e) => sessions.push({ id: e.id, platformName: e.capabilities.platformName })
+      )
+    }
+    if (sessions.length) {
+      console.log('>>> response sessions:', sessions);
+      for (const session of sessions) {
         try {
           await getPageSource(session.id);
           break; // exit when no error
@@ -36,16 +82,24 @@ http.get(SESSIONS_URL, (res) => {
         catch (e) {
           console.error(e);
           // close errored session
+          deleteSession = true;
           console.log('>>> try to remove errored session');
-          try {
-          await closeSession(session.id);
-          } catch {}
+        }
+        finally {
+          if (deleteSession) {
+            console.log('>>> close session');
+            try {
+              await closeSession(session.id);
+            } catch {/* ignore */}
+          }
         }
       }
     } else {
       console.error('Error: no sessions');
       console.log(data.value);
     }
+    // TOFIX: should call exit?
+    process.exit(0);
   });
 }).on('error', err => {
   console.log('Error: ', err.message);
@@ -93,10 +147,10 @@ function closeSession(sessionId) {
   return new Promise((resolve, reject) => {
     const url = new URL(`http://127.0.0.1:4723/session/${sessionId}`);
     http.request({
-      method: 'DELETE', host: url.host, port: url.port, protocol: url.protocol, path: url.pathname
+      method: 'DELETE', host: url.hostname, port: url.port, protocol: url.protocol, path: url.pathname
     }, res => {
       if (res.statusCode !== 200) {
-        console.log('!!! get-page-source(): Error Status Code:', res.statusCode, res.statusMessage);
+        console.log('!!! closeSession(): Error Status Code:', res.statusCode, res.statusMessage);
         reject(`${res.statusCode}:${res.statusMessage}`);
       }
       resolve();
@@ -104,4 +158,23 @@ function closeSession(sessionId) {
     .end()
     .on('error', reject);
   });
+}
+
+async function newSession(cap) {
+  try {
+    const response = await fetch(NEW_SESSION_URL, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(cap)
+    });
+    if (!response.ok) {
+      throw new Error(`${response.statusText}(${response.status})`);
+    }
+    return await response.json();
+  } catch (e) {
+    throw e;
+  }
 }

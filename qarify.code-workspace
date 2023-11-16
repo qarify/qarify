@@ -5,25 +5,25 @@
 			"path": "."
 		},
 		{
-			"path": "qa-cli"
-		},
-		{
-			"path": "qa-globals"
-		},
-		{
 			"path": "qa-types"
 		},
 		{
 			"path": "qa-core"
 		},
 		{
+			"path": "../qarify-web/qaweb-features"
+		},
+		{
 			"path": "../qarify-web/qaweb-remote-screen"
 		},
 		{
-			"path": "../qarify-web"
+			"path": "../qarify-vsce"
 		},
 		{
-			"path": "../qarify-vsce"
+			"path": "../ti-client-driver"
+		},
+		{
+			"path": "../qarify-core"
 		}
 	],
 	"settings": {}

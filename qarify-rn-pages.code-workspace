@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"name": "root",
+			"path": "."
+		},
+		{
+			"path": "qa-types"
+		},
+		{
+			"path": "qa-core"
+		},
+		{
+			"path": "../../ws-howto/howto-react-native-ui/rnp-example"
+		}
+	],
+	"settings": {}
+}
