@@ -28,7 +28,7 @@ type PageSrcProps = {
   ios:       'visible' | 'enabled' | 'accessible' | 'x' | 'y' | 'width' | 'height' | 'value' | 'name' | 'label',
   android: 'displayed' | 'enabled' | 'checked' | 'selected' | 'bounds' | 'scrollable' | 'text',
 };
-type PropMap = {
+type PropsMap = {
   [format in PageSrcFormat]: {
     [name in PageSrcProps[format][number]]: [QAPageNodeAttrName, CastFunc]
   }
@@ -38,7 +38,7 @@ type PropMap = {
 // type IosFormatProps = keyof PropMap['ios'];
 // type AndroidFormatProps = keyof PropMap['android'];
 
-const PROP_MAP: PropMap = {
+const PROPS_MAP: PropsMap = {
   'universal': {
     'visible': ['visible', _toBoolean],
     'enabled': ['enabled', _toBoolean],
@@ -70,6 +70,10 @@ const PROP_MAP: PropMap = {
     'checked': ['value', _toBoolean],
     // 'bounds': using parser
     'text': ['text', _toString],
+    'x': ['x', _toInt],
+    'y': ['y', _toInt],
+    'width': ['width', _toInt],
+    'height': ['height', _toInt],
   },
 };
 
@@ -214,7 +218,7 @@ function _translateRecursively (xmlNode: Element, options: PageParserOptions = {
     const attr = attributes.item(attrIdx);
     if (attr) {
       const name = attr.name;
-      const caster = PROP_MAP[_pageSrcFormat][name];
+      const caster = PROPS_MAP[_pageSrcFormat][name];
       if (caster) {
         nodeAttrs[caster[0]] = caster[1](attr.value)
       } else {

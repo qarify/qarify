@@ -225,9 +225,25 @@ export type PageParserOptions = {
   title?: boolean;
 };
 
+export type FetchPageOptions = {
+  // session id to fetch page
+  sessionId?: string,
+  // whether forcefully fetching new page even though a cache exists
+  forceFetch?: boolean,
+  // whether fetching source or not
+  src?: boolean,
+  // options for page source parser
+  // Falsy value means no parsing
+  parsingOptions?: PageParserOptions,
+  // whether fetching screen-shot or not
+  screenshot?: boolean,
+  // whether fetching window or not
+  windowRect?: boolean,
+};
+
 export type QAPageRefreshOptions = {
   parsing?: boolean,
-  parserOptions: PageParserOptions;
+  parserOptions?: PageParserOptions;
   screenshot?: boolean
 };
 
