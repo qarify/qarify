@@ -23,7 +23,7 @@
     ]
   },
   "scripts": {
-    "test:file": "mocha src/page/fetch-page.spec.ts",
+    "test:file": "mocha src/page/page-node.spec.ts",
     "e2e": "mocha ./tests/e2e/**/*.spec.ts",
     "e2e:file": "mocha ./tests/e2e/page.spec.ts",
     "test": "mocha src/**/*.spec.ts",

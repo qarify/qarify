@@ -270,7 +270,7 @@ function _getTitle(tagName: string, attributes: QAPageNodeAttribute) {
   return `${tagName}${moreTitle.length > 20 ? (moreTitle.substring(0, 20) + '...') : moreTitle}`;
 }
 
-export function isUniqueAttribute(attrName: string, attrValue: string) {
+function _isUniqueAttribute(attrName: string, attrValue: string) {
   // If no sourceXML provided, assume it's unique
   if (!_pageDoc) {
     return true;
@@ -350,17 +350,23 @@ export function getOptimalXPath(
   }
 }
 
+/**
+ * find a node with it's path
+ * @param node parent node
+ * @param path path to find
+ * @returns found node if found, `undefined` if not
+ */
 export function findPageNode(node: QAPageNode, path: string) {
-  if (!node) {return null;}
+  if (!node) {return undefined;}
 
   if (!path) {return node;}
 
   const indicies = lengthenNodePath(path).split('.').map((e) => parseInt(e, 10));
   let cur = node;
   for (let i = 0; i < indicies.length; i += 1) {
-    if (!cur.children || indicies[i] >= cur.children.length ) {return null;}
+    if (!cur.children || indicies[i] >= cur.children.length ) {return undefined;}
     cur = cur.children[indicies[i]];
-    if (!cur) {return null;}
+    if (!cur) {return undefined;}
   }
   return cur;
 }
@@ -464,17 +470,20 @@ type FilterPageNodeOptions = {
   attributes?: {
     [Attr in QAPageNodeAttrName]?: QAPageNodeAttribute[Attr] extends (string|undefined) ? (string | RegExp) : QAPageNodeAttribute[Attr]
   },
+  leafOnly?: boolean,
 };
 
 type QAPageNodeAttributeKeys = Array<keyof QAPageNodeAttribute>;
 function _filterPageNode(nodes: QAPageNode[], options: FilterPageNodeOptions, attrKeys: QAPageNodeAttributeKeys, res: QAPageNode[]) {
   const {
-    hasText, hasValue, hasAxId, attributes,
+    hasText, hasValue, hasAxId, attributes, leafOnly,
   } = options;
 
   for (const item of nodes) {
-    const { attributes: attr } = item;
-    let match = !!attr;
+    const { attributes: attr, children } = item;
+    const hasChildren = children && children.length;
+
+    let match = !!attr && (leafOnly ? !hasChildren : true);
 
     if (match && typeof hasText !== 'undefined') {
       match = hasText ? !!attr.text : !attr.text;
@@ -497,11 +506,11 @@ function _filterPageNode(nodes: QAPageNode[], options: FilterPageNodeOptions, at
         break;
       }
     }
-    if (match) {
+    if (match || (!attr && leafOnly && !hasChildren)) {
       res.push(item);
     }
-    if (item.children && item.children.length) {
-      _filterPageNode(item.children, options, attrKeys, res);
+    if (hasChildren) {
+      _filterPageNode(children, options, attrKeys, res);
     }
   }
   return res;
@@ -518,12 +527,91 @@ export function getLocators(attributes: QAPageNodeAttribute) {
   const res = [] as Array<QAPageNodeSelector>;
   for (const [attr, strategy] of STRATEGY_MAPPINGS) {
     const locator = attributes[attr] as string;
-    if (locator && isUniqueAttribute(attr, locator)) {
+    if (locator && _isUniqueAttribute(attr, locator)) {
       res.push({
         strategy,
         locator,
       });
     }
   }
+  return res;
+}
+
+/**
+ * calculate y-axis overlap ratio over min height among two nodes.
+ * @param a 
+ * @param b 
+ * @returns >= 1 means two nodes are overlapped fully,
+ *          > 0 means two nodes are overlapped partially,
+ *          <= 0 means two nodes are not overlapped.
+ */
+function _verticalOverlapRatio(a: QAPageNode, b: QAPageNode) {
+  const { y:ay, height:ah } = a.attributes;
+  const { y:by, height:bh } = b.attributes;
+  return ((ay! + ah!) - by!) / Math.min(ah!, bh!);
+}
+
+/**
+ * calculate x-axis overlap ratio over mean height of two nodes.
+ * @param a 
+ * @param b 
+ * @returns > 0 means two nodes are overlapped partially,
+  *         <= 0 means two nodes are not overlapped.
+ */
+function _horizontalOverlapRatio(a: QAPageNode, b: QAPageNode) {
+  const { x:ax, width:aw, height:ah } = a.attributes;
+  const { x:bx, width:bw, height:bh } = b.attributes;
+  return ((ax! + aw!) - bx!) / ((ah! + bh!) / 2);
+}
+
+type OverlapRatioResult = {
+  node: QAPageNode,
+  verticalOverlap: number,
+  horizontalOverlap: number,
+};
+
+type OverlapRatioOptions = {
+  // line threshold. default is 0.7
+  // 0.7 means that it is considered as one line
+  // when two nodes are overlapped at least 70%
+  lineThreshold: number,
+};
+
+/**
+ * calculate overlap ratio among rectangles of the children of the specified node.
+ * @param node target node
+ * @param options 
+ * @returns calculation result array
+ */
+export function calcOverlapRatio(node: QAPageNode, options?: OverlapRatioOptions) {
+  const { lineThreshold = 0.7 } = options || {};
+  // filter and sort nodes
+  const nodes = filterPageNode(node, { leafOnly: true, attributes: { visible: true } })
+  .sort((a, b) => {
+    const yratio = _verticalOverlapRatio(b, a);
+    if (yratio >= lineThreshold) { // same line
+      return a.attributes.x! - b.attributes.x!;
+    }
+    return a.attributes.y! - b.attributes.y!;
+  });
+  const res: OverlapRatioResult[] = [];
+  
+  let curr = nodes[0];
+  let next = nodes[0];
+  for (let i = 1; i < nodes.length; i++) {
+    next = nodes[i];
+    res.push({
+      verticalOverlap: _verticalOverlapRatio(curr, next),
+      horizontalOverlap: _horizontalOverlapRatio(curr, next),
+      node: curr,
+    });
+    curr = next;
+  }
+  // add last node
+  res.push({
+    verticalOverlap: 0,
+    horizontalOverlap: 0,
+    node: next,
+  });
   return res;
 }

@@ -4,9 +4,9 @@
     <Window visible="true" accessible="false" x="0" y="0" width="390" height="844">
       <Element visible="true" accessible="false" x="0" y="0" width="390" height="844">
         <PickerInput axId="Dropdown picker" value="automate tests" visible="true" accessible="true" x="59" y="315" width="242" height="292">
-          <Element visible="false" accessible="false" x="0" y="0" width="0" height="0"></Element>
-          <Element visible="false" accessible="false" x="0" y="0" width="0" height="0"></Element>
-          <Element visible="false" accessible="false" x="0" y="0" width="0" height="0"></Element>
+          <Element visible="true" accessible="true" x="0" y="0" width="100" height="100"></Element>
+          <Element visible="true" accessible="true" x="0" y="100" width="200" height="200"></Element>
+          <Element visible="true" accessible="true" x="0" y="300" width="300" height="300"></Element>
         </PickerInput>
       </Element>
     </Window>

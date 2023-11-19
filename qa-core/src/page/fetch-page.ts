@@ -14,14 +14,14 @@ type WindowSize = {
   height: number
 };
 
-type CachedData = {
+type CachedPage = {
   src?: string,
   screenshot?: string,
   nodes?: QAPageNode,
   windowRect?: WindowSize,
 };
 
-const _cache = new LRUCache<string, CachedData>({
+const _cache = new LRUCache<string, CachedPage>({
   max: 100, // # of items to be stored
 });
 
@@ -32,7 +32,7 @@ const _cache = new LRUCache<string, CachedData>({
  * @returns 
  */
 export async function fetchPage(key: string, options?: FetchPageOptions) {
-  let page: CachedData | undefined = !options ? _cache.get(key) : undefined;
+  let page: CachedPage | undefined = !options ? _cache.get(key) : undefined;
   if (options) {
     const { sessionId } = options;
     // updates flags for src, screenshot, window rect
@@ -61,7 +61,7 @@ export async function fetchPage(key: string, options?: FetchPageOptions) {
         throw new Error(`No Driver for specified session, ${sessionId}`);
       }
       if (!page) {
-        page = {} as CachedData;
+        page = {} as CachedPage;
       }
       if (updates[0]) {
         page.src = await driver.getPageSource();
@@ -112,7 +112,7 @@ export async function refreshPage(key: string, sessionId: string) {
  * @param key 
  * @param value 
  */
-export function setPageCache(key: string, value: CachedData | undefined) {
+export function setPageCache(key: string, value: CachedPage | undefined) {
   return _cache.set(key, value);
 }
 

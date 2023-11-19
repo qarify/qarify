@@ -35,6 +35,7 @@ The WebDriver Protocol provides several selector strategies to query an element.
 - 아래 샘플은 iOS 상에서 `VoiceOver`가 label, hint 순으로 읽는다.
 - 아래 샘플은 Android 상에서 `TalkBack`이 label, hint 순으로 읽는다.
 - See [here](https://reactnative.dev/docs/accessibility) for details
+- *N.B.*: `appium-xcuitest-driver@5.9.0`에서는 `accessibilityLabel`을 사용할 경우, `axId`는 해당 값으로 바뀌지만, `value` 및 `text` property 값들도 해당 값으로 바뀌는 이슈가 있다. (`appium-uiautomator2-driver`에서는 정상동작) [관련 이슈 #19434](https://github.com/appium/appium/issues/19434)
 
 ```html
 <TouchableOpacity
@@ -47,6 +48,8 @@ The WebDriver Protocol provides several selector strategies to query an element.
   </View>
 </TouchableOpacity>
 ```
+
+
 
 ### Accessibility Support for iOS
 

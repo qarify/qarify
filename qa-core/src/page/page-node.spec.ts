@@ -10,6 +10,7 @@ import {
   PAGE_TAG_MAP,
   parsePageSrc, findPageNode, findPageNodePlatform, findPageWindowSize,
   getOptimalXPath, findPageNodeScrollPosition, getLocators,
+  filterPageNode, calcOverlapRatio,
 } from './page-node.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -111,6 +112,46 @@ describe('page-node on universal *ios*', () => {
     });
   });
 
+  it('filterPageNode()', () => {
+    let node = parsePageSrc(ios_src['00']);
+    // filter nothing
+    let res = filterPageNode(node, {});
+    expect(res.length).toBe(9);
+    // filter sub node
+    res = filterPageNode(findPageNode(node, '0.1')!, {});
+    expect(res.length).toBe(1);
+
+    // filter leafOnly
+    res = filterPageNode(node, { leafOnly: true });
+    expect(res.length).toBe(4);
+
+    // filter hasText
+    res = filterPageNode(node, { hasText: true });
+    expect(res.length).toBe(1);
+    expect(res[0].tagName).toBe('App');
+    res = filterPageNode(node, { hasText: true, leafOnly: true });
+    expect(res.length).toBe(0);
+
+    // filter hasValue
+    res = filterPageNode(node, { hasValue: true });
+    expect(res.length).toBe(1);
+    expect(res[0].tagName).toBe('PickerInput');
+
+    // filter hasAxId
+    res = filterPageNode(node, { hasAxId: true });
+    expect(res.length).toBe(2);
+
+    // filter attr.accessible
+    res = filterPageNode(node, { attributes: { accessible: true } });
+    expect(res.length).toBe(4);
+    res = filterPageNode(node, { leafOnly: true, attributes: { accessible: true } });
+    expect(res.length).toBe(3);
+
+    node = parsePageSrc(ios_src['01']);
+    res = filterPageNode(node, { leafOnly: true, attributes: { accessible: true } });
+    expect(res.length).toBe(3);
+  });
+
   it('findPageNodeScrollPosition()', () => {
     // no scroll values
     let node = parsePageSrc(ios_src['00']);
@@ -131,7 +172,15 @@ describe('page-node on universal *ios*', () => {
       horizontalValue: 0,
       horizontalPages: 1,
     });
-  })
+  });
+
+  it('calcOverlapRatio()', () => {
+    let node = parsePageSrc(ios_src['01']);
+
+    let res = calcOverlapRatio(node);
+    // vertically & horizontally overlapped items
+    expect(res.filter((e) => e.verticalOverlap > 0.7 && e.horizontalOverlap >= 0.25).length).toBe(1);
+  });
 });
 
 describe('page-node on universal *android*', () => {
@@ -178,6 +227,15 @@ describe('page-node on universal *android*', () => {
     expect(findPageNodePlatform(node)).toBe('android');
     expect(findPageWindowSize(node)).toBeDefined();
   });
+
+  it('calcOverlapRatio()', () => {
+    let node = parsePageSrc(android_src['01']);
+
+    let res = calcOverlapRatio(node);
+    // vertically & horizontally overlapped items
+    expect(res.filter((e) => e.verticalOverlap > 0.7 && e.horizontalOverlap >= 0.25).length).toBe(1);
+  });
+
 });
 
 describe.skip('page-node on sample *ios*', () => {
