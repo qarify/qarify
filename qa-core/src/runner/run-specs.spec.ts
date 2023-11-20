@@ -6,15 +6,15 @@ import { runSpecFiles } from './run-specs.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
 import { setGlobalExpect } from '../index.js';
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const _dataDir = path.join(__dirname, '__mock');
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const _dataDir = path.join(FIXTURE_ROOT, 'spec-files');
 
 // N.B.
 // we should test different files for each test 
 // because of the mocha dispose issue
 const allSpecFiles = [
-  './spec-files/1-pass.spec.js',
-  './spec-files/2-fail.spec.js',
+  './runner-spec-files/1-pass.spec.js',
+  './runner-spec-files/2-fail.spec.js',
 ];
 
 describe('run-specs', () => {

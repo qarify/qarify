@@ -10,10 +10,10 @@ import {
   setPageCache,
 } from './fetch-page.js';
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
 
 function _loadPageSrc(platform: 'ios' | 'android', name:string[]) {
-  const filePath = path.join(__dirname, '__mock', platform, ...name);
+  const filePath = path.join(FIXTURE_ROOT, 'page-src', platform, ...name);
   return fs.readFileSync(filePath).toString();
 }
 

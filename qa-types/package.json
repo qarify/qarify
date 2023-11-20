@@ -29,6 +29,7 @@
   },
   "scripts": {
     "test:types": "tsc --skipLibCheck",
+    "test": "echo skip test...",
     "compile": "tsc -b ./tsconfig.build.json ./tsconfig.cjs.json",
     "compile:esm": "tsc -b ./tsconfig.build.json",
     "compile:cjs": "tsc -b ./tsconfig.cjs.json",

@@ -14,14 +14,14 @@ declare global {
   var __qyrunner__: QARunner
 }
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const _dataDir = path.join(__dirname, '__mock');
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const _dataDir = path.join(FIXTURE_ROOT, 'spec-files');
 
 // N.B.
 // we should test different files for each test 
 // because of the mocha dispose issue
 const allSpecFiles = [
-  './spec-files/5-runner.spec.js',
+  './runner-spec-files/5-runner.spec.js',
 ];
 
 describe("runner", () => {

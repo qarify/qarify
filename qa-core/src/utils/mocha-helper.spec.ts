@@ -4,7 +4,8 @@ import Mocha from 'mocha';
 import { expect } from 'expect-webdriverio';
 import { getTestSuiteNode } from "./mocha-helper.js";
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const testFilePath = path.resolve(FIXTURE_ROOT, 'spec-files', 'spec-bdd.js');
 
 describe('spec-info', function() {
   it('should return empty spec node', async function() {
@@ -14,7 +15,7 @@ describe('spec-info', function() {
 
   it('should return valid spec node', async function() {
     const mocha = new Mocha();
-    mocha.addFile(path.resolve(__dirname, '__mock', 'spec-bdd.js'));
+    mocha.addFile(testFilePath);
     await mocha.loadFilesAsync();
 
     const res = getTestSuiteNode(mocha);

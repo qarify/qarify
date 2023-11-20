@@ -13,8 +13,8 @@ declare global {
   var __qaconfig__: QAConfig
 }
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const _baseDir = path.join(__dirname, '__mock');
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const _baseDir = path.join(FIXTURE_ROOT, 'config-files');
 
 describe('load-config', () => {
   it('should load default config', async () => {

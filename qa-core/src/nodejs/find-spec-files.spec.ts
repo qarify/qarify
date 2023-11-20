@@ -3,8 +3,8 @@ import url from 'node:url';
 import { expect } from 'expect-webdriverio';
 import { findSpecFiles } from './find-spec-files.js';
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const _dataDir = path.join(__dirname, '__mock');
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const _dataDir = path.join(FIXTURE_ROOT, 'spec-files');
 
 const allSpecFiles = [
   '1-pass.spec.ts',
@@ -20,16 +20,16 @@ describe('find-spec-files', () => {
     expect(res).toEqual([]);
 
     // empty search result
-    res = findSpecFiles(['./spec-files/*.cjs'], _dataDir);
+    res = findSpecFiles(['./nodejs-spec-files/*.cjs'], _dataDir);
     expect(res).toEqual([]);
 
     // not existing file
-    res = findSpecFiles(['./spec-files/not-existing.spec.js'], _dataDir);
+    res = findSpecFiles(['./nodejs-spec-files/not-existing.spec.js'], _dataDir);
     expect(res).toEqual([]);
   });
 
   it('should return some files', () => {
-    const baseDir = path.join(_dataDir, 'spec-files');
+    const baseDir = path.join(_dataDir, 'nodejs-spec-files');
     const someFiles = allSpecFiles.filter(e => e.endsWith('.ts')).sort();
     const searchResult = someFiles.map((e) => path.join(baseDir, e)).sort();
 
@@ -47,7 +47,7 @@ describe('find-spec-files', () => {
   });
 
   it('should return all files', () => {
-    const baseDir = path.join(_dataDir, 'spec-files');
+    const baseDir = path.join(_dataDir, 'nodejs-spec-files');
     const allFiles = allSpecFiles.sort();
     const searchResult = allFiles.map((e) => path.join(baseDir, e)).sort();
 

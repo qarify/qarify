@@ -47,6 +47,7 @@
     "e2e:init": "node ./bin/qarify.js init --overwrite",
     "e2e:init:clean": "rm -rf ./qa ./.qarify.json",
     "test:types": "tsc --skipLibCheck",
+    "test": "echo skip test...",
     "build": "run-s clean:build compile",
     "compile": "tsc -b ./tsconfig.build.json ./tsconfig.cjs.json",
     "compile:esm": "tsc -b tsconfig.build.json",

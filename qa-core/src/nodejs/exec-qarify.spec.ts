@@ -7,8 +7,8 @@ import { prepareSpecs } from './prepare-specs.js';
 import { execQArify } from './exec-qarify.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const _dataDir = path.join(__dirname, '__mock');
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const _dataDir = path.join(FIXTURE_ROOT, 'spec-files');
 
 describe('exec-qarify', () => {
   before(() => {
@@ -17,7 +17,7 @@ describe('exec-qarify', () => {
 
   it('should run .js spec files', async () => {
     const config = getDefaultQAConfig(_dataDir, {
-      specs: ['./spec-files/*.js'],
+      specs: ['./nodejs-spec-files/*.js'],
     });
 
     const specs = await prepareSpecs(config);
@@ -30,8 +30,8 @@ describe('exec-qarify', () => {
 
   it('should run .ts spec files after build', async () => {
     const config = getDefaultQAConfig(_dataDir, {
-      specs: ['./spec-files/*.ts'],
-      tsconfig: path.join(_dataDir, 'tsconfig.json'),
+      specs: ['./nodejs-spec-files/*.ts'],
+      tsconfig: path.join(_dataDir, 'nodejs-spec-files', 'tsconfig.json'),
       forceBuild: true,
     });
 
@@ -45,8 +45,8 @@ describe('exec-qarify', () => {
 
   it('should run .ts spec files with ts-node', async () => {
     const config = getDefaultQAConfig(_dataDir, {
-      specs: ['./spec-files/*.ts'],
-      tsconfig: path.join(_dataDir, 'tsconfig.json'),
+      specs: ['./nodejs-spec-files/*.ts'],
+      tsconfig: path.join(_dataDir, 'nodejs-spec-files', 'tsconfig.json'),
       nodeOptions: [
         "--no-warnings",
         "--loader=ts-node/esm"
