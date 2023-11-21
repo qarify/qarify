@@ -10,7 +10,7 @@ import {
   PAGE_TAG_MAP,
   parsePageSrc, findPageNode, findPageNodePlatform, findPageWindowSize,
   getOptimalXPath, findPageNodeScrollPosition, getLocators,
-  filterPageNode, calcOverlapRatio, validateLayout,
+  filterPageNode,
 } from './page-node.js';
 
 const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
@@ -25,22 +25,7 @@ function rnpPageSrcFiles(platform: 'ios' | 'android', format: 'universal' | 'ios
   return fs.readdirSync(dir).map((e) => path.join(dir, e));
 }
 
-describe('', () => {
-  const ios_src = {
-    '00': loadPageSrc('ios', ['universal', 'page-source-ios-00.xml']).toString(),
-    '01': loadPageSrc('ios', ['universal', 'page-source-ios-01.xml']).toString(),
-  };
-
-  it('validateLayout()', () => {
-    let node = parsePageSrc(ios_src['01']);
-
-    let res = validateLayout('', node);
-
-  });
-  
-});
-
-describe.skip('page-node on universal *ios*', () => {
+describe('page-node on universal *ios*', () => {
   const ios_src = {
     '00': loadPageSrc('ios', ['universal', 'page-source-ios-00.xml']).toString(),
     '01': loadPageSrc('ios', ['universal', 'page-source-ios-01.xml']).toString(),
@@ -188,17 +173,9 @@ describe.skip('page-node on universal *ios*', () => {
       horizontalPages: 1,
     });
   });
-
-  it('calcOverlapRatio()', () => {
-    let node = parsePageSrc(ios_src['01']);
-
-    let res = calcOverlapRatio(node, { filterAttributes: { visible: true } });
-    // vertically & horizontally overlapped items
-    expect(res.filter((e) => e.verticalOverlap > 0.7 && e.horizontalOverlap >= 0.25).length).toBe(1);
-  });
 });
 
-describe.skip('page-node on universal *android*', () => {
+describe('page-node on universal *android*', () => {
   const android_src = {
     '00': loadPageSrc('android', ['universal', 'page-source-android-00.xml']).toString(),
     '01': loadPageSrc('android', ['universal', 'page-source-android-01.xml']).toString(),
@@ -242,18 +219,9 @@ describe.skip('page-node on universal *android*', () => {
     expect(findPageNodePlatform(node)).toBe('android');
     expect(findPageWindowSize(node)).toBeDefined();
   });
-
-  it('calcOverlapRatio()', () => {
-    let node = parsePageSrc(android_src['01']);
-
-    let res = calcOverlapRatio(node, { filterAttributes: { visible: true } });
-    // vertically & horizontally overlapped items
-    expect(res.filter((e) => e.verticalOverlap > 0.7 && e.horizontalOverlap >= 0.25).length).toBe(1);
-  });
-
 });
 
-describe.skip('page-node on sample *ios*', () => {
+describe('page-node on sample *ios*', () => {
   const ios_src = {
     '00': loadPageSrc('ios', ['sample-ios', 'sample-main-view.xml']).toString(),
     '01': loadPageSrc('ios', ['sample-ios', 'sample-detail-view.xml']).toString(),
@@ -294,7 +262,7 @@ describe.skip('page-node on sample *ios*', () => {
 
 });
 
-describe.skip('page-node on sample *android*', () => {
+describe('page-node on sample *android*', () => {
   const ios_src = {
     '00': loadPageSrc('android', ['sample-android', 'sample-main-view.xml']).toString(),
     '01': loadPageSrc('android', ['sample-android', 'sample-detail-view.xml']).toString(),

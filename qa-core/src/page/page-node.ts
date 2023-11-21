@@ -1,6 +1,9 @@
-import type { QAPageNode, QAPageNodeAttribute, QAPageNodeSelector, PageParserOptions } from '@qarify/types';
+import type {
+  QAPageNode, QAPageNodeAttribute, QAPageNodeSelector, PageParserOptions
+} from '@qarify/types';
 import { DOMParser } from '@xmldom/xmldom';
 import XPath from 'xpath';
+
 import { STRATEGY_MAPPINGS } from '../constants.js';
 import { lengthenNodePath, shortenNodePath } from '../utils/helpers.js';
 
@@ -534,84 +537,5 @@ export function getLocators(attributes: QAPageNodeAttribute) {
       });
     }
   }
-  return res;
-}
-
-/**
- * calculate y-axis overlap ratio over min height among two nodes.
- * @param a 
- * @param b 
- * @returns >= 1 means two nodes are overlapped fully,
- *          > 0 means two nodes are overlapped partially,
- *          <= 0 means two nodes are not overlapped.
- */
-function _verticalOverlapRatio(a: QAPageNode, b: QAPageNode) {
-  const { y:ay, height:ah } = a.attributes;
-  const { y:by, height:bh } = b.attributes;
-  return ((ay! + ah!) - by!) / Math.min(ah!, bh!);
-}
-
-/**
- * calculate x-axis overlap ratio over mean height of two nodes.
- * @param a 
- * @param b 
- * @returns > 0 means two nodes are overlapped partially,
-  *         <= 0 means two nodes are not overlapped.
- */
-function _horizontalOverlapRatio(a: QAPageNode, b: QAPageNode) {
-  const { x:ax, width:aw, height:ah } = a.attributes;
-  const { x:bx, width:bw, height:bh } = b.attributes;
-  return ((ax! + aw!) - bx!) / ((ah! + bh!) / 2);
-}
-
-type OverlapRatioResult = {
-  node: QAPageNode,
-  verticalOverlap: number,
-  horizontalOverlap: number,
-};
-
-type OverlapRatioOptions = {
-  // line threshold. default is 0.7
-  // 0.7 means that it is considered as one line
-  // when two nodes are overlapped at least 70%
-  lineThreshold: number,
-};
-
-/**
- * calculate overlap ratio among rectangles of the children of the specified node.
- * @param node target node
- * @param options 
- * @returns calculation result array
- */
-export function calcOverlapRatio(node: QAPageNode, options?: OverlapRatioOptions) {
-  const { lineThreshold = 0.7 } = options || {};
-  // filter and sort nodes
-  const nodes = filterPageNode(node, { leafOnly: true, attributes: { visible: true } })
-  .sort((a, b) => {
-    const yratio = _verticalOverlapRatio(b, a);
-    if (yratio >= lineThreshold) { // same line
-      return a.attributes.x! - b.attributes.x!;
-    }
-    return a.attributes.y! - b.attributes.y!;
-  });
-  const res: OverlapRatioResult[] = [];
-  
-  let curr = nodes[0];
-  let next = nodes[0];
-  for (let i = 1; i < nodes.length; i++) {
-    next = nodes[i];
-    res.push({
-      verticalOverlap: _verticalOverlapRatio(curr, next),
-      horizontalOverlap: _horizontalOverlapRatio(curr, next),
-      node: curr,
-    });
-    curr = next;
-  }
-  // add last node
-  res.push({
-    verticalOverlap: 0,
-    horizontalOverlap: 0,
-    node: next,
-  });
   return res;
 }
