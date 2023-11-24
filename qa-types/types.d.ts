@@ -209,6 +209,9 @@ export type QAPageNodeAttribute = {
   'resource-id'?: string;
   'class'?: string;
   rntestid?: string;
+  displayed?: string;
+  checked?: string;
+  selected?: string;
 };
 
 export type QAPageNode = {

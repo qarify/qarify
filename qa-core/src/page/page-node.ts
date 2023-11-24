@@ -16,10 +16,7 @@ let _pageSrcFormat: PageSrcFormat = 'universal';
 export const getPageSrcFormat = () => _pageSrcFormat;
 
 // Attributes on nodes that we know are unique to the node
-const UNIQUE_XPATH_ATTRIBUTES = ['axId', 'accessibility-id', 'name', 'id', 'content-desc'];
-
-type PageSrcFormat = 'universal' | 'ios' | 'android'; //typeof PAGE_SRC_FORMAT[number];
-const PAGE_SRC_FORMAT: Array<PageSrcFormat> = ['universal', 'ios', 'android'];
+const UNIQUE_XPATH_ATTRIBUTES = ['axId', 'name', 'id', 'accessibility-id', 'content-desc'];
 
 type CastFunc<T=any> = (value: string) => T;
 const _toInt = (value: string) => value ? parseInt(value, 10) : 0;
@@ -56,8 +53,6 @@ const PROPS_MAP: PropsMap = {
     'id': ['id', _toString],
   },
   'ios': {
-    'name': ['axId', _toString],
-    'label': ['axId', _toString],
     'visible': ['visible', _toBoolean],
     'enabled': ['enabled', _toBoolean],
     'accessible': ['accessible', _toBoolean],
@@ -66,11 +61,14 @@ const PROPS_MAP: PropsMap = {
     'width': ['width', _toInt],
     'height': ['height', _toInt],
     'value': ['value', _toString],
+    'name': ['name', _toString],
+    'label': ['label', _toString],
   },
   'android': {
-    'displayed': ['visible', _toBoolean],
+    'displayed': ['displayed', _toString],
     'enabled': ['enabled', _toBoolean],
-    'checked': ['value', _toBoolean],
+    'checked': ['checked', _toString],
+    'selected': ['selected', _toString],
     // 'bounds': using parser
     'text': ['text', _toString],
     'x': ['x', _toInt],
@@ -79,6 +77,9 @@ const PROPS_MAP: PropsMap = {
     'height': ['height', _toInt],
   },
 };
+
+type PageSrcFormat = 'universal' | 'ios' | 'android'; //typeof PAGE_SRC_FORMAT[number];
+const PAGE_SRC_FORMAT: Array<PageSrcFormat> = ['universal', 'ios', 'android'];
 
 export const PAGE_TAG_MAP: { [format in PageSrcFormat]: Record<string,string> } = {
   'universal': {
@@ -399,14 +400,13 @@ export function findPageNodePlatform(rootNode: QAPageNode) {
 }
 
 export function findPageWindowSize(rootNode: QAPageNode): { width: number, height: number } | undefined {
-  if (isValidRootNode(rootNode)) {
-    if ('width' in rootNode.attributes && 'height' in rootNode.attributes) {
-      // android(universal) has width and height in the root node
-      return {
-        width: rootNode.attributes.width!,
-        height: rootNode.attributes.height!,
-      };
-    }
+  if ('attributes' in rootNode && 'width' in rootNode.attributes && 'height' in rootNode.attributes) {
+    // android(universal) has width and height in the root node
+    return {
+      width: rootNode.attributes.width!,
+      height: rootNode.attributes.height!,
+    };
+  } else if ('children' in rootNode && rootNode.children) {
     const tagName = rootNode.children[0].tagName;
     if (tagName === PAGE_TAG_MAP[_pageSrcFormat]['App'] && rootNode.children[0].attributes.width && rootNode.children[0].attributes.height) {
       // ios(its universal) has width and height in the 'App' node
@@ -417,7 +417,7 @@ export function findPageWindowSize(rootNode: QAPageNode): { width: number, heigh
       };
     }
   }
-  return undefined;
+  return { width: 0, height: 0 };
 }
 
 export function findPageNodeScrollPosition(node: QAPageNode): { verticalValue: number, verticalPages: number, horizontalValue: number, horizontalPages: number } {
@@ -466,7 +466,7 @@ export function _childNodesOf(xmlNode: Document | HTMLElement | Element): Elemen
   return result as Element[];
 };
 
-type FilterPageNodeOptions = {
+export type FilterPageNodeOptions = {
   hasText?: boolean,
   hasValue?: boolean,
   hasAxId?: boolean,

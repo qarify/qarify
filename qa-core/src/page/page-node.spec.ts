@@ -301,8 +301,9 @@ describe('page-node on sample *android*', () => {
       package:"com.greenlite.androidsample",
       'class':"android.widget.FrameLayout",
       text:"",
+      displayed: "true",
       checkable:"false",
-      value:false, //checked="false"
+      checked: "false",
       clickable:"false",
       enabled:true,
       focusable:"false",
@@ -313,7 +314,6 @@ describe('page-node on sample *android*', () => {
       selected:"false",
       bounds:"[0,0][1080,1857]",
       x: 0, y: 0, width: 1080, height: 1857,
-      visible: true, //displayed:"true"
       accessible: false,
     });
 
