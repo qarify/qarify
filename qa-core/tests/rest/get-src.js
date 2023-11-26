@@ -1,8 +1,10 @@
-// const http = require('node:http');
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import * as url from 'url';
+
+import * as qarify from '@qarify/core';
+import { parseAndVizSource } from './visualize-page-node.js';
 
 console.log('>>> Get page source via appium request.');
 
@@ -14,8 +16,8 @@ const CAPs = {
       "alwaysMatch": {
         "platformName": "iOS",
         "appium:automationName": "XCUITest",
-        "appium:deviceName": "iPhone 14",
-        "appium:platformVersion": "16.4",
+        "appium:deviceName": "iPhone 15 Pro",
+        "appium:platformVersion": "17.0",
         "appium:orientation": "PORTRAIT"
       }
     }
@@ -37,82 +39,66 @@ const capForNewSession = CAPs['ios']
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const OUTDIR = path.join(__dirname, 'output');
 
-
-const startTime = Date.now();
-
 // get session id
-http.get(GET_SESSIONS_URL, (res) => {
-  let rawData = [];
-  if (res.statusCode !== 200) {
-    console.log('!!! Error Status Code:', res.statusCode);
-    console.error(res);
-    return;
-  }
-
-  res.on('data', chunk => {
-    rawData.push(chunk);
-  });
-
-  res.on('end', async () => {
-    const data = JSON.parse(Buffer.concat(rawData).toString());
-    const sessions = [];
-    let deleteSession = false;
-    if (!data.value.length) {
-      if (capForNewSession) {
-        try {
-          const session = await newSession(capForNewSession)
-          sessions.push({ id: session.value.sessionId, platformName: session.value.capabilities.platformName })
-          deleteSession = true;
-        } catch (e) {
-          console.error('!!! Error on newSession:', e);
-        }
+function getSessions() {
+  return new Promise((resolve, reject) => {
+    http.get(GET_SESSIONS_URL, (res) => {
+      let rawData = [];
+      if (res.statusCode !== 200) {
+        console.log('!!! Error Status Code:', res.statusCode);
+        console.error(res);
+        reject(res);
       }
-    } else {
-      data.value.forEach(
-        (e) => sessions.push({ id: e.id, platformName: e.capabilities.platformName })
-      )
-    }
-    if (sessions.length) {
-      console.log('>>> response sessions:', sessions);
-      for (const session of sessions) {
-        try {
-          await getPageSource(session.id);
-          break; // exit when no error
-        }
-        catch (e) {
-          console.error(e);
-          // close errored session
-          deleteSession = true;
-          console.log('>>> try to remove errored session');
-        }
-        finally {
-          if (deleteSession) {
-            console.log('>>> close session');
+
+      res.on('data', chunk => {
+        rawData.push(chunk);
+      });
+
+      res.on('end', async () => {
+        const data = JSON.parse(Buffer.concat(rawData).toString());
+        const sessions = [];
+        if (!data.value.length) {
+          if (capForNewSession) {
             try {
-              await closeSession(session.id);
-            } catch {/* ignore */}
+              const session = await newSession(capForNewSession)
+              sessions.push({
+                id: session.value.sessionId, platformName: session.value.capabilities.platformName, isCreatedSession: true
+              });
+            } catch (e) {
+              console.error('!!! Error on newSession:', e);
+              reject(e);
+            }
           }
+        } else {
+          data.value.forEach(
+            (e) => sessions.push({ id: e.id, platformName: e.capabilities.platformName })
+          );
         }
-      }
-    } else {
-      console.error('Error: no sessions');
-      console.log(data.value);
-    }
-    // TOFIX: should call exit?
-    process.exit(0);
+        if (sessions.length) {
+          console.log('>>> response sessions:', sessions);
+          resolve(sessions);
+        } else {
+          console.error('Error: no sessions');
+          console.log(data.value);
+          reject(new Error('no sessions'));
+        }
+      });
+    }).on('error', err => {
+      console.log('Error: ', err.message);
+      reject(err);
+    });
   });
-}).on('error', err => {
-  console.log('Error: ', err.message);
-});
+}
 
-function getPageSource(sessionId) {
+function getPageSource(sessionId, srcPath=undefined) {
   return new Promise((resolve, reject) => {
     const URL = `http://127.0.0.1:4723/session/${sessionId}/source`;
     http.get(URL, res => {
       let rawData = [];
       if (res.statusCode !== 200) {
         console.log('!!! get-page-source(): Error Status Code:', res.statusCode, res.statusMessage);
-        reject(`${res.statusCode}:${res.statusMessage}`);
+        console.error(`${res.statusCode}:${res.statusMessage}`);
+        reject(res);
       }
 
       res.on('data', chunk => {
@@ -122,19 +108,14 @@ function getPageSource(sessionId) {
       res.on('end', () => {
         if (res.statusCode === 200) {
           const data = JSON.parse(Buffer.concat(rawData).toString());
-          // console.log('>>> data.value:');
-          // console.log(data.value);
-          (!fs.existsSync(OUTDIR)) && fs.mkdirSync(OUTDIR);
-          const filePath = path.join(OUTDIR, `${sessionId}.xml`);
-          fs.writeFileSync(filePath, data.value);
-          console.log('>>> Done: save to', filePath);
-          console.log('>>> Elapsed:', `${((Date.now() - startTime) / 1000)}s`);
-          resolve();
+          if (srcPath) {
+            fs.writeFileSync(srcPath, data.value);
+          }
+          resolve(data.value);
         } else {
           console.log('!!!', Buffer.concat(rawData).toString());
         }
       });
-
     })
     .end()
     .on('error', err => {
@@ -178,3 +159,48 @@ async function newSession(cap) {
     throw e;
   }
 }
+
+function main() {
+  const startTime = Date.now();
+  getSessions().then(async (sessions) => {
+    let pageSrc = undefined;
+    let sessionId = undefined;
+    for (const session of sessions) {
+      let deleteSession = !!session.isCreatedSession;
+      sessionId = session.id;
+      try {
+        // const srcPath = path.join(OUTDIR, `${sessionId}.xml`);
+        const srcPath = path.join(OUTDIR, `out.xml`);
+        pageSrc = await getPageSource(sessionId, srcPath);
+        break; // exit when no error
+      }
+      catch (e) {
+        console.error(e);
+        // close errored session
+        deleteSession = true;
+        console.log('>>> try to remove errored session');
+      }
+      finally {
+        if (deleteSession) {
+          console.log('>>> close session');
+          try {
+            await closeSession(sessionId);
+          } catch {/* ignore */}
+        }
+      }
+    }
+    if (pageSrc) {
+      console.log('>>> got page source: Elapsed:', `${((Date.now() - startTime) / 1000)}s`);
+      await parseAndVizSource(pageSrc);
+    }
+
+    // TOFIX: should call exit?
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
+
+main();

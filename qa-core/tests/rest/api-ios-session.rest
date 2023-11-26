@@ -21,8 +21,8 @@ content-type: application/json
     "alwaysMatch": {
       "platformName": "iOS",
       "appium:automationName": "XCUITest",
-      "appium:deviceName": "iPhone 14",
-      "appium:platformVersion": "16.4",
+      "appium:deviceName": "iPhone 15 Pro",
+      "appium:platformVersion": "17.0",
       "appium:orientation": "PORTRAIT"
     }
   }
@@ -59,6 +59,16 @@ POST {{BASE_URL}}/session/{{ios_session_id}}/execute/sync
 ###
 
 #
+# launch app with url
+#
+POST {{BASE_URL}}/session/{{ios_session_id}}/url
+
+{
+  "url":"wdiosampleapprn://webview"
+}
+###
+
+#
 # launch app with bundle id
 #
 POST {{BASE_URL}}/session/{{ios_session_id}}/execute/sync
@@ -88,4 +98,20 @@ POST {{BASE_URL}}/session/{{ios_session_id}}/execute/sync
 # delete session
 #
 DELETE {{BASE_URL}}/session/{{ios_session_id}}
+###
+
+#
+# get contexts
+#
+GET {{BASE_URL}}/session/{{ios_session_id}}/contexts
+###
+
+#
+# set contexts
+#
+POST {{BASE_URL}}/session/{{ios_session_id}}/context
+
+{
+  "name":"WEBVIEW_APP"
+}
 ###
