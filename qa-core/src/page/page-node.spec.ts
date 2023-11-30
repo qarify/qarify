@@ -298,12 +298,12 @@ describe('page-node on sample *android*', () => {
     expect(res.tagName).toBe(PAGE_TAG_MAP['android']['App']);
     expect(res.attributes).toEqual({
       index:"0",
-      package:"com.greenlite.androidsample",
       'class':"android.widget.FrameLayout",
       text:"",
-      displayed: "true",
+      displayed:"true",
+      visible: true,
       checkable:"false",
-      checked: "false",
+      checked:"false",
       clickable:"false",
       enabled:true,
       focusable:"false",
@@ -314,7 +314,6 @@ describe('page-node on sample *android*', () => {
       selected:"false",
       bounds:"[0,0][1080,1857]",
       x: 0, y: 0, width: 1080, height: 1857,
-      accessible: false,
     });
 
     expect(findPageNodePlatform(node)).toBe('android');

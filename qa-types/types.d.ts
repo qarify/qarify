@@ -183,35 +183,41 @@ export type QARunner = QAConfig & {
 };
 
 export type QAPageNodeAttribute = {
-  visible?: boolean;     // boolean
-  enabled?: boolean;     // boolean
-  accessible?: boolean;  // boolean
-  x?: number;           // number
-  y?: number;           // number
-  width?: number;       // number
-  height?: number;      // number
-  axId?: string;
-  text?: string;
-  id?: string;
-  value?: string;
-  label?: string;       // legacy but used
+  visible?: boolean;      // ios, universal(android['displayed'])
+  enabled?: boolean;      // ALL
+  x?: number;             // ios, universal(android['bounds'])
+  y?: number;             // ios, universal(android['bounds'])
+  width?: number;         // ios, android, universal(android['bounds'])
+  height?: number;        // ios, android, universal(android['bounds'])
 
-  //
-  // Legacy props
-  //
-  name?: string;
+  axId?: string;          // universal
+  text?: string;          // ALL
+  id?: string;            // universal(android['resource-id'])
+
+  type?: string;          // ios, e.g. XCUIElementTypeOther
+  name?: string;          // ios
+  accessible?: boolean;    // ios, universal
+  label?: string;         // ios
+  value?: string;         // ios, universal
+
+  displayed?: string;       // android
+  package?: string;         // andorid
+  'class'?: string;         // android
+  checkable?: string;       // android
+  checked?: string;         // android
+  clickable?: string;       // android
+  focusable?: string;       // android
+  focused?: string;         // android
+  'long-clickable'?: string;// android
+  password?: string;        // android
+  scrollable?: string;      // android
+  selected?: string;        // android
   // e.g. [x1,y1,x2,y2]
-  bounds?: string;
-  type?: string;
-  index?: string;
-  'content-desc'?: string;
-  rntestid?: string;
-  'resource-id'?: string;
-  'class'?: string;
-  rntestid?: string;
-  displayed?: string;
-  checked?: string;
-  selected?: string;
+  bounds?: string;          // android
+  'content-desc'?: string;  // android
+  'resource-id'?: string;   // android
+
+  index?: string;           // ALL
 };
 
 export type QAPageNode = {

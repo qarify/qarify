@@ -33,11 +33,13 @@ type PropsMap = {
     [name in PageSrcProps[format][number]]: [QAPageNodeAttrName, CastFunc]
   }
 };
+type IgnoreAttrs = {
+  [format in PageSrcFormat]?: Array<string>
+};
 
 // type UniversalFormatProps = keyof PropMap['universal'];
 // type IosFormatProps = keyof PropMap['ios'];
 // type AndroidFormatProps = keyof PropMap['android'];
-
 const PROPS_MAP: PropsMap = {
   'universal': {
     'visible': ['visible', _toBoolean],
@@ -51,6 +53,7 @@ const PROPS_MAP: PropsMap = {
     'axId': ['axId', _toString],
     'text': ['text', _toString],
     'id': ['id', _toString],
+    'index': ['index', _toString],
   },
   'ios': {
     'visible': ['visible', _toBoolean],
@@ -60,22 +63,40 @@ const PROPS_MAP: PropsMap = {
     'y': ['y', _toInt],
     'width': ['width', _toInt],
     'height': ['height', _toInt],
-    'value': ['value', _toString],
+    'type': ['type', _toString],
     'name': ['name', _toString],
     'label': ['label', _toString],
+    'value': ['value', _toString],
+    'index': ['index', _toString],
   },
   'android': {
     'displayed': ['displayed', _toString],
     'enabled': ['enabled', _toBoolean],
-    'checked': ['checked', _toString],
-    'selected': ['selected', _toString],
-    // 'bounds': using parser
-    'text': ['text', _toString],
-    'x': ['x', _toInt],
-    'y': ['y', _toInt],
     'width': ['width', _toInt],
     'height': ['height', _toInt],
+    'text': ['text', _toString],
+    'selected': ['selected', _toString],
+    // 'package': ['package', _toString],
+    'class': ['class', _toString],
+    'checkable': ['checkable', _toString],
+    'checked': ['checked', _toString],
+    'clickable': ['clickable', _toString],
+    'focusable': ['focusable', _toString],
+    'focused': ['focused', _toString],
+    'long-clickable': ['long-clickable', _toString],
+    'password': ['password', _toString],
+    'scrollable': ['scrollable', _toString],
+    // 'bounds': parsed into x, y, width, hegiht
+    'bounds': ['bounds', _toString],
+    'content-desc': ['content-desc', _toString],
+    'resource-id': ['resource-id', _toString],
+    'index': ['index', _toString],
   },
+};
+
+const IGNORE_ATTRS: IgnoreAttrs = {
+  'android': ['rotation', 'hint', 'package'],
+  'universal': ['hint'],
 };
 
 type PageSrcFormat = 'universal' | 'ios' | 'android'; //typeof PAGE_SRC_FORMAT[number];
@@ -218,6 +239,7 @@ function _translateRecursively (xmlNode: Element, options: PageParserOptions = {
 
   // attributes
   const nodeAttrs = {} as QAPageNodeAttribute;
+  const ignoreAttrs = IGNORE_ATTRS[_pageSrcFormat];
   for (let attrIdx = 0; attrIdx < attributes.length; attrIdx += 1) {
     const attr = attributes.item(attrIdx);
     if (attr) {
@@ -226,14 +248,19 @@ function _translateRecursively (xmlNode: Element, options: PageParserOptions = {
       if (caster) {
         nodeAttrs[caster[0]] = caster[1](attr.value)
       } else {
-        // @ts-ignore
-        nodeAttrs[name] = attr.value;
+        if (!ignoreAttrs || ignoreAttrs.indexOf(name) < 0) {
+          // @ts-ignore
+          nodeAttrs[name] = attr.value;
+          console.log(`*** unhandled attributes: ${name} on ${_pageSrcFormat}`);
+        }
       }
     }
   }
   if (_pageSrcFormat === 'android') {
     // android has no 'accessible' attribute.
-    nodeAttrs['accessible'] = _isAccessible(tagName, nodeAttrs);
+    // nodeAttrs['accessible'] = _isAccessible(tagName, nodeAttrs);
+
+    // bounds to x, y, width, height
     if (nodeAttrs['bounds']) {
       // '[left,top],[right,bottom]'
       const vals = nodeAttrs['bounds'].split('[');
@@ -251,8 +278,12 @@ function _translateRecursively (xmlNode: Element, options: PageParserOptions = {
         nodeAttrs.x = nodeAttrs.y = nodeAttrs.width = nodeAttrs.height = 0;
       }
     }
+    // displayed to visible
+    if (nodeAttrs['displayed']) {
+      // TOFIX: check the x, y position
+      nodeAttrs.visible = _toBoolean(nodeAttrs['displayed']);
+    }
   }
-  // 'label' is legacy prop but use it with 'text'
   const path = index === undefined ? '' : `${!parentPath ? '' : `${parentPath}.`}${index}`;
   const { xpath, title } = options;
 
