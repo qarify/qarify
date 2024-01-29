@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "test:types": "npm run -ws test:types",
-    "test": "npm run -ws test",
+    "test": "npm test -ws",
     "build": "npm run -ws build",
-    "e2e": "npm run -ws e2e",
+    "e2e": "npm run -ws e2e --if-present",
     "compile": "npm run -ws compile",
     "compile:browser": "npm run -ws compile:browser",
     "clean": "npm run -ws clean:build",

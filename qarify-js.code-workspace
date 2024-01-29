@@ -4,6 +4,30 @@
       "name": "root",
       "path": "."
     },
+    {
+      "path": "./qa-cli"
+    },
+    {
+      "path": "./qa-drivers"
+    },
+    {
+      "path": "./qa-globals"
+    },
+    {
+      "path": "./qa-logger"
+    },
+    {
+      "path": "./qa-pages"
+    },
+    {
+      "path": "./qa-runtime-env"
+    },
+    {
+      "path": "./qa-types"
+    },
+    {
+      "path": "../drivers"
+    }
   ],
   "settings": {
     "markdownlint.config": {

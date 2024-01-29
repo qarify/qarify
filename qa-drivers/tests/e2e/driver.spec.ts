@@ -1,7 +1,7 @@
 import { expect } from 'expect-webdriverio';
 import type { QADriver } from '@qarify/types';
 
-import { makeSession, closeSession, getDriver } from "../../src/index.js";
+import { makeSession, closeSession, getDriver } from "@qarify/drivers";
 
 export const localIosDriver: QADriver = {
   id: 'local-server',
@@ -13,8 +13,8 @@ export const localIosDriver: QADriver = {
   capabilities: {
     "platformName": "iOS",
     "appium:automationName": "XCUITest",
-    "appium:deviceName": "iPhone 14",
-    "appium:platformVersion": "16.4",
+    "appium:deviceName": "iPhone 15 Pro",
+    "appium:platformVersion": "17.0",
     "appium:orientation": "PORTRAIT",
   },
   ignore: [],
@@ -58,7 +58,7 @@ describe("driver", () => {
     expect(driver).toBeUndefined();
   });
 
-  it.skip("should make an android session", async function() {
+  it("should make an android session", async function() {
     this.timeout(10000); // 10s
 
     // make a session

@@ -17,9 +17,7 @@
     ]
   },
   "scripts": {
-    "test:file": "mocha src/page/parse-page-src.spec.ts",
-    "e2e": "mocha ./tests/e2e/**/*.spec.ts",
-    "e2e:file": "mocha ./tests/e2e/page.spec.ts",
+    "test:file": "mocha src/parse-page-src.spec.ts",
     "test": "mocha src/**/*.spec.ts",
     "test:types": "tsc --skipLibCheck",
     "compile": "tsc -b ./tsconfig.build.json ./tsconfig.cjs.json",
@@ -27,10 +25,7 @@
     "compile:cjs": "tsc -b ./tsconfig.cjs.json",
     "compile:browser": "vite build --emptyOutDir --force",
     "clean:build": "rimraf dist",
-    "build": "run-s clean:build compile",
-    "patch:gen": "node ./scripts/patch-gen.js @wdio/logger ./patches/browser-env",
-    "patch:apply": "node ./scripts/patch-apply.js ./patches/node-env",
-    "patch:vsce": "sh scripts/patch-vsce.sh"
+    "build": "run-s clean:build compile"
   },
   "dependencies": {
     "@qarify/drivers": "0.9.0",

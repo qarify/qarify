@@ -8,7 +8,7 @@ Vision-based Test Automation Service
 ### [qarify](./qa-cli/)
 - CLI for qarify
 
-### [@qarify/core](./qa-core/)
+### [@qarify/runtime-env](./qa-runtime-env/)
 - load config file(.qarify)
 - manage driver sessions
 - run spec files

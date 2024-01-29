@@ -24,7 +24,7 @@ export function updateConfigWithRunnerOptions(
   if (driverOption && driverOption.length) {
     // filter qaconfig.drivers with options.drivers
     if (drivers && drivers.length) {
-      _drivers.push(...drivers.filter((e) => driverOption.find((n) => n === e.id)));
+      _drivers.push(...drivers.filter((e) => driverOption.find((n) => n === e.name)));
     }
   } else {
     // options.drivers is not specified.
@@ -170,13 +170,13 @@ export function validateConfigValues(config: QAConfig) {
   }
   if (config.drivers && config.drivers.length) {
     for (const d of config.drivers) {
-      if (!d.id) {
-        throw new Error(`invalid driver id`);
+      if (!d.name) {
+        throw new Error(`invalid driver name`);
       }
     }
-    const uniqueSet = new Set(config.drivers.map((e) => e.id));
+    const uniqueSet = new Set(config.drivers.map((e) => e.name));
     if (uniqueSet.size !== config.drivers.length) {
-      throw new Error('duplicated driver id');
+      throw new Error('duplicated driver name');
     }
   }
   return true;

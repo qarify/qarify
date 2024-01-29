@@ -1,4 +1,4 @@
-import { _getGlobal, GLOBAL_RUNNER } from "@qarify/core";
+import { _getGlobal, GLOBAL_RUNNER } from "@qarify/runtime-env";
 
 test('global variables should be defined', () => {
   expect(driver).toBeDefined();

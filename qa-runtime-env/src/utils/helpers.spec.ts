@@ -14,8 +14,8 @@ describe('utils/helpers', function() {
 
   it('updateConfigWithRunOptions should update config', async function() {
     const _drivers: QADriver[] = [
-      { id: '1', name: '1', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
-      { id: '2', name: '2', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
+      { name: '1', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
+      { name: '2', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
     ];
     const config = getDefaultQAConfig('.', { drivers: [] });
     const runnerId = 'test';
@@ -124,14 +124,14 @@ describe('utils/helpers', function() {
 
     // drivers
     // @ts-ignore
-    config.drivers = [ { name: '' } ];
-    expect(() => validateConfigValues(config)).toThrow(/invalid driver id/);
+    config.drivers = [ { } ];
+    expect(() => validateConfigValues(config)).toThrow(/invalid driver name/);
     // @ts-ignore
-    config.drivers = [ { id: '1' }, { id: '1' } ];
-    expect(() => validateConfigValues(config)).toThrow(/duplicated driver id/);
+    config.drivers = [ { name: '1' }, { name: '1' } ];
+    expect(() => validateConfigValues(config)).toThrow(/duplicated driver name/);
 
     // @ts-ignore
-    config.drivers = [ { id: '1' }, { id: '2' } ];
+    config.drivers = [ { name: '1' }, { name: '2' } ];
     expect(validateConfigValues(config)).toBe(true);
   });
 

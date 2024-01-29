@@ -46,9 +46,6 @@ export type QADriverSession = Omit<AttachOptions, 'capabilities'> & {
 };
 
 export type QADriver = {
-  // driver id
-  // it should be unique value within config scope.
-  id: string;
   name: string;
   protocol: "http" | "https";
   hostname: string;
@@ -88,7 +85,7 @@ export type QARunnerOptions = {
   // runner id
   runnerId: string;
 
-  // array of driver id to be used to run specs
+  // array of driver name to be used to run specs
   // it must be one of qaconfig.drivers
   // if not specified, use all qaconfig.drivers
   drivers?: string[];
