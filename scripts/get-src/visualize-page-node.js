@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import { createCanvas } from "canvas";
-import { parsePageSrc, findPageWindowSize, getPageLayout } from '@qarify/pages';
+import { parsePageSrc, findPageWindowSize } from '@qarify/pages';
+import { getPageLayout } from '@qarify/runtime-env';
+
 import * as url from 'url';
 
 /**@typedef {import('@qarify/types').QAPageNode} QAPageNode */
-
 
 /**
  * 

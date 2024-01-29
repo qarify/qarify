@@ -49,7 +49,7 @@ const CAPs = {
 }
 const capForNewSession = CAPs['android'];
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const __dirname = url.fileURLToPath(new URL('../..', import.meta.url));
 const OUTDIR = path.join(__dirname, '.output');
 const OUTFILE_PREFIX = 'demoapp-drag-congratulations';
 
@@ -155,6 +155,11 @@ function closeSession(sessionId) {
   });
 }
 
+/**
+ * create a new session
+ * @param {any} cap 
+ * @returns 
+ */
 async function newSession(cap) {
   try {
     const response = await fetch(NEW_SESSION_URL, {
@@ -168,7 +173,7 @@ async function newSession(cap) {
     if (!response.ok) {
       throw new Error(`${response.statusText}(${response.status})`);
     }
-    return await response.json();
+    return await /**@type {Promise<{ value: any }>}*/(response.json());
   } catch (e) {
     throw e;
   }

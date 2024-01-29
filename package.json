@@ -1,5 +1,6 @@
 {
   "name": "qarify-js-root",
+  "type": "module",
   "private": true,
   "scripts": {
     "test:types": "npm run -ws test:types",
@@ -9,6 +10,7 @@
     "compile": "npm run -ws compile",
     "compile:browser": "npm run -ws compile:browser",
     "clean": "npm run -ws clean:build",
+    "get-src": "node scripts/get-src/get-src.js",
     "setup": "npm run link:deps && bash scripts/setup.sh",
     "setup:full": "npm run setup ibl",
     "link:deps": "npm link @wdio/config @wdio/logger @wdio/protocols @wdio/types @wdio/utils webdriver webdriverio expect-webdriverio",
@@ -19,6 +21,7 @@
   "devDependencies": {
     "@types/mocha": "~10.0.1",
     "@types/node": "^20.4.8",
+    "canvas": "^2.11.2",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
     "expect-webdriverio": "4.9.3",

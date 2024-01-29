@@ -279,3 +279,4 @@ esbuild.json
 # misc.
 /tmp
 .qycache
+.output
