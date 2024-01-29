@@ -1,7 +1,7 @@
 {
-  "name": "@qarify/logger",
+  "name": "@qarify/pages",
   "version": "0.9.0",
-  "description": "QArify Logger",
+  "description": "QArify Pages",
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -17,20 +17,31 @@
     ]
   },
   "scripts": {
-    "test": "mocha ./src/**/*.spec.ts",
+    "test:file": "mocha src/page/parse-page-src.spec.ts",
+    "e2e": "mocha ./tests/e2e/**/*.spec.ts",
+    "e2e:file": "mocha ./tests/e2e/page.spec.ts",
+    "test": "mocha src/**/*.spec.ts",
     "test:types": "tsc --skipLibCheck",
     "compile": "tsc -b ./tsconfig.build.json ./tsconfig.cjs.json",
     "compile:esm": "tsc -b ./tsconfig.build.json",
     "compile:cjs": "tsc -b ./tsconfig.cjs.json",
+    "compile:browser": "vite build --emptyOutDir --force",
     "clean:build": "rimraf dist",
-    "build": "run-s clean:build compile"
+    "build": "run-s clean:build compile",
+    "patch:gen": "node ./scripts/patch-gen.js @wdio/logger ./patches/browser-env",
+    "patch:apply": "node ./scripts/patch-apply.js ./patches/node-env",
+    "patch:vsce": "sh scripts/patch-vsce.sh"
   },
   "dependencies": {
+    "@qarify/drivers": "0.9.0",
+    "@qarify/globals": "0.9.0",
+    "@qarify/logger": "0.9.0",
     "@qarify/types": "0.9.0",
-    "debug": "~4.3.4"
+    "@xmldom/xmldom": "~0.8.10",
+    "lru-cache": "~10.0.2",
+    "xpath": "^0.0.33"
   },
   "devDependencies": {
-    "@types/debug": "~4.1.12"
   },
   "license": "MIT",
   "keywords": [

@@ -1,0 +1,80 @@
+import { expect } from 'expect-webdriverio';
+import type { QADriver } from '@qarify/types';
+
+import { makeSession, closeSession, getDriver } from "../../src/index.js";
+
+export const localIosDriver: QADriver = {
+  id: 'local-server',
+  name: "Local Server",
+  protocol: "http",
+  hostname: "127.0.0.1",
+  port: 4723,
+  path: "/",
+  capabilities: {
+    "platformName": "iOS",
+    "appium:automationName": "XCUITest",
+    "appium:deviceName": "iPhone 14",
+    "appium:platformVersion": "16.4",
+    "appium:orientation": "PORTRAIT",
+  },
+  ignore: [],
+};
+
+export const localAndroidDriver: QADriver = {
+  id: 'local-server',
+  name: "Local Server",
+  protocol: "http",
+  hostname: "127.0.0.1",
+  port: 4723,
+  path: "/",
+  capabilities: {
+    "platformName": "android",
+    "appium:automationName": "UiAutomator2",
+    "appium:avd": "Pixel_API_33",
+    "appium:platformVersion": "13.0",
+    "appium:orientation": "PORTRAIT"
+  },
+  ignore: [],
+};
+
+describe("driver", () => {
+  it("should make an ios session", async function() {
+    this.timeout(10000); // 10s
+
+    // make a session
+    const res = await makeSession(localIosDriver);
+    expect(res).toBeDefined();
+
+    // get driver instance
+    let driver = getDriver(res.sessionId);
+    expect(driver).toBeDefined();
+
+    // close session
+    const closed = await closeSession(res.sessionId);
+    expect(closed).toBe(true);
+
+    // check the closed session
+    driver = getDriver(res.sessionId);
+    expect(driver).toBeUndefined();
+  });
+
+  it.skip("should make an android session", async function() {
+    this.timeout(10000); // 10s
+
+    // make a session
+    const res = await makeSession(localAndroidDriver);
+    expect(res).toBeDefined();
+
+    // get driver instance
+    let driver = getDriver(res.sessionId);
+    expect(driver).toBeDefined();
+
+    // close session
+    const closed = await closeSession(res.sessionId);
+    expect(closed).toBe(true);
+
+    // check the closed session
+    driver = getDriver(res.sessionId);
+    expect(driver).toBeUndefined();
+  });
+});

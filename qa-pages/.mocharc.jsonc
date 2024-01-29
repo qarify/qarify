@@ -1,0 +1,16 @@
+{
+  "extension": ["ts"],
+  // Specify "require" for CommonJS
+  // "require": "ts-node/register",
+  // Specify "loader" for native ESM
+  "loader": "ts-node/esm",
+	// "node-option": [
+	// 	"experimental-specifier-resolution=node",
+  //   "no-warnings",
+  //   "loader=ts-node/esm"
+	// ]
+  "timeout": 30000,
+  "ignore": [
+    "**/__mock/**"
+  ]
+}

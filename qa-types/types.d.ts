@@ -218,6 +218,7 @@ export type QAPageNodeAttribute = {
   'resource-id'?: string;   // android
 
   index?: string;           // ALL
+  rawIdentifier?: string;
 };
 
 export type QAPageNode = {

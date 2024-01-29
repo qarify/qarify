@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "name": "root",
+      "path": "."
+    },
+  ],
+  "settings": {
+    "markdownlint.config": {
+      "MD012": false, // no multiple blanks
+      "MD022": false, // title empty lines
+      "MD032": false, // list empty lines
+    }
+  }
+}
