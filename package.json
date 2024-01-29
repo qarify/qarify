@@ -11,7 +11,7 @@
     "compile:browser": "npm run -ws compile:browser",
     "clean": "npm run -ws clean:build",
     "get-src": "node scripts/get-src/get-src.js",
-    "setup": "npm run link:deps && bash scripts/setup.sh",
+    "setup": "bash scripts/setup.sh",
     "setup:full": "npm run setup ibl",
     "link:deps": "npm link @wdio/config @wdio/logger @wdio/protocols @wdio/types @wdio/utils webdriver webdriverio expect-webdriverio",
     "patch:gen": "node ./scripts/patch-gen.js @wdio/logger ./patches/browser-env",

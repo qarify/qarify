@@ -17,7 +17,9 @@ PACKAGE_DIR_NAMES=(
     qa-types
     qa-logger
     qa-globals
-    qa-core
+    qa-drivers
+    qa-pages
+    qa-runtime-env
     qa-cli
 )
 
