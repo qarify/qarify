@@ -1,15 +1,16 @@
+import type { InternalDriver } from "@qarify/types";
 
 type Drivers = {
-  [key: string]: WebdriverIO.Browser; //  | WebdriverIO.MultiRemoteBrowser
+  [key: string]: InternalDriver; //  | WebdriverIO.MultiRemoteBrowser
 };
 
 let drivers: Drivers = {} as Drivers;
 
-export function getDriver(sessionId: string): WebdriverIO.Browser | undefined {
+export function getDriver(sessionId: string): InternalDriver | undefined {
   return drivers[sessionId];
 }
 
-export function setDriver(sessionId: string, client: WebdriverIO.Browser) {
+export function setDriver(sessionId: string, client: InternalDriver) {
   drivers[sessionId] = client;
 }
 

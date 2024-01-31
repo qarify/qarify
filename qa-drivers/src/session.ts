@@ -1,7 +1,6 @@
 import type { Capabilities, Options } from '@wdio/types';
-import { remote, multiremote, attach, type AttachOptions } from "webdriverio";
-// import WebDriver, { type Client } from 'webdriver';
-import type { QADriver, QADriverSession } from "@qarify/types";
+import WebDriver from 'webdriver';
+import type { QADriver, QADriverSession, InternalDriver } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 import {
   getDriver, removeDriver, setDriver
@@ -9,12 +8,12 @@ import {
 
 export const MJPEG_URL_CAP = 'mjpegScreenshotUrl' as const;
 
-// const remote = WebDriver.newSession;
-// const attach = WebDriver.attachToSession;
+const remote = WebDriver.newSession;
+const attach = WebDriver.attachToSession;
 
 const log = getLogger('driver:session');
 
-function _buildSession(driver: WebdriverIO.Browser, options: Options.WebDriver) {
+function _buildSession(driver: InternalDriver, options: Options.WebDriver) {
   setDriver(driver.sessionId, driver);
 
   const mjpegScreenshotUrl: string | undefined = driver.capabilities[MJPEG_URL_CAP as keyof typeof driver.capabilities] || undefined;
@@ -58,7 +57,7 @@ export async function makeSession(
       // try to connect
     } else {
       log(`attach connection with session of ${qadriver.name}, ${session.sessionId}`);
-      driver = await attach({ ...session, capabilities } as AttachOptions);
+      driver = await attach({ ...session, capabilities });
     }
     return _buildSession(driver, qadriver);
   }

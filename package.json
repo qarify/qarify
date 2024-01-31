@@ -11,9 +11,8 @@
     "compile:browser": "npm run -ws compile:browser",
     "clean": "npm run -ws clean:build",
     "get-src": "node scripts/get-src/get-src.js",
-    "setup": "bash scripts/setup.sh",
+    "setup": "bash scripts/setup.sh il",
     "setup:full": "npm run setup ibl",
-    "link:deps": "npm link @wdio/config @wdio/logger @wdio/protocols @wdio/types @wdio/utils webdriver webdriverio expect-webdriverio",
     "patch:gen": "node ./scripts/patch-gen.js @wdio/logger ./patches/browser-env",
     "patch:node": "node ./scripts/patch-apply.js ./patches/node-env",
     "patch:vsce": "sh scripts/patch-apply-vsce.sh ; npm run link:deps && npm run build"

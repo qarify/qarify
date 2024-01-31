@@ -98,7 +98,7 @@ export async function runQARunner(
 async function _makeConnection(
   driver: QADriver,
   isMultiremote?: boolean
-): Promise<WebdriverIO.Browser | undefined> {
+) {
   const session = await makeSession(driver, isMultiremote);
   return getDriver(session.sessionId);
 }

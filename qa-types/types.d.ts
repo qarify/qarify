@@ -1,12 +1,14 @@
 /// <reference types="node" />
 /// <reference types="mocha" />
 
-import type { AttachOptions } from 'webdriver';
+import type { AttachOptions, Client } from 'webdriver';
 import type { Capabilities } from '@wdio/types';
 
 import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework, FindStrategy } from './dist/index.js';
 
 export * from './dist/index.js';
+
+export type InternalDriver = Client;
 
 export type LogLevelName = keyof typeof LogLevel;
 

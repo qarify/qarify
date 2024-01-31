@@ -27,6 +27,12 @@
     },
     {
       "path": "../drivers"
+    },
+    {
+      "path": "../qarify-vsce"
+    },
+    {
+      "path": "../qarify-web"
     }
   ],
   "settings": {
