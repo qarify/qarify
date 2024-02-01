@@ -1,0 +1,30 @@
+{
+  "folders": [
+    {
+      "name": "root",
+      "path": "."
+    },
+    {
+      "path": "./qa-cli"
+    },
+    {
+      "path": "../drivers"
+    },
+    {
+      "path": "../qarify-vsce"
+    },
+    {
+      "path": "../qarify-vsce/qarify-web"
+    },
+    {
+      "path": "../driver-client"
+    }
+  ],
+  "settings": {
+    "markdownlint.config": {
+      "MD012": false, // no multiple blanks
+      "MD022": false, // title empty lines
+      "MD032": false, // list empty lines
+    }
+  }
+}

@@ -82,19 +82,9 @@ function _install_deps() {
             if [[ "$jobs" =~ "I" ]]; then 
                 rm -rf node_modules
             fi
-
-            # N.B.
-            # 'package-lock.json'이 없는 상태에서 `expect-webdriverio`를 `npm install` 전에 link하면 다음 에러 발생한다.
-            # npm ERR! Cannot set properties of null (setting 'peer')
-            #
-            # Workaround
-            # `npm install` 이후 `expect-webdriverio`를 설치하면 해당 에러를 회피할 수 있다.
-            # 하지만 `package-lock.json` 상에는 npm repo에 있는 `expect-webdriverio` 정보가 저장된다.
-            # 
-
-            npm link @wdio/types @wdio/protocols @wdio/repl @wdio/logger @wdio/utils @wdio/config webdriver webdriverio @wdio/globals
+            npm link webdriverio
             npm install
-            npm link @wdio/types @wdio/protocols @wdio/repl @wdio/logger @wdio/utils @wdio/config webdriver webdriverio expect-webdriverio @wdio/globals
+            npm link webdriverio expect-webdriverio
             res="$?"
         fi
     fi
@@ -159,7 +149,7 @@ function _do_jobs() {
                     echo "#################################"
                     echo ""
                     echo "Remove bin files with the following command"
-                    echo "rm -f $NPM_GLOBAL_BIN_DIR/qarify $NPM_GLOBAL_BIN_DIR/qy"
+                    echo "sudo rm -f $NPM_GLOBAL_BIN_DIR/qarify $NPM_GLOBAL_BIN_DIR/qy"
                     echo ""
                 fi
             fi
