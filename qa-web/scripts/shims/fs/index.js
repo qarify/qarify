@@ -10,6 +10,7 @@ export const {
   lstatSync, readdir, readdirSync, readlinkSync, realpathSync, accessSync,
   existsSync, readFileSync, statSync, writeFileSync, writeFile,
   createWriteStream, createReadStream, Stats,
-  mkdtempSync
+  mkdtempSync,
+  promises,
 } = fs;
 export default fs;

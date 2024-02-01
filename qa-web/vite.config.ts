@@ -74,6 +74,10 @@ export default defineConfig(({ mode }) => {
         'node:dns': resolve('./scripts/shims/dns'),
         'node:tls': resolve('./scripts/shims/tls'),
         'node:perf_hooks': resolve('./scripts/shims/perf_hooks'),
+        'node:stream': resolve('./scripts/shims/stream'),
+        'url': resolve('./scripts/shims/url'),
+        'node:url': resolve('./scripts/shims/url'),
+        'node:net': resolve('./scripts/shims/net'),
       },
     },
     plugins: [
@@ -90,7 +94,7 @@ export default defineConfig(({ mode }) => {
         // Whether to polyfill `node:` protocol imports.
         protocolImports: true,
         overrides: {},
-        exclude: [ 'child_process', 'module', 'fs', 'dns', 'tls' ],
+        exclude: [ 'child_process', 'module', 'fs', 'dns', 'tls', 'stream', 'url', 'net' ],
       }),
     ],
   };
