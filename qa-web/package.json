@@ -7,18 +7,23 @@
   "types": "./dist/index.d.ts",
   "main": "./dist/__cjs/index.js",
   "exports": {
-    ".": [
-      {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "require": "./dist/__cjs/index.js"
-      },
-      "./dist/__cjs/index.js"
-    ]
+    "./logger": {
+      "types": "./dist/qa-logger/src/index.d.ts",
+      "import": "./dist/qa-logger.js"
+    },
+    "./drivers": {
+      "types": "./dist/qa-drivers/src/index.d.ts",
+      "import": "./dist/qa-drivers.js"
+    },
+    "./pages": {
+      "types": "./dist/qa-pages/src/index.d.ts",
+      "import": "./dist/qa-pages.js"
+    }
   },
   "scripts": {
-    "build": "run-p bundle type",
+    "build": "run-s bundle type",
     "bundle": "vite build",
+    "compile": "run-s bundle type",
     "type": "npx tsc --noEmit false --declarationDir dist --declaration --emitDeclarationOnly",
     "clean:build": "rimraf dist"
   },
