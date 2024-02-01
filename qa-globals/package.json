@@ -27,8 +27,6 @@
     "clean:build": "rimraf dist",
     "build": "run-s clean:build compile"
   },
-  "devDependencies": {
-  },
   "license": "MIT",
   "keywords": [
     "QA",

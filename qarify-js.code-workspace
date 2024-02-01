@@ -32,7 +32,10 @@
       "path": "../qarify-vsce"
     },
     {
-      "path": "../qarify-web"
+      "path": "../qarify-vsce/qarify-web"
+    },
+    {
+      "path": "../driver-client"
     }
   ],
   "settings": {

@@ -1,3 +1,4 @@
+import "@wdio/protocols";
 import { getLogger } from '@qarify/logger';
 import type {
   QAPageNode, FetchPageOptions,

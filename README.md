@@ -2,6 +2,13 @@
 
 Vision-based Test Automation Service
 
+## Getting Started
+
+```sh
+# install deps and build and link
+yarn setup
+```
+
 ---
 ## Packages
 
