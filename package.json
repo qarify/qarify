@@ -13,11 +13,7 @@
     "setup": "bash scripts/setup.sh ibl",
     "clean-setup": "bash scripts/setup.sh DUibl",
     "clean": "npm run -ws clean:build",
-    "clean:all": "bash ./scripts/setup.sh CU",
-    "link:deps": "npm link @wdio/types @wdio/protocols @wdio/repl @wdio/logger @wdio/utils @wdio/config @wdio/globals webdriver webdriverio expect-webdriverio",
-    "patch:gen": "node ./scripts/patch-gen.js @wdio/logger ./patches/browser-env",
-    "patch:node": "node ./scripts/patch-apply.js ./patches/node-env",
-    "patch:vsce": "sh scripts/patch-apply-vsce.sh ; npm run link:deps && npm run build"
+    "clean:all": "bash ./scripts/setup.sh CU"
   },
   "devDependencies": {
     "@types/mocha": "~10.0.1",
