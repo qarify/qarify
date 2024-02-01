@@ -12,8 +12,8 @@ export function setGlobalDriver(driver: InternalDriver, isMultiremote = false) {
   // TODO: InternalDriver to WebdriverIO.Browser
   _setGlobal("browser", driver);
   _setGlobal("driver", driver);
-  // _setGlobal("$", driver.$.bind(driver));
-  // _setGlobal("$$", driver.$$.bind(driver));
+  _setGlobal("$", driver.$.bind(driver));
+  _setGlobal("$$", driver.$$.bind(driver));
   if (isMultiremote) {
     _setGlobal("multiremotebrowser", driver);
   }

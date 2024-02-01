@@ -1,5 +1,6 @@
 import type { Capabilities, Options } from '@wdio/types';
-import WebDriver from 'webdriver';
+import { remote, attach } from 'webdriverio';
+// import WebDriver from 'webdriver';
 import type { QADriver, QADriverSession, InternalDriver } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 import {
@@ -8,8 +9,8 @@ import {
 
 export const MJPEG_URL_CAP = 'mjpegScreenshotUrl' as const;
 
-const remote = WebDriver.newSession;
-const attach = WebDriver.attachToSession;
+// const remote = WebDriver.newSession;
+// const attach = WebDriver.attachToSession;
 
 const log = getLogger('driver:session');
 
@@ -110,6 +111,7 @@ export async function closeSession(sessionId: string) {
     }
     res = true;
   } catch (e) {
+    console.error(e);
     /** IGNORE */
   } finally {
     removeDriver(sessionId);

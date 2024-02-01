@@ -8,8 +8,8 @@ import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework, FindStrategy } fro
 
 export * from './dist/index.js';
 
-export type InternalDriver = Client;
-
+// export type InternalDriver = Client;
+export type InternalDriver = WebdriverIO.Browser;
 export type LogLevelName = keyof typeof LogLevel;
 
 export type QATestAttach = {
