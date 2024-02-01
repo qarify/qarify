@@ -53,7 +53,7 @@ export type QADriver = {
   hostname: string;
   port: number;
   path: string;
-  capabilities: any;
+  capabilities: WebdriverIO.Capabilities;
   session?: QADriverSession;
   // spec filter. e.g. [ '*.ios.ts' ]
   // See https://www.npmjs.com/package/minimatch

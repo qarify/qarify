@@ -1,0 +1,39 @@
+{
+  "name": "@qarify/web",
+  "version": "0.9.0",
+  "description": "QArify Web Build",
+  "author": "Peter HS Kang <peterhs.kang@gmail.com>",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/__cjs/index.js",
+  "exports": {
+    ".": [
+      {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "require": "./dist/__cjs/index.js"
+      },
+      "./dist/__cjs/index.js"
+    ]
+  },
+  "scripts": {
+    "build": "run-p bundle type",
+    "bundle": "vite build",
+    "type": "npx tsc --noEmit false --declarationDir dist --declaration --emitDeclarationOnly",
+    "clean:build": "rimraf dist"
+  },
+  "devDependencies": {
+    "@rollup/plugin-inject": "^5.0.5",
+    "memfs": "~4.4.0",
+    "node-stdlib-browser": "~1.2.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.5",
+    "vite": "~5.0.12",
+    "vite-tsconfig-paths": "~4.3.1"
+  },
+  "license": "MIT",
+  "keywords": [
+    "QA",
+    "test"
+  ]
+}

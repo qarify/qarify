@@ -3,3 +3,4 @@ const { lstat, readdir, readlink, realpath, mkdir, mkdtemp, unlink, rename } = f
 export {
     lstat, readdir, readlink, realpath, mkdir, mkdtemp, unlink, rename,
 };
+export default fs.promises;

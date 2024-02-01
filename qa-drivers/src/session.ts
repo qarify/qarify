@@ -25,7 +25,7 @@ function _buildSession(driver: InternalDriver, options: Options.WebDriver) {
   const session: QADriverSession = {
     ...options,
     sessionId: driver.sessionId,
-    capabilities: driver.capabilities as Capabilities.Capabilities,
+    capabilities: driver.capabilities as WebdriverIO.Capabilities,
     isW3C: driver.isW3C,
     isAndroid: driver.isAndroid,
     isIOS: driver.isIOS,
@@ -52,13 +52,14 @@ export async function makeSession(
     //
     // use existing session
     //
-    let driver = getDriver(session.sessionId);
+    const { sessionId } = session;
+    let driver = getDriver(sessionId);
     if (driver) {
       log(`found existing driver, ${qadriver.name}`);
       // try to connect
     } else {
-      log(`attach connection with session of ${qadriver.name}, ${session.sessionId}`);
-      driver = await attach({ ...session, capabilities });
+      log(`attach connection with session of ${qadriver.name}, ${sessionId}`);
+      driver = await attach({ options: session, sessionId, capabilities });
     }
     return _buildSession(driver, qadriver);
   }
@@ -76,30 +77,6 @@ export async function makeSession(
   }
 
   throw new Error("Invalid driver");
-
-  // const options: Record<string, Options.WebdriverIO> = {};
-  // delete connection.capabilities;
-  // for (const browserName of Object.keys(capabilities)) {
-  //   options[browserName] = deepmerge(
-  //     connection,
-  //     (capabilities as Capabilities.MultiRemoteCapabilities)[browserName]
-  //   );
-  // }
-
-  // const browser = await multiremote(options, connection);
-
-  // /**
-  //  * only attach to global environment if `injectGlobals` is set to true
-  //  */
-  // const browserNames = connection.injectGlobals
-  //   ? Object.keys(capabilities)
-  //   : [];
-  // for (const browserName of browserNames) {
-  //   // @ts-ignore allow random global browser names
-  //   global[browserName] = browser[browserName];
-  // }
-
-  // return browser;
 }
 
 export async function closeSession(sessionId: string) {

@@ -6,7 +6,7 @@
     "test:types": "npm run -ws test:types",
     "test": "npm test -ws",
     "e2e": "npm run -ws e2e --if-present",
-    "compile:browser": "npm run -ws compile:browser",
+    "bundle:web": "npm run build -w @qarify/web",
     "get-src": "node scripts/get-src/get-src.js",
     "build": "bash ./scripts/setup.sh B",
     "compile": "bash ./scripts/setup.sh b",

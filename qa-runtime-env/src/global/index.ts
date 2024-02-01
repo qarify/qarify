@@ -111,5 +111,5 @@ export function _setGlobal(key: SupportedGlobals, value: any) {
 }
 
 export function _getGlobal(key: SupportedGlobals) {
-  return globalThis[key];
+  return globalThis[key] as any;
 }

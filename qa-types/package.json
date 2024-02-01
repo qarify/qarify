@@ -27,12 +27,12 @@
     "build": "run-s clean:build compile"
   },
   "devDependencies": {
-    "@wdio/types": "8.10.4",
-    "webdriver": "8.10.7"
+    "@wdio/types": "8.29.1",
+    "webdriver": "8.29.3"
   },
   "optionalDependencies": {
-    "@wdio/types": "8.10.4",
-    "webdriver": "8.10.7"
+    "@wdio/types": "8.29.1",
+    "webdriver": "8.29.3"
   },
   "publishConfig": {
     "access": "public",
