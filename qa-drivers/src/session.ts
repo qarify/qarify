@@ -1,4 +1,3 @@
-import type { Capabilities, Options } from '@wdio/types';
 import { remote, attach } from 'webdriverio';
 // import WebDriver from 'webdriver';
 import type { QADriver, QADriverSession, InternalDriver } from "@qarify/types";
@@ -14,7 +13,7 @@ export const MJPEG_URL_CAP = 'mjpegScreenshotUrl' as const;
 
 const log = getLogger('driver:session');
 
-function _buildSession(driver: InternalDriver, options: Options.WebDriver) {
+function _buildSession(driver: InternalDriver, qadriver: QADriver) {
   setDriver(driver.sessionId, driver);
 
   const mjpegScreenshotUrl: string | undefined = driver.capabilities[MJPEG_URL_CAP as keyof typeof driver.capabilities] || undefined;
@@ -23,7 +22,7 @@ function _buildSession(driver: InternalDriver, options: Options.WebDriver) {
   // `${options.protocol}://${options.hostname}:${mjpegScreenshotPort}` : undefined;
 
   const session: QADriverSession = {
-    ...options,
+    ...qadriver,
     sessionId: driver.sessionId,
     capabilities: driver.capabilities as WebdriverIO.Capabilities,
     isW3C: driver.isW3C,

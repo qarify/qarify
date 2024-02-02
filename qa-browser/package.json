@@ -21,7 +21,7 @@
     "build": "vite build",
     "bundle": "vite build",
     "bundle:watch": "vite build --watch",
-    "compile": "run-s bundle gen-types",
+    "compile": "run-s bundle",
     "clean:build": "rimraf dist"
   },
   "devDependencies": {

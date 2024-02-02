@@ -40,8 +40,7 @@ BUILD_DIR_NAME=dist
 __DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 ROOT_DIR=$(realpath "$__DIR/..")
 
-LINK_DEPS="@wdio/types @wdio/protocols @wdio/repl @wdio/logger @wdio/utils @wdio/config webdriver webdriverio"
-LINK_DEPS2="expect-webdriverio"
+LINK_DEPS="webdriver webdriverio expect-webdriverio"
 
 PACKAGE_DIR_NAMES=(
     qa-types
@@ -83,9 +82,8 @@ function _install_deps() {
             if [[ "$jobs" =~ "I" ]]; then 
                 rm -rf node_modules
             fi
-            npm link webdriverio
+            npm link $LINK_DEPS
             npm install
-            npm link webdriverio expect-webdriverio
             res="$?"
         fi
     fi

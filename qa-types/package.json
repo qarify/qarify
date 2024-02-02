@@ -26,14 +26,6 @@
     "clean:build": "rimraf dist",
     "build": "run-s clean:build compile"
   },
-  "devDependencies": {
-    "@wdio/types": "8.29.1",
-    "webdriver": "8.29.3"
-  },
-  "optionalDependencies": {
-    "@wdio/types": "8.29.1",
-    "webdriver": "8.29.3"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

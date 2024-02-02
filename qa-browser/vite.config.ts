@@ -42,7 +42,6 @@ const rollupGlobals = {
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  console.log('>>>>>>>>>>>>: formats:', mode, mode === 'production' ? ['es', 'umd'] : ['es']);
   const build: UserConfig['build'] = mode === 'production' ?  {
     lib: {
       name: 'qarify-browser',

@@ -15,6 +15,12 @@
     },
     {
       "path": "../driver-client"
+    },
+    {
+      "path": "../driver-client/ti-wdio/packages/webdriver"
+    },
+    {
+      "path": "../driver-client/ti-wdio/packages/webdriverio"
     }
   ],
   "settings": {
