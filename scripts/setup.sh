@@ -51,7 +51,7 @@ PACKAGE_DIR_NAMES=(
     qa-pages
     qa-runtime-env
     qa-cli
-    qa-web
+    qa-browser
 )
 
 PACKAGES_DIR="$ROOT_DIR"

@@ -26,12 +26,9 @@ export default defineConfig(({ mode }) => {
   const build: UserConfig['build'] = mode === 'production' ?  {
     lib: {
       name: 'qarify',
-      entry: packages.reduce((acc, e) => ({
-        ...acc,
-        [e]: resolve(ROOT_DIR, e, 'src', 'index.ts')
-      }), {}),
+      entry: resolve(__dirname, 'src', 'index.ts'),
       // es module
-      formats: ['es'],
+      formats: ['es', 'umd'],
     },
     outDir: './dist',
     minify: true,
@@ -78,6 +75,7 @@ export default defineConfig(({ mode }) => {
         'url': resolve('./scripts/shims/url'),
         'node:url': resolve('./scripts/shims/url'),
         'node:net': resolve('./scripts/shims/net'),
+        '@wdio/logger': resolve('./scripts/shims/wdio-logger'),
       },
     },
     plugins: [

@@ -7,14 +7,19 @@
 
     /* Emit */
     "noEmit": true,                                   /* Disable emitting files from a compilation. */
+
+    "baseUrl": "..",
+    "paths": {
+      "@qarify/types": ["../qa-types/src/index.ts"],
+      "@qarify/logger": ["../qa-logger/src/index.ts"],
+      "@qarify/drivers": ["../qa-drivers/src/index.ts"],
+      "@qarify/pages": ["../qa-pages/src/index.ts"],
+    }
   },
   "exclude": [
     "./dist",
   ],
   "include": [
-    "../qa-types/src",
-    "../qa-logger/src",
-    "../qa-drivers/src",
-    "../qa-pages/src",
+    "./src",
   ]
 }
