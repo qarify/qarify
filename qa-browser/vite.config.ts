@@ -13,13 +13,13 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { nodePolyfills } from './scripts/node-polyfills';
 import { loadAndfindEnv } from './scripts/vite-utils';
 
-const ROOT_DIR = join(__dirname, '..');
-const packages = [
-  'qa-types',
-  'qa-logger',
-  'qa-drivers',
-  'qa-pages',
-];
+// const ROOT_DIR = join(__dirname, '..');
+// const packages = [
+//   'qa-types',
+//   'qa-logger',
+//   'qa-drivers',
+//   'qa-pages',
+// ];
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
       entry: resolve(__dirname, 'src', 'index.ts'),
       // es module
       formats: ['es', 'umd'],
+      
     },
     outDir: './dist',
     minify: true,
@@ -41,11 +42,16 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         // make sure to externalize deps that shouldn't be bundled
         // into your library
-        external: [],
+        external: ['safaridriver', 'geckodriver', 'edgedriver', '@puppeteer/browsers'],
         output: {
           // Provide global variables to use in the UMD build
           // for externalized deps
-          globals: {},
+          globals: {
+            'safaridriver': 'safaridriver',
+            'geckodriver': 'geckodriver',
+            'edgedriver': 'edgedriver',
+            '@puppeteer/browsers': 'puppeteer_browsers'
+          },
         },
       },
       target: "es2022",

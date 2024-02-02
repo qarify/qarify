@@ -8,9 +8,6 @@
       "path": "./qa-cli"
     },
     {
-      "path": "../drivers"
-    },
-    {
       "path": "../qarify-vsce"
     },
     {

@@ -4,20 +4,16 @@
   "description": "QArify for Browser",
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
   "type": "module",
+  "main": "./dist/browser.umd.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./logger": {
-      "types": "./dist/qa-logger/src/index.d.ts",
-      "import": "./dist/qa-logger.js"
-    },
-    "./drivers": {
-      "types": "./dist/qa-drivers/src/index.d.ts",
-      "import": "./dist/qa-drivers.js"
-    },
-    "./pages": {
-      "types": "./dist/qa-pages/src/index.d.ts",
-      "import": "./dist/qa-pages.js"
-    }
+    ".": [{
+        "types": "./dist/index.d.ts",
+        "import": "./dist/browser.js",
+        "require": "./dist/browser.umd.cjs"
+      },
+      "./dist/browser.umd.cjs"
+    ]
   },
   "scripts": {
     "build": "run-s bundle type",
