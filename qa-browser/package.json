@@ -4,28 +4,32 @@
   "description": "QArify for Browser",
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
   "type": "module",
-  "main": "./dist/browser.umd.cjs",
+  "main": "./dist/qarify-browser.umd.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": [{
         "types": "./dist/index.d.ts",
-        "import": "./dist/browser.js",
-        "require": "./dist/browser.umd.cjs"
+        "import": "./dist/qarify-browser.js",
+        "require": "./dist/qarify-browser.umd.cjs"
       },
-      "./dist/browser.umd.cjs"
+      "./dist/qarify-browser.umd.cjs"
     ]
   },
   "scripts": {
-    "build": "run-s bundle type",
+    "test": "mocha ./test/unit/**/*.spec.ts",
+    "e2e": "mocha ./test/e2e/**/*.spec.ts",
+    "build": "vite build",
     "bundle": "vite build",
-    "compile": "run-s bundle type",
-    "type": "npx tsc --noEmit false --declarationDir dist --declaration --emitDeclarationOnly",
+    "bundle:watch": "vite build --watch",
+    "compile": "run-s bundle gen-types",
     "clean:build": "rimraf dist"
   },
   "devDependencies": {
     "@rollup/plugin-inject": "^5.0.5",
     "memfs": "~4.4.0",
     "node-stdlib-browser": "~1.2.0",
+    "rollup-plugin-polyfill-node": "^0.13.0",
+    "rollup-plugin-typescript2": "^0.36.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.5",
     "vite": "~5.0.12",
