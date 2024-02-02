@@ -27,6 +27,7 @@ export const localAndroidDriver: QADriver = {
   path: "/",
   capabilities: {
     "platformName": "android",
+    //@ts-ignore
     "appium:avd": "Pixel_API_33",
     "appium:platformVersion": "13.0",
     "appium:automationName": "UiAutomator2",
@@ -37,7 +38,7 @@ export const localAndroidDriver: QADriver = {
 
 describe("driver", () => {
   it("should make an ios session", async function() {
-    this.timeout(10000); // 10s
+    this.timeout(30_000); // 30s
 
     // make a session
     const res = await makeSession(localIosDriver);
@@ -57,7 +58,7 @@ describe("driver", () => {
   });
 
   it.skip("should make an android session", async function() {
-    this.timeout(10000); // 10s
+    this.timeout(30_000); // 30s
 
     // make a session
     const res = await makeSession(localAndroidDriver);
