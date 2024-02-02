@@ -25,10 +25,11 @@ import { loadAndfindEnv } from './scripts/vite-utils';
 
 const externalized_node_modules = [
   'url', 'module', 'path', 'events', 'fs', 'fs/promises', 'os', 'v8', 'stream', 'net', 'tls', 'http', 'https', 'http2',
-  'perf_hooks', 'child_process', 'repl', 'assert', 'util', 'process', 'buffer', 'vm', 'zlib', 'dns', 'crypto', 'constants'
+  'perf_hooks', 'child_process', 'repl', 'assert', 'util', 'process', 'buffer', 'vm', 'zlib', 'dns', 'crypto', 'constants',
+  'readline',
 ];
 const externalized_modules = [
-  'safaridriver', 'geckodriver', 'edgedriver', '@puppeteer/browsers',
+  'safaridriver', 'geckodriver', 'edgedriver',
 ];
 const rollupExternal = [
   ...externalized_modules, ...externalized_node_modules, ...externalized_node_modules.map(e => `node:${e}`),
@@ -121,6 +122,7 @@ export default defineConfig(({ mode }) => {
         // 'node:stream': resolve('./scripts/shims/stream'),
         // 'url': resolve('./scripts/shims/url'),
         // 'node:url': resolve('./scripts/shims/url'),
+        'puppeteer-core': resolve('./scripts/shims/puppeteer-core'),
         '@wdio/logger': resolve('./scripts/shims/wdio-logger'),
       },
     },

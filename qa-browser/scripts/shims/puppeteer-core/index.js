@@ -1,6 +1,6 @@
 
 const dummy = {
-  connect: () => ({}),
+  connect: () => (null),
 };
 
 export const KnownDevices = {};
