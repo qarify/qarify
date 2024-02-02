@@ -1,4 +1,4 @@
-import { expect } from 'expect-webdriverio';
+import { describe, expect, it } from 'vitest';
 import {
   LogLevel, setLogLevel, getLogger, setLogLevelName, disableLogger
 } from "@qarify/browser";

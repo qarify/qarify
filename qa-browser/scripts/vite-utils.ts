@@ -7,7 +7,7 @@ import { loadEnv } from 'vite';
  * @param mode 'development' | 'production'
  * @returns 
  */
-export function loadAndfindEnv(prefix: string, mode: string, isVSCE=false) {
+export function loadAndFindEnv(prefix: string, mode: string, isVSCE=false) {
   // Load env file based on `mode` in the current working directory.
   // And create env object with the loaded value
   const envApp = loadEnv(isVSCE ? 'vsce' : 'web', process.cwd(), prefix);

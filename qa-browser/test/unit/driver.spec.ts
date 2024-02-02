@@ -1,4 +1,4 @@
-import { expect } from 'expect-webdriverio';
+import { describe, expect, it } from 'vitest';
 import type { InternalDriver } from '@qarify/types';
 
 import { getDriver, setDriver, removeDriver } from '@qarify/browser';

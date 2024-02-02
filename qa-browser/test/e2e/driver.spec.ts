@@ -1,4 +1,4 @@
-import { expect } from 'expect-webdriverio';
+import { describe, expect, it } from 'vitest';
 import type { QADriver } from '@qarify/types';
 
 import { makeSession, closeSession, getDriver } from "@qarify/browser";
@@ -38,8 +38,6 @@ export const localAndroidDriver: QADriver = {
 
 describe("driver", () => {
   it("should make an ios session", async function() {
-    this.timeout(30_000); // 30s
-
     // make a session
     const res = await makeSession(localIosDriver);
     expect(res).toBeDefined();
@@ -58,8 +56,6 @@ describe("driver", () => {
   });
 
   it.skip("should make an android session", async function() {
-    this.timeout(10000); // 10s
-
     // make a session
     const res = await makeSession(localAndroidDriver);
     expect(res).toBeDefined();

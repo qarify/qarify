@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 /**
  * vite.config.ts
  * 
@@ -18,19 +19,17 @@
 import { resolve } from 'path';
 import { defineConfig, type UserConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 import typescript from 'rollup-plugin-typescript2';
 // import { nodePolyfills } from './scripts/node-polyfills';
-import nodePolyfills from 'rollup-plugin-polyfill-node';
-import { loadAndfindEnv } from './scripts/vite-utils';
+import { loadAndFindEnv } from './scripts/vite-utils';
 
 const externalized_node_modules = [
   'url', 'module', 'path', 'events', 'fs', 'fs/promises', 'os', 'v8', 'stream', 'net', 'tls', 'http', 'https', 'http2',
   'perf_hooks', 'child_process', 'repl', 'assert', 'util', 'process', 'buffer', 'vm', 'zlib', 'dns', 'crypto', 'constants',
   'readline',
 ];
-const externalized_modules = [
-  'safaridriver', 'geckodriver', 'edgedriver',
-];
+const externalized_modules: string[] = [];
 const rollupExternal = [
   ...externalized_modules, ...externalized_node_modules, ...externalized_node_modules.map(e => `node:${e}`),
 ];
@@ -51,7 +50,7 @@ export default defineConfig(({ mode }) => {
       fileName: 'qarify-browser',
     },
     outDir: './dist',
-    minify: true,
+    minify: false,
   } : {};
 
   const config: UserConfig = {
@@ -72,13 +71,13 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: mode === 'production',
     },
     optimizeDeps: {
-      esbuildOptions: {
+      esbuildOptions: { // <== for dev-server
         target: 'es2022',
         minify: false,
       }
     },
     define: {
-      ...loadAndfindEnv('APP_', mode),
+      ...loadAndFindEnv('APP_', mode),
       '_IS_NODE_ENV_': 'false',
       '_IS_BROWSER_ENV_': 'true',
     },
@@ -87,16 +86,6 @@ export default defineConfig(({ mode }) => {
         { projects: ['./tsconfig.bundle.json'] }
       ),
       nodePolyfills({
-        // // Whether to polyfill specific globals.
-        // globals: {
-        //   Buffer: false,
-        //   global: true,
-        //   process: true,
-        // },
-        // // Whether to polyfill `node:` protocol imports.
-        // protocolImports: true,
-        // overrides: {},
-        // exclude: [ 'child_process', 'module', 'fs', 'dns', 'stream', 'url' ],
       }),
       typescript({
         tsconfig: resolve(__dirname, 'tsconfig.bundle.json'),
@@ -112,19 +101,17 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        // 'fs': resolve('./scripts/shims/fs'),
-        // 'node:fs': resolve('./scripts/shims/fs'),
-        // 'node:module': resolve('./scripts/shims/module'),
-        // 'child_process': resolve('./scripts/shims/child_process'),
-        // 'node:child_process': resolve('./scripts/shims/child_process'),
-        // 'node:dns': resolve('./scripts/shims/dns'),
-        // 'node:perf_hooks': resolve('./scripts/shims/perf_hooks'),
-        // 'node:stream': resolve('./scripts/shims/stream'),
-        // 'url': resolve('./scripts/shims/url'),
-        // 'node:url': resolve('./scripts/shims/url'),
+        'safaridriver':resolve('./scripts/shims/safaridriver'),
+        'geckodriver':resolve('./scripts/shims/geckodriver'),
+        'edgedriver':resolve('./scripts/shims/edgedriver'),
         'puppeteer-core': resolve('./scripts/shims/puppeteer-core'),
         '@wdio/logger': resolve('./scripts/shims/wdio-logger'),
       },
+    },
+    // Configure Vitest (https://vitest.dev/config/)
+    test: {
+      environment: 'jsdom',
+      testTimeout: 10_000,
     },
   };
 
