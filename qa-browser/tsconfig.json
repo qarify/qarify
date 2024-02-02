@@ -20,6 +20,6 @@
     "./dist",
   ],
   "include": [
-    "./src",
+    "./src", "./test", "./scripts", "vite.config.ts",
   ]
 }
