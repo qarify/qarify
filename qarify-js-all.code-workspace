@@ -2,7 +2,7 @@
   "folders": [
     {
       "name": "root-driver-client",
-      "path": "../driver-client"
+      "path": "../ti-driver-client"
     },
     {
       "name": "root-qarify-js",
@@ -13,10 +13,6 @@
       "path": "../qarify-vsce/qarify-web"
     },
     {
-      "name": "root-qarify-vsce",
-      "path": "../qarify-vsce"
-    },
-    {
       "path": "./packages/qa-browser"
     },
     {
@@ -24,6 +20,12 @@
     },
     {
       "path": "../driver-client/ti-wdio/packages/webdriverio"
+    },
+    {
+      "path": "../ti-driver-server"
+    },
+    {
+      "path": "../ti-browserify"
     }
   ],
   "settings": {

@@ -40,7 +40,7 @@ BUILD_DIR_NAME=dist
 __DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 ROOT_DIR=$(realpath "$__DIR/..")
 
-LINK_DEPS="webdriver webdriverio expect-webdriverio"
+LINK_DEPS="webdriver webdriverio expect-webdriverio rollup-plugin-ti-browserify"
 
 PACKAGE_DIR_NAMES=(
     qa-types
