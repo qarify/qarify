@@ -19,17 +19,17 @@
 import { resolve } from 'path';
 import { defineConfig, type UserConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import nodePolyfills from 'rollup-plugin-polyfill-node';
+// import nodePolyfills from 'rollup-plugin-polyfill-node';
 import typescript from 'rollup-plugin-typescript2';
-// import { nodePolyfills } from './scripts/node-polyfills';
+import { nodePolyfills, type ModuleNameWithoutNodePrefix } from './scripts/node-polyfills';
 import { loadAndFindEnv } from './scripts/vite-utils';
 
-const externalized_node_modules = [
-  'url', 'module', 'path', 'events', 'fs', 'fs/promises', 'os', 'v8', 'stream', 'net', 'tls', 'http', 'https', 'http2',
+const externalized_node_modules:string[] = [
+  'url', 'module', 'events', 'path', 'fs', 'fs/promises', 'os', 'v8', 'stream', 'net', 'tls', 'http', 'https', 'http2',
   'perf_hooks', 'child_process', 'repl', 'assert', 'util', 'process', 'buffer', 'vm', 'zlib', 'dns', 'crypto', 'constants',
   'readline',
 ];
-const externalized_modules: string[] = [];
+const externalized_modules:string[] = [];
 const rollupExternal = [
   ...externalized_modules, ...externalized_node_modules, ...externalized_node_modules.map(e => `node:${e}`),
 ];
@@ -39,6 +39,12 @@ const rollupGlobals = {
   ...externalized_node_modules.reduce((acc, e) => ({ ...acc, [e]: mod2var(e) }), {}),
   ...externalized_node_modules.reduce((acc, e) => ({ ...acc, [`node:${e}`]: mod2var(e) }), {}),
 };
+const polyfillExcludes:ModuleNameWithoutNodePrefix[] = ['fs', 'url' ];
+const resolveAliases = polyfillExcludes.reduce((acc, e) => ({
+  ...acc,
+  [e]: resolve(`./scripts/shims/node/${e}`),
+  [`node:${e}`]: resolve(`./scripts/shims/node/${e}`),
+}), {});
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -86,6 +92,15 @@ export default defineConfig(({ mode }) => {
         { projects: ['./tsconfig.bundle.json'] }
       ),
       nodePolyfills({
+        // Whether to polyfill specific globals.
+        globals: {
+          Buffer: false,
+          global: true,
+          process: true,
+        },
+        // Whether to polyfill `node:` protocol imports.
+        protocolImports: true,
+        exclude: polyfillExcludes,
       }),
       typescript({
         tsconfig: resolve(__dirname, 'tsconfig.bundle.json'),
@@ -101,6 +116,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
+        ...resolveAliases,
         'safaridriver':resolve('./scripts/shims/safaridriver'),
         'geckodriver':resolve('./scripts/shims/geckodriver'),
         'edgedriver':resolve('./scripts/shims/edgedriver'),

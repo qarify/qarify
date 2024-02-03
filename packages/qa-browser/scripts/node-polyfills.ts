@@ -204,7 +204,6 @@ export const nodePolyfills = (options: PolyfillOptions = {}): Plugin => {
             },
             plugins: [
               {
-                //@ts-ignore
                 ...inject({
                   // https://github.com/niksy/node-stdlib-browser/blob/3e7cd7f3d115ac5c4593b550e7d8c4a82a0d4ac4/README.md#vite
                   ...(isBuildEnabled(optionsResolved.globals.Buffer) ? { Buffer: [globalShimsPath, 'Buffer'] } : {}),

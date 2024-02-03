@@ -3,17 +3,19 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "@browser": "npm run -w @qarify/browser ",
     "test:types": "npm run -ws test:types",
     "test": "npm test -ws",
     "e2e": "npm run -ws e2e --if-present",
-    "bundle:browser": "npm run build -w @qarify/browser",
-    "get-src": "node scripts/get-src/get-src.js",
-    "build": "bash ./scripts/setup.sh B",
+    "=== Build & Clean ===": "",
     "compile": "bash ./scripts/setup.sh b",
+    "build": "bash ./scripts/setup.sh B",
+    "clean-build": "bash scripts/setup.sh DUibl",
     "setup": "bash scripts/setup.sh ibl",
-    "clean-setup": "bash scripts/setup.sh DUibl",
     "clean": "npm run -ws clean:build",
-    "clean:all": "bash ./scripts/setup.sh CU"
+    "clean:all": "bash ./scripts/setup.sh CU",
+    "=== Utility ===": "",
+    "get-src": "node scripts/get-src/get-src.js"
   },
   "resolutions": {
     "webdriver": "8.29.7",
@@ -38,6 +40,6 @@
     "vitest": "~1.2.2"
   },
   "workspaces": [
-    "qa-*"
+    "packages/*"
 	]
 }

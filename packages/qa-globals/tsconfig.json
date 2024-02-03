@@ -1,13 +1,11 @@
 {
-  "extends": "../tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     /* Emit */
     "noEmit": true,                                   /* Disable emitting files from a compilation. */
-   },
+  },
   "include": [
     "./src",
-  ],
-  "exclude": [
-    "./tests"
+    "./types.d.ts",
   ]
 }

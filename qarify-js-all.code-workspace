@@ -1,20 +1,20 @@
 {
   "folders": [
     {
+      "path": "../driver-client"
+    },
+    {
       "name": "root",
       "path": "."
-    },
-    {
-      "path": "./qa-cli"
-    },
-    {
-      "path": "../qarify-vsce"
     },
     {
       "path": "../qarify-vsce/qarify-web"
     },
     {
-      "path": "../driver-client"
+      "path": "../qarify-vsce"
+    },
+    {
+      "path": "./qa-browser"
     },
     {
       "path": "../driver-client/ti-wdio/packages/webdriver"

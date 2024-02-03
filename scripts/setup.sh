@@ -53,7 +53,7 @@ PACKAGE_DIR_NAMES=(
     qa-cli
 )
 
-PACKAGES_DIR="$ROOT_DIR"
+PACKAGES_DIR="$ROOT_DIR/packages"
 
 JOBS="$1"
 if [[ "$JOBS" =~ "h" ]]; then
