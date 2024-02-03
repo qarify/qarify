@@ -6,7 +6,7 @@ import { setLogLevelName } from '@qarify/logger';
 import { runQArify } from './run-qarify.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../../fixtures', import.meta.url));
 const _dataDir = path.join(FIXTURE_ROOT, 'spec-files');
 
 // N.B.

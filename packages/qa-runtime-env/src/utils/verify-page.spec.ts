@@ -4,13 +4,13 @@ import path from 'path';
 import { expect } from 'expect-webdriverio';
 import { parsePageSrc } from '@qarify/pages';
 
-import testQAConfig from '../../../fixtures/config-files/test-config.js';
+import testQAConfig from '../../../../fixtures/config-files/test-config.js';
 import { cleanPageLayout, readPageLayout } from '../nodejs/artifacts-utils.js';
 import {
   calcOverlapRatio, getPageLayout, comparePageLayout, getDiffLayoutItems
 } from './verify-page.js';
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../../fixtures', import.meta.url));
 
 function loadPageSrc(platform: 'ios' | 'android', name:string[]) {
   const filePath = path.join(FIXTURE_ROOT, 'page-src', platform, ...name);

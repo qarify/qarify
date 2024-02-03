@@ -13,7 +13,7 @@ declare global {
   var __qaconfig__: QAConfig
 }
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../../fixtures', import.meta.url));
 const _baseDir = path.join(FIXTURE_ROOT, 'config-files');
 
 describe('load-config', () => {

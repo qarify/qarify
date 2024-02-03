@@ -6,7 +6,7 @@ import { runSpecFiles } from './run-specs.js';
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
 import { setGlobalExpect } from '../index.js';
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../../fixtures', import.meta.url));
 const _dataDir = path.join(FIXTURE_ROOT, 'spec-files');
 
 // N.B.

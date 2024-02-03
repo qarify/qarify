@@ -13,7 +13,7 @@ import {
   filterPageNode,
 } from './page-node.js';
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
 
 function loadPageSrc(platform: 'ios' | 'android', name:string[]) {
   const filePath = path.join(FIXTURE_ROOT, 'page-src', platform, ...name);

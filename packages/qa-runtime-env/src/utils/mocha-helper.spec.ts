@@ -4,7 +4,7 @@ import Mocha from 'mocha';
 import { expect } from 'expect-webdriverio';
 import { getTestSuiteNode } from "./mocha-helper.js";
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../../fixtures', import.meta.url));
 const testFilePath = path.resolve(FIXTURE_ROOT, 'spec-files', 'spec-bdd.js');
 
 describe('spec-info', function() {

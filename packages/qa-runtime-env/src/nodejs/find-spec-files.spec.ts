@@ -3,7 +3,7 @@ import url from 'node:url';
 import { expect } from 'expect-webdriverio';
 import { findSpecFiles } from './find-spec-files.js';
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../../fixtures', import.meta.url));
 const _dataDir = path.join(FIXTURE_ROOT, 'spec-files');
 
 const allSpecFiles = [

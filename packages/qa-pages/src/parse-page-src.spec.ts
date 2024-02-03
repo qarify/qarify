@@ -7,7 +7,7 @@ import {
   parsePageSrc, 
 } from './page-node.js';
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
 const PAGE_SRC_ROOT = path.join(FIXTURE_ROOT, 'page-src');
 
 function loadPageSrc(file: string) {

@@ -14,7 +14,7 @@ declare global {
   var __qyrunner__: QARunner
 }
 
-const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../fixtures', import.meta.url));
+const FIXTURE_ROOT = url.fileURLToPath(new URL('../../../../fixtures', import.meta.url));
 const _dataDir = path.join(FIXTURE_ROOT, 'spec-files');
 
 // N.B.
