@@ -1,6 +1,6 @@
 {
   "name": "qarify-js-root",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "type": "module",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
     "clean:all": "bash ./scripts/setup.sh CU",
     "=== Utility ===": "",
     "get-src": "node scripts/get-src/get-src.js",
-    "version": "lerna version"
+    "version-up": "lerna version"
   },
   "resolutions": {
     "webdriver": "8.29.7",
@@ -28,21 +28,21 @@
     "@types/mocha": "~10.0.1",
     "@types/node": "^20.4.8",
     "canvas": "^2.11.2",
+    "expect-webdriverio": "4.9.4",
     "lerna": "~8.1.2",
+    "mocha": "~10.2.0",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
-    "webdriver": "8.29.7",
-    "webdriverio": "8.29.7",
-    "expect-webdriverio": "4.9.4",
-    "mocha": "~10.2.0",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
     "typescript": "~5.3.3",
     "vite": "~5.0.12",
     "vite-tsconfig-paths": "~4.3.1",
-    "vitest": "~1.2.2"
+    "vitest": "~1.2.2",
+    "webdriver": "8.29.7",
+    "webdriverio": "8.29.7"
   },
   "workspaces": [
     "packages/*"
-	]
+  ]
 }
