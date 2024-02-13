@@ -1,5 +1,6 @@
 {
   "name": "qarify-js-root",
+  "version": "0.9.0",
   "type": "module",
   "private": true,
   "scripts": {
@@ -15,7 +16,8 @@
     "clean": "npm run -ws clean:build",
     "clean:all": "bash ./scripts/setup.sh CU",
     "=== Utility ===": "",
-    "get-src": "node scripts/get-src/get-src.js"
+    "get-src": "node scripts/get-src/get-src.js",
+    "version": "lerna version"
   },
   "resolutions": {
     "webdriver": "8.29.7",
@@ -26,6 +28,7 @@
     "@types/mocha": "~10.0.1",
     "@types/node": "^20.4.8",
     "canvas": "^2.11.2",
+    "lerna": "~8.1.2",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
     "webdriver": "8.29.7",
