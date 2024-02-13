@@ -16,13 +16,7 @@
       "path": "./packages/qa-browser"
     },
     {
-      "path": "../driver-client/ti-wdio/packages/webdriver"
-    },
-    {
-      "path": "../driver-client/ti-wdio/packages/webdriverio"
-    },
-    {
-      "path": "../ti-driver-server"
+      "path": "../ti-driver-client/ti-wdio-browser"
     },
     {
       "path": "../ti-browserify"

@@ -3,7 +3,7 @@ import type { QADriver } from '@qarify/types';
 
 import { makeSession, closeSession, getDriver } from "@qarify/browser";
 
-export const localIosDriver: QADriver = {
+const localIosDriver: QADriver = {
   name: "Local Server",
   protocol: "http",
   hostname: "127.0.0.1",
@@ -19,7 +19,7 @@ export const localIosDriver: QADriver = {
   ignore: [],
 };
 
-export const localAndroidDriver: QADriver = {
+const localAndroidDriver: QADriver = {
   name: "Local Server",
   protocol: "http",
   hostname: "127.0.0.1",

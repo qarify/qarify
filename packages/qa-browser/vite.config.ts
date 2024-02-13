@@ -1,4 +1,5 @@
 /// <reference types="vitest" />
+/// <reference types="vite/client" />
 /**
  * vite.config.ts
  * 
@@ -19,109 +20,108 @@
 import { resolve } from 'path';
 import { defineConfig, type UserConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import nodePolyfills from 'rollup-plugin-ti-browserify';
+import { nodePolyfills } from 'vite-plugin-ti-browserify'
 import typescript from 'rollup-plugin-typescript2';
-// import { nodePolyfills, type ModuleNameWithoutNodePrefix } from './scripts/node-polyfills';
 import { loadAndFindEnv } from './scripts/vite-utils';
+//@ts-ignore
+import packageJson from './package.json' assert { type: 'json' };
 
-const externalized_node_modules:string[] = [
-  'url', 'module', 'events', 'path', 'fs', 'fs/promises', 'os', 'v8', 'stream', 'net', 'tls', 'http', 'https', 'http2',
-  'perf_hooks', 'child_process', 'repl', 'assert', 'util', 'process', 'buffer', 'vm', 'zlib', 'dns', 'crypto', 'constants',
-  'readline',
-];
-const externalized_modules:string[] = [];
-const rollupExternal = [
-  ...externalized_modules, ...externalized_node_modules, ...externalized_node_modules.map(e => `node:${e}`),
-];
-const mod2var = (mod: string) => mod.replace(/[\W_]+/g, '_');
-const rollupGlobals = {
-  ...externalized_modules.reduce((acc, e) => ({ ...acc, [e]: mod2var(e) }), {}),
-  ...externalized_node_modules.reduce((acc, e) => ({ ...acc, [e]: mod2var(e) }), {}),
-  ...externalized_node_modules.reduce((acc, e) => ({ ...acc, [`node:${e}`]: mod2var(e) }), {}),
+const resolveAliases = {
+  'safaridriver':resolve('./scripts/shims/safaridriver'),
+  'geckodriver':resolve('./scripts/shims/geckodriver'),
+  'edgedriver':resolve('./scripts/shims/edgedriver'),
+  'puppeteer-core': resolve('./scripts/shims/puppeteer-core'),
+  '@wdio/logger': resolve('./scripts/shims/wdio-logger'),
+  'node:repl': resolve('./scripts/shims/empty'),
+  'node:v8': resolve('./scripts/shims/empty'),
+  'node:perf_hooks': resolve('./scripts/shims/node/perf_hooks'),
+  'got': resolve('./scripts/shims/empty'),
+  'graceful-fs': resolve('./scripts/shims/empty'),
 };
-// const polyfillExcludes:ModuleNameWithoutNodePrefix[] = ['fs', 'url' ];
-// const resolveAliases = polyfillExcludes.reduce((acc, e) => ({
-//   ...acc,
-//   [e]: resolve(`./scripts/shims/node/${e}`),
-//   [`node:${e}`]: resolve(`./scripts/shims/node/${e}`),
-// }), {});
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  // build config for production(bundling)
   const build: UserConfig['build'] = mode === 'production' ?  {
     lib: {
-      name: 'qarify-browser',
-      entry: resolve(__dirname, 'src', 'index.ts'),
-      formats: mode === 'production' ? ['es', 'umd'] : ['es'],
+      name: 'qarify_browser',
+      entry: 'src/index.ts',
+      formats: ['es', 'umd'],
       fileName: 'qarify-browser',
     },
     outDir: './dist',
     minify: false,
+    emptyOutDir: true,
   } : {};
+
+  // plugins config for production(bundling)
+  const plugins: UserConfig['plugins'] = mode === 'production' ? [
+    // N.B
+    // For 'test' mode, you may get the following error, when using this plugin.
+    // 'TS2742: The inferred type...'
+    typescript({
+      check: false,
+      tsconfigOverride: {
+        compilerOptions: {
+          declaration: true,
+          declarationMap: true
+        }
+      }
+    }),
+    // tsconfigPaths(
+    //   { projects: ['./tsconfig.bundle.json'] }
+    // ),
+  ] : [];
 
   const config: UserConfig = {
     build: {
       minify: false,
+      emptyOutDir: false,
       ...build,
-      rollupOptions: {
-        // make sure to externalize deps that shouldn't be bundled
-        // into your library
-        external: rollupExternal,
-        output: {
-          // Provide global variables to use in the UMD build
-          // for externalized deps
-          globals: rollupGlobals
-        },
-      },
-      target: "es2022",
-      emptyOutDir: mode === 'production',
-    },
-    optimizeDeps: {
-      esbuildOptions: { // <== for dev-server
-        target: 'es2022',
-        minify: false,
-      }
     },
     define: {
-      ...loadAndFindEnv('APP_', mode),
+      ...loadAndFindEnv('APP_', 'browser', mode),
       '_IS_NODE_ENV_': 'false',
       '_IS_BROWSER_ENV_': 'true',
     },
     plugins: [
-      tsconfigPaths(
-        { projects: ['./tsconfig.bundle.json'] }
-      ),
       nodePolyfills({
+        globals: {
+          Buffer: true,
+          global: true,
+          process: true,
+        },
+        overrides: {
+          //@ts-ignore
+          'fs/promises': resolve('./scripts/shims/node/fs/promises'),
+          fs: resolve('./scripts/shims/node/fs'),
+        },
         protocolImports: true,
       }),
-      typescript({
-        tsconfig: resolve(__dirname, 'tsconfig.bundle.json'),
-        tsconfigDefaults: {
-          compilerOptions: {
-            sourceMap: false,
-            declaration: true,
-            declarationMap: true
-          },
-        },
-        check: false,
-      }),
+      ...plugins,
     ],
     resolve: {
       alias: {
-        // ...resolveAliases,
-        'safaridriver':resolve('./scripts/shims/safaridriver'),
-        'geckodriver':resolve('./scripts/shims/geckodriver'),
-        'edgedriver':resolve('./scripts/shims/edgedriver'),
-        'puppeteer-core': resolve('./scripts/shims/puppeteer-core'),
-        '@wdio/logger': resolve('./scripts/shims/wdio-logger'),
+        ...resolveAliases,
       },
     },
     // Configure Vitest (https://vitest.dev/config/)
     test: {
+      globals: true,
       environment: 'jsdom',
-      testTimeout: 10_000,
+      browser: {
+        enabled: mode === 'browser_test',
+        name: "chromium",
+        provider: "playwright"
+      },
+      setupFiles: [
+        `./test/${mode}-setup.ts`, // test | browser_test | e2e_test
+      ],
+      pool: 'forks',
+      testTimeout: 10_000, // 10 seconds
     },
   };
 
   return config;
 });
+

@@ -1,4 +1,4 @@
 
 export const performance = {
-  now: () => 1,
+  now: () => Date.now(),
 };

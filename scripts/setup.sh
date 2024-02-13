@@ -38,51 +38,66 @@ NPM_GLOBAL_BIN_DIR=/usr/local/bin
 BUILD_DIR_NAME=dist
 
 __DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+# ===========================================================
+# Projects configuration
+#
+
+# include configuration
+source "$__DIR/projects.sh"
+projects=$(projects_get)
+all_packages=( $(projects_keys) ) # to array
+
+# project root dir
 ROOT_DIR=$(realpath "$__DIR/..")
 
-LINK_DEPS="webdriver webdriverio expect-webdriverio rollup-plugin-ti-browserify"
+# ===========================================================
+# Setup Utilities
+#
 
-PACKAGE_DIR_NAMES=(
-    qa-types
-    qa-logger
-    qa-globals
-    qa-drivers
-    qa-pages
-    qa-runtime-env
-    qa-browser
-    qa-cli
-)
-
-PACKAGES_DIR="$ROOT_DIR/packages"
-
-JOBS="$1"
-if [[ "$JOBS" =~ "h" ]]; then
+JOBS="$1" # first argument
+if [[ "$JOBS" =~ "h" || "$JOBS" == "" ]]; then
    usage
    exit 0
 fi
-
 if [[ ! "$JOBS" =~ ^[$AVAILABLE_CMDS]*$ ]]; then
     usage "Error: Invalid command(s), $JOBS"
     exit 1
 fi
 
 shift
-TARGET_PACKAGES=( "$@" )
+TARGET_PACKAGES=( "$@" ) # rest arguments
 if [[ "$TARGET_PACKAGES" == "" ]]; then
-    TARGET_PACKAGES=( ${PACKAGE_DIR_NAMES[@]} )
+    TARGET_PACKAGES=( ${all_packages[@]} )
+else
+    # validate package names
+    for pkg in "${TARGET_PACKAGES[@]}" ; do
+        res=$(projects_has_key "$pkg")
+        if [[ "$res" != "true" ]]; then
+            echo "!!! Invalid package name: $pkg"
+            echo "    Available packages: ${all_packages[@]}"
+            exit 1
+        fi
+    done
 fi
 
 function _install_deps() {
     local jobs="$1"
+    local pkg="$2"
     local res=0
     # install
     if [[ "$jobs" =~ [i|I] ]]; then
-        echo ">>> Install dependencies under $PWD"
+        local link_deps=$(projects_get_prop "$pkg" "link_deps")
+        echo ">>> Install deps under $PWD"
+        [[ "$link_deps" != "" && "$link_deps" != "null" ]] && echo ">>> Link deps: $link_deps"
+
         if [[ ! "$jobs" =~ "d" ]]; then
             if [[ "$jobs" =~ "I" ]]; then 
                 rm -rf node_modules
             fi
-            npm link $LINK_DEPS
+            if [[ "$link_deps" != "" && "$link_deps" != "null" ]]; then
+                npm link $link_deps
+            fi
             npm install
             res="$?"
         fi
@@ -91,25 +106,43 @@ function _install_deps() {
 }
 
 function _do_jobs() {
-    local jobs=$1
+    local jobs="$1"
+    local pkg="$2"
     local res=0
     # read package name
     parsed_json=$(jq '.' package.json)
-    name=$(echo $parsed_json | jq '.name')
-    name="${name%\"}"
-    name="${name#\"}"
-    version=$(echo $parsed_json | jq '.version')
+    name=$(echo $parsed_json | jq -r '.name')
+    # name="${name%\"}"
+    # name="${name#\"}"
+    version=$(echo $parsed_json | jq -r '.version')
 
-    echo "\"$name\": $version"
+    echo "$name: $version"
     
     # build
     if [[ "$jobs" =~ [b|B] ]]; then
         echo ">>> Build $name"
         if [[ ! "$jobs" =~ "d" ]]; then
+            local cmd=""
             if [[ "$jobs" =~ "B" ]]; then 
-                npm run build
+                cmd=$(projects_get_prop "$pkg" "build")
+                if [[ "$cmd" == "NONE" ]]; then
+                    echo "Not build..."
+                elif [[ "$cmd" == "" || "$cmd" == "null" ]]; then
+                    # default
+                    cmd='npm run build'
+                fi
             else
-                npm run compile
+                cmd=$(projects_get_prop "$pkg" "compile")
+                if [[ "$cmd" == "NONE" ]]; then
+                    echo "Not compile..."
+                elif [[ "$cmd" == "" || "$cmd" == "null" ]]; then
+                    # default
+                    cmd='npm run compile'
+                fi
+            fi
+
+            if [[ "$cmd" != "" && "$cmd" != "NONE" ]]; then
+                eval " $cmd"
             fi
             res="$?"
         fi
@@ -120,8 +153,13 @@ function _do_jobs() {
 
     # linking
     if [[ "$jobs" =~ [lL] ]]; then
-        echo ">>> Linking $name"
-        if [[ ! "$jobs" =~ "d" ]]; then
+        local link=$(projects_get_prop "$pkg" "link")
+        if [[ "$link" == "true" ]]; then 
+            echo ">>> Linking $name"
+        else
+            echo ">>> No-Linking $name"
+        fi
+        if [[ ! "$jobs" =~ "d" && "$link" == "true" ]]; then
             #echo "npm link $name"
             if [[ "$jobs" =~ "L" || ! -d "$NPM_GLOBAL_DIR/$name" ]]; then
                 npm link
@@ -133,24 +171,15 @@ function _do_jobs() {
 
     # unlinking
     if [[ "$jobs" =~ [uU] ]]; then
-        echo ">>> Uninking $name"
-        if [[ ! "$jobs" =~ "d" ]]; then
-            if [[ "$jobs" =~ "u" ]]; then npm unlink $name;
+        local link=$(projects_get_prop "$pkg" "link")
+        if [[ "$link" == "true" ]]; then 
+            echo ">>> Uninking $name"
+        fi
+        if [[ ! "$jobs" =~ "d"&& "$link" == "true" ]]; then
+            if [[ "$jobs" =~ "u" ]]; then
+                npm unlink $name
             else
                 rm -f "$NPM_GLOBAL_DIR/$name"
-                if [[ "$name" == "qarify" ]]; then
-                    # remove bin file
-                    # TODO: read bin name from package.json
-                    # need su, so print only
-                    echo ""
-                    echo "#################################"
-                    echo "###   NOTICE                  ###"
-                    echo "#################################"
-                    echo ""
-                    echo "Remove bin files with the following command"
-                    echo "sudo rm -f $NPM_GLOBAL_BIN_DIR/qarify $NPM_GLOBAL_BIN_DIR/qy"
-                    echo ""
-                fi
             fi
             res="$?"
         fi
@@ -167,11 +196,14 @@ if [[ "$JOBS" =~ [uU] ]]; then
     job=U
     if [[ "$JOBS" =~ 'u' ]]; then job=u; fi
 
-    for pkg_dir in "${TARGET_PACKAGES[@]}" ; do
-        pushd "$PACKAGES_DIR/$pkg_dir" >> /dev/null
-        _do_jobs $job
+    for pkg in "${TARGET_PACKAGES[@]}" ; do
+        pkg_dir=$(projects_get_path "$pkg")
+        pushd "$ROOT_DIR/$pkg_dir" > /dev/null
+
+        _do_jobs "$job" "$pkg"
         res="$?"
         if [ "$res" -ne 0 ]; then exit "$res"; fi
+
         popd > /dev/null
     done
     JOBS="${JOBS/[uU]/}"
@@ -182,11 +214,23 @@ if [[ "$JOBS" =~ [cCD] ]]; then
 
     pushd "$ROOT_DIR" > /dev/null
     if [[ "$JOBS" =~ "D" ]]; then
-        find . \( -name "node_modules" -type d \) -o \( -name "$BUILD_DIR_NAME" -type d \) -o \( -name "package-lock.json" -type f \) | xargs rm -rf
+        if [[ "$JOBS" =~ "d" ]]; then
+            find . \( -name "node_modules" -type d \) -o \( -name "$BUILD_DIR_NAME" -type d \) -o \( -name "package-lock.json" -type f \)
+        else
+            find . \( -name "node_modules" -type d \) -o \( -name "$BUILD_DIR_NAME" -type d \) -o \( -name "package-lock.json" -type f \) | xargs rm -rf
+        fi
     elif [[ "$JOBS" =~ "C" ]]; then
-        find . \( -name "node_modules" -type d \) -o \( -name "$BUILD_DIR_NAME" -type d \) | xargs rm -rf
+        if [[ "$JOBS" =~ "d" ]]; then
+            find . \( -name "node_modules" -type d \) -o \( -name "$BUILD_DIR_NAME" -type d \)
+        else
+            find . \( -name "node_modules" -type d \) -o \( -name "$BUILD_DIR_NAME" -type d \) | xargs rm -rf
+        fi
     else
-        find . -name "$BUILD_DIR_NAME" -type d | xargs rm -rf
+        if [[ "$JOBS" =~ "d" ]]; then
+            find . -name "$BUILD_DIR_NAME" -type d
+        else
+            find . -name "$BUILD_DIR_NAME" -type d | xargs rm -rf
+        fi
     fi
     popd > /dev/null
     JOBS="${JOBS/[cCD]/}"
@@ -196,14 +240,22 @@ fi
 # install on root
 #
 if [[ "$JOBS" =~ [iI] ]]; then
-    pushd "$ROOT_DIR" > /dev/null
+    echo ">>> Installing..."
 
-    _install_deps "$JOBS"
-    res="$?"
-    
-    if [ "$res" -ne 0 ]; then exit "$res"; fi
-    popd > /dev/null
+    for pkg in "${TARGET_PACKAGES[@]}" ; do
+        isRoot=$(projects_get_prop "$pkg" "is_root")
+        if [[ "$isRoot" != "true" ]]; then
+            continue
+        fi
+        pkg_dir=$(projects_get_path "$pkg")
+        pushd "$ROOT_DIR/$pkg_dir" > /dev/null
 
+        _install_deps "$JOBS" "$pkg"
+        res="$?"
+        if [ "$res" -ne 0 ]; then exit "$res"; fi
+
+        popd > /dev/null
+    done
     JOBS="${JOBS/[iI]/}"
 fi
 
@@ -212,10 +264,13 @@ fi
 #
 # do jobs for each packages
 #
-for pkg_dir in "${TARGET_PACKAGES[@]}" ; do
-    pushd "$PACKAGES_DIR/$pkg_dir" >> /dev/null
-    _do_jobs $JOBS
+for pkg in "${TARGET_PACKAGES[@]}" ; do
+    pkg_dir=$(projects_get_path "$pkg")
+    pushd "$ROOT_DIR/$pkg_dir" > /dev/null
+
+    _do_jobs "$JOBS" "$pkg"
     res="$?"
     if [ "$res" -ne 0 ]; then exit "$res"; fi
+
     popd > /dev/null
 done
