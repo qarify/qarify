@@ -1,6 +1,6 @@
 {
   "name": "@qarify/drivers",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "QArify Drivers",
   "author": "Peter HS Kang <peterhs.kang@gmail.com>",
   "type": "module",
@@ -33,9 +33,9 @@
     "patch:vsce": "sh scripts/patch-vsce.sh"
   },
   "dependencies": {
-    "@qarify/globals": "0.9.0",
-    "@qarify/logger": "0.9.0",
-    "@qarify/types": "0.9.0"
+    "@qarify/globals": "^0.9.1",
+    "@qarify/logger": "^0.9.1",
+    "@qarify/types": "^0.9.1"
   },
   "license": "MIT",
   "keywords": [

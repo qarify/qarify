@@ -17,7 +17,7 @@
     "clean:all": "bash ./scripts/setup.sh CU",
     "=== Utility ===": "",
     "get-src": "node scripts/get-src/get-src.js",
-    "version-up": "lerna version"
+    "version:up": "lerna version"
   },
   "resolutions": {
     "webdriver": "8.29.7",
