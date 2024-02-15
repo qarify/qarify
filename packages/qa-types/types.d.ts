@@ -2,14 +2,13 @@
 /// <reference types="mocha" />
 
 import type { AttachOptions, Client } from 'webdriver';
-import type { Capabilities } from '@wdio/types';
+import type { Capabilities, Options } from '@wdio/types';
 
 import type { LogLevel, SpecRunnerEvent, SpecRunnerFramework, FindStrategy } from './dist/index.js';
 
 export * from './dist/index.js';
 
-// export type InternalDriver = Client;
-export type InternalDriver = WebdriverIO.Browser;
+export type QADriver = WebdriverIO.Browser;
 export type LogLevelName = keyof typeof LogLevel;
 
 export type QATestAttach = {
@@ -47,13 +46,8 @@ export type QADriverSession = Omit<AttachOptions, 'capabilities'> & {
   isIOS: boolean;
 };
 
-export type QADriver = {
+export interface QADriverOptions extends Options.WebdriverIO {
   name: string;
-  protocol: "http" | "https";
-  hostname: string;
-  port: number;
-  path: string;
-  capabilities: WebdriverIO.Capabilities;
   session?: QADriverSession;
   // spec filter. e.g. [ '*.ios.ts' ]
   // See https://www.npmjs.com/package/minimatch
@@ -152,7 +146,7 @@ export type QAConfig = {
   forceBuild?: boolean;
 
   // drivers to use while testing
-  drivers: QADriver[];
+  drivers: QADriverOptions[];
 
   // whether to ignore no spec files to run
   ignoreNoFiles?: boolean;

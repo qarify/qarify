@@ -5,37 +5,28 @@
       "path": "."
     },
     {
-      "path": "./qa-cli"
+      "path": "./packages/qa-cli"
     },
     {
-      "path": "./qa-drivers"
+      "path": "./packages/qa-drivers"
     },
     {
-      "path": "./qa-globals"
+      "path": "./packages/qa-globals"
     },
     {
-      "path": "./qa-logger"
+      "path": "./packages/qa-logger"
     },
     {
-      "path": "./qa-pages"
+      "path": "./packages/qa-pages"
     },
     {
-      "path": "./qa-runtime-env"
+      "path": "./packages/qa-runtime-env"
     },
     {
-      "path": "./qa-types"
+      "path": "./packages/qa-types"
     },
     {
-      "path": "../drivers"
-    },
-    {
-      "path": "../qarify-vsce"
-    },
-    {
-      "path": "../qarify-vsce/qarify-web"
-    },
-    {
-      "path": "../driver-client"
+      "path": "../ti-driver-client"
     }
   ],
   "settings": {

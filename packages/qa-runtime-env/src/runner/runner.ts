@@ -1,4 +1,4 @@
-import type { QArifyResult, QADriver, QARunner } from "@qarify/types";
+import type { QArifyResult, QADriverOptions, QARunner } from "@qarify/types";
 import { getLogger, isSilent } from '@qarify/logger';
 import { closeSession, makeSession, getDriver } from "@qarify/drivers";
 
@@ -91,14 +91,14 @@ export async function runQARunner(
 
 /**
  * make a driver session
- * @param driver 
+ * @param options 
  * @param isMultiremote 
  * @returns driver instance
  */
 async function _makeConnection(
-  driver: QADriver,
+  options: QADriverOptions,
   isMultiremote?: boolean
 ) {
-  const session = await makeSession(driver, isMultiremote);
+  const session = await makeSession(options, isMultiremote);
   return getDriver(session.sessionId);
 }

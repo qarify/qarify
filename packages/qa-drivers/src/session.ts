@@ -1,6 +1,6 @@
 import { remote, attach } from 'webdriverio';
 // import WebDriver from 'webdriver';
-import type { QADriver, QADriverSession, InternalDriver } from "@qarify/types";
+import type { QADriverOptions, QADriverSession, QADriver } from "@qarify/types";
 import { getLogger } from '@qarify/logger';
 import {
   getDriver, removeDriver, setDriver
@@ -13,7 +13,7 @@ export const MJPEG_URL_CAP = 'mjpegScreenshotUrl' as const;
 
 const log = getLogger('driver:session');
 
-function _buildSession(driver: InternalDriver, qadriver: QADriver) {
+function _buildSession(driver: QADriver, options: QADriverOptions) {
   setDriver(driver.sessionId, driver);
 
   const mjpegScreenshotUrl: string | undefined = driver.capabilities[MJPEG_URL_CAP as keyof typeof driver.capabilities] || undefined;
@@ -22,7 +22,7 @@ function _buildSession(driver: InternalDriver, qadriver: QADriver) {
   // `${options.protocol}://${options.hostname}:${mjpegScreenshotPort}` : undefined;
 
   const session: QADriverSession = {
-    ...qadriver,
+    ...options,
     sessionId: driver.sessionId,
     capabilities: driver.capabilities as WebdriverIO.Capabilities,
     isW3C: driver.isW3C,
@@ -36,16 +36,16 @@ function _buildSession(driver: InternalDriver, qadriver: QADriver) {
 
 /**
  * initialise connection depending whether remote or multiremote is requested
- * @param qadriver        configuration of sessions
+ * @param options        configuration of sessions
  * @param capabilities  desired session capabilities
  * @param isMultiremote isMultiremote
  * @return resolves with browser object
  */
 export async function makeSession(
-  qadriver: QADriver,
+  options: QADriverOptions,
   isMultiremote?: boolean
 ): Promise<QADriverSession> {
-  const { capabilities, session } = qadriver;
+  const { capabilities, session } = options;
 
   if (session && session.sessionId) {
     //
@@ -54,25 +54,25 @@ export async function makeSession(
     const { sessionId } = session;
     let driver = getDriver(sessionId);
     if (driver) {
-      log(`found existing driver, ${qadriver.name}`);
+      log(`found existing driver, ${options.name}`);
       // try to connect
     } else {
-      log(`attach connection with session of ${qadriver.name}, ${sessionId}`);
+      log(`attach connection with session of ${options.name}, ${sessionId}`);
       driver = await attach({ options: session, sessionId, capabilities });
     }
-    return _buildSession(driver, qadriver);
+    return _buildSession(driver, options);
   }
 
   //
   // make new session
   //
   if (session) {
-    delete qadriver.session;
+    delete options.session;
   }
-  log(`make new connection with ${qadriver.name}`);
+  log(`make new connection with ${options.name}`);
   if (!isMultiremote) {
-    let driver = await remote(qadriver);
-    return _buildSession(driver, qadriver);
+    let driver = await remote(options);
+    return _buildSession(driver, options);
   }
 
   throw new Error("Invalid driver");

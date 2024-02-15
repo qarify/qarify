@@ -1,5 +1,5 @@
 import { expect } from 'expect-webdriverio';
-import type { QAConfig, QADriver, QAFrameworkOption, QARunnerOptions, SpecRunnerFramework } from '@qarify/types';
+import type { QAConfig, QADriverOptions, QAFrameworkOption, QARunnerOptions, SpecRunnerFramework } from '@qarify/types';
 
 import {
   updateConfigWithRunnerOptions, updateExecConfig,
@@ -13,7 +13,7 @@ import { MAX_SUPPORT_VERSION, MIN_SUPPORT_VERSION } from '../constants.js';
 describe('utils/helpers', function() {
 
   it('updateConfigWithRunOptions should update config', async function() {
-    const _drivers: QADriver[] = [
+    const _drivers: QADriverOptions[] = [
       { name: '1', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
       { name: '2', protocol: 'http', hostname: '', port: 1, path: '/', capabilities: {} },
     ];

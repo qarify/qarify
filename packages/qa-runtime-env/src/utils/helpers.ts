@@ -1,5 +1,5 @@
 import type {
-  CLIOptions, QAConfig, QARunner, QADriver, QAFrameworkOption, QARunnerOptions, ReportMessage, QATestAttach, QAReporterOptions, QARunnerReporter,
+  CLIOptions, QAConfig, QARunner, QADriverOptions, QAFrameworkOption, QARunnerOptions, ReportMessage, QATestAttach, QAReporterOptions, QARunnerReporter,
 } from "@qarify/types";
 import { SpecRunnerEvent, LogLevel, SpecRunnerFramework } from "@qarify/types";
 import { setLogLevel, isSilent } from '@qarify/logger';
@@ -19,7 +19,7 @@ export function updateConfigWithRunnerOptions(
   const { drivers } = config;
   
   // apply driverOption
-  let _drivers: QADriver[] = [];
+  let _drivers: QADriverOptions[] = [];
 
   if (driverOption && driverOption.length) {
     // filter qaconfig.drivers with options.drivers
@@ -33,7 +33,7 @@ export function updateConfigWithRunnerOptions(
       _drivers = drivers;
     } else {
       // add dummy driver
-      _drivers.push({ name: '_dummy driver_' } as QADriver);
+      _drivers.push({ name: '_dummy driver_' } as QADriverOptions);
     }
   }
 

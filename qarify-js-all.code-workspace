@@ -16,11 +16,8 @@
       "path": "./packages/qa-browser"
     },
     {
-      "path": "../ti-driver-client/ti-wdio-browser"
+      "path": "../qarify-vsce/qarify-web/qaweb-remote-screen"
     },
-    {
-      "path": "../ti-browserify"
-    }
   ],
   "settings": {
     "markdownlint.config": {

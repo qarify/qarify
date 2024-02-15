@@ -5,7 +5,7 @@ import {
   runQARunner,
 } from "./runner.js";
 import { getDefaultQAConfig } from '../../tests/helper/default-qaconfig.js';
-import { QADriver, QARunner } from '@qarify/types';
+import { QADriverOptions, QARunner } from '@qarify/types';
 import { GLOBAL_RUNNER } from '../constants.js';
 import { _getGlobal } from '../global/index.js';
 
@@ -51,7 +51,7 @@ describe("runner", () => {
     const qarunner: QARunner = {
       ...qaconfig,
       specs: allSpecFiles.map(e => path.join(_dataDir, e)),
-      drivers: [{ name: 'runner test' } as QADriver],
+      drivers: [{ name: 'runner test' } as QADriverOptions],
       runnerId: 'test',
     };
     // no global runner before test

@@ -17,6 +17,7 @@
     ]
   },
   "scripts": {
+    "test:types": "tsc",
     "test:watch": "vitest --dir ./src",
     "test": "vitest run --dir ./src",
     "test:browser": "vitest run --dir ./test/e2e --mode browser_test",

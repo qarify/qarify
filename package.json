@@ -25,6 +25,7 @@
     "expect-webdriverio": "4.9.4"
   },
   "devDependencies": {
+    "@wdio/types": "8.29.1",
     "@types/mocha": "~10.0.1",
     "@types/node": "^20.4.8",
     "canvas": "^2.11.2",

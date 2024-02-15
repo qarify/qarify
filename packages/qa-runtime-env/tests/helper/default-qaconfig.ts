@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { QAConfig, QADriver } from "@qarify/types";
+import type { QAConfig, QADriverOptions } from "@qarify/types";
 import { SpecRunnerFramework } from "@qarify/types";
 import { MAX_SUPPORT_VERSION } from "../../src/constants.js";
 
@@ -18,7 +18,7 @@ export const getDefaultQAConfig = (baseDir: string, override: Partial<QAConfig> 
   ...override,
 });
 
-export const localIosDriver: QADriver = {
+export const localIosDriver: QADriverOptions = {
   name: "Local Server iOS",
   protocol: "http",
   hostname: "127.0.0.1",
@@ -34,7 +34,7 @@ export const localIosDriver: QADriver = {
   ignore: [],
 };
 
-export const localAndroidDriver: QADriver = {
+export const localAndroidDriver: QADriverOptions = {
   name: "Local Server Android",
   protocol: "http",
   hostname: "127.0.0.1",

@@ -1,9 +1,9 @@
 import { expect } from 'expect-webdriverio';
-import type { QADriver } from '@qarify/types';
+import type { QADriverOptions } from '@qarify/types';
 
 import { makeSession, closeSession, getDriver } from "../../src/index.js";
 
-export const localIosDriver: QADriver = {
+export const localIosDriver: QADriverOptions = {
   name: "Local Server",
   protocol: "http",
   hostname: "127.0.0.1",
@@ -19,7 +19,7 @@ export const localIosDriver: QADriver = {
   ignore: [],
 };
 
-export const localAndroidDriver: QADriver = {
+export const localAndroidDriver: QADriverOptions = {
   name: "Local Server",
   protocol: "http",
   hostname: "127.0.0.1",

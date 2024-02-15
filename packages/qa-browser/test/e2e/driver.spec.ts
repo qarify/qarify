@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { QADriver } from '@qarify/types';
+import type { QADriverOptions } from '@qarify/types';
 
 import { makeSession, closeSession, getDriver } from "@qarify/browser";
 
-const localIosDriver: QADriver = {
+const localIosDriver: QADriverOptions = {
   name: "Local Server",
   protocol: "http",
   hostname: "127.0.0.1",
@@ -19,7 +19,7 @@ const localIosDriver: QADriver = {
   ignore: [],
 };
 
-const localAndroidDriver: QADriver = {
+const localAndroidDriver: QADriverOptions = {
   name: "Local Server",
   protocol: "http",
   hostname: "127.0.0.1",
