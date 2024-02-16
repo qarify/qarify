@@ -21,7 +21,7 @@
     "test:watch": "vitest --dir ./src",
     "test": "vitest run --dir ./src",
     "test:browser": "vitest run --dir ./test/e2e --mode browser_test",
-    "build": "vite build --force",
+    "build": "vite build",
     "build:watch": "vite build --watch",
     "compile": "run-s build",
     "clean:build": "rimraf dist"

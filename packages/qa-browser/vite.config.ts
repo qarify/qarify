@@ -60,11 +60,10 @@ export default defineConfig(({ mode }) => {
     // For 'test' mode, you may get the following error, when using this plugin.
     // 'TS2742: The inferred type...'
     typescript({
-      check: false,
       tsconfigOverride: {
         compilerOptions: {
           declaration: true,
-          declarationMap: true
+          declarationMap: true,
         }
       }
     }),
