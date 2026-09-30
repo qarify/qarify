@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    /* Emit */
-    "noEmit": true,                                   /* Disable emitting files from a compilation. */
-  },
-  "include": ["./src", "./types.d.ts"],
-  "exclude": ["./dist"]
-}

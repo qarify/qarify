@@ -1,4 +1,0 @@
-# .npmignore - the files to not push to NPM
-patches/
-scripts/
-src/
