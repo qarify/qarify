@@ -7,7 +7,7 @@
     "dev:en": "docusaurus start --locale en",
     "typecheck": "tsc --noEmit",
     "clear": "docusaurus clear",
-    "build": "docusaurus build",
+    "bundle": "docusaurus build",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations --locale en",
     "write-heading-ids": "docusaurus write-heading-ids",

@@ -57,3 +57,4 @@ firebase-debug.log
 firestore-debug.log
 .docusaurus
 /__fixtures__/public/react-shadcn
+.DS_Store
