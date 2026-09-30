@@ -1,0 +1,44 @@
+---
+sidebar_position: 1
+---
+
+# Installation
+
+The QArify CLI can be easily installed via your preferred package manager, such as `npm`, `pnpm` or `yarn`.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+    ```bash npm install -g qarify ```
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    ```bash pnpm add -g qarify ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```bash yarn global add qarify ```
+  </TabItem>
+</Tabs>
+
+:::info
+
+**Before You Start: URL Testing Policy**
+
+Welcome to QArify!
+
+For security and service stability, there are restrictions on the URLs you can test with the `qy start` command when you are **not logged in**.
+
+- **Allowed URLs:**
+  - `localhost` (e.g., `http://localhost:3000`): Allows you to test applications running on your local machine.
+  - `qarify.github.io`: Our official demo page, where you can explore QArify's features.
+
+This policy is in place to prevent potential misuse and ensure a stable environment for all users.
+
+**How do I test other URLs (e.g., dev, staging servers)?**
+
+It's simple. Just log in with the following command to unlock testing for any URL:
+
+```bash
+qy login
+```

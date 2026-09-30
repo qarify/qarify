@@ -1,0 +1,46 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docSidebar.category.Overview": {
+    "message": "Overview",
+    "description": "The label for category Overview in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Overview.link.generated-index.description": {
+    "message": "5 minutes to learn the most important QArify concepts.",
+    "description": "The generated-index page description for category Overview in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Getting Started": {
+    "message": "Getting Started",
+    "description": "The label for category Getting Started in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Getting Started.link.generated-index.description": {
+    "message": "5 minutes to learn the most important Docusaurus concepts.",
+    "description": "The generated-index page description for category Getting Started in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Guides": {
+    "message": "Guides",
+    "description": "The label for category Guides in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Guides.link.generated-index.description": {
+    "message": "QArify Usage",
+    "description": "The generated-index page description for category Guides in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Reference": {
+    "message": "Reference",
+    "description": "The label for category Reference in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Reference.link.generated-index.description": {
+    "message": "QArify Reference",
+    "description": "The generated-index page description for category Reference in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Type Definitions": {
+    "message": "Type Definitions",
+    "description": "The label for category Type Definitions in sidebar docSidebar"
+  },
+  "sidebar.docSidebar.category.Type Definitions.link.generated-index.description": {
+    "message": "QArify Type Definitions",
+    "description": "The generated-index page description for category Type Definitions in sidebar docSidebar"
+  }
+}

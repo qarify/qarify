@@ -1,0 +1,11 @@
+peter:
+  name: Peter Kang
+  title: QArify Engineer
+  url: https://linkedin.com/in/peterhskang
+  image_url: https://github.com/peterhskang.png
+  page: true
+  socials:
+    x: peterhskang
+    linkedin: peterhskang
+    github: peterhskang
+    newsletter: https://www.qarify.com

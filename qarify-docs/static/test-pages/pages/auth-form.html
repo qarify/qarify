@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Auth Form</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            div {
+                margin-bottom: 10px;
+            }
+            label {
+                display: inline-block;
+                width: 80px;
+            }
+            button {
+                margin-right: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Login</h2>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="testuser" />
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" value="password" />
+        </div>
+        <div>
+            <button id="loginBtn">Login</button>
+            <button id="cancelBtn">Cancel</button>
+        </div>
+
+        <script>
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                if (window.opener) {
+                    const username = document.getElementById('username').value;
+                    window.opener.postMessage({ status: 'logined', username: username }, '*');
+                    window.close();
+                }
+            });
+
+            document.getElementById('cancelBtn').addEventListener('click', () => {
+                if (window.opener) {
+                    window.opener.postMessage({ status: 'canceled' }, '*');
+                    window.close();
+                }
+            });
+        </script>
+    </body>
+</html>

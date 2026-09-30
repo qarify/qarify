@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Embedded Content</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                line-height: 1.4;
+                margin: 20px;
+                padding: 0;
+                font-size: 14px;
+                background-color: #f9f9f9;
+            }
+            .tab-container {
+                display: flex;
+                border-bottom: 1px solid #ccc;
+                margin-bottom: 20px;
+            }
+            .tab {
+                padding: 10px 20px;
+                cursor: pointer;
+                border: 1px solid transparent;
+                border-bottom: none;
+                margin-right: 5px;
+            }
+            .tab.active {
+                border-color: #ccc;
+                border-bottom: 1px solid white;
+                background-color: white;
+                border-radius: 5px 5px 0 0;
+            }
+            fieldset {
+                border: 1px solid #ccc;
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+            legend {
+                font-weight: bold;
+                padding: 0 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Tabs -->
+        <div class="tab-container">
+            <div class="tab" onclick="location.href = '/qy-docs/test-pages/index.html'">Normal elements</div>
+            <div class="tab active" onclick="location.href = '/qy-docs/test-pages/embedded-content-tab.html'">
+                Embedded Content(TODO)
+            </div>
+        </div>
+        <fieldset>
+            <legend>Embedded Content(TODO)</legend>
+            <div>
+                <label for="iframe">Form in Iframe:</label>
+                <iframe
+                    id="iframe"
+                    src="/qy-docs/test-pages/pages/iframe-form.html"
+                    title="Form"
+                    width="100%"
+                    height="300"
+                    style="border: 1px solid #ddd; padding: 5px; overflow: auto"
+                ></iframe>
+            </div>
+            <div>
+                <label for="internal-iframe">Form in Internal Iframe:</label>
+                <iframe
+                    id="internal-iframe"
+                    title="Internal Form"
+                    width="100%"
+                    height="300"
+                    style="border: 1px solid #ddd; padding: 5px; overflow: auto"
+                ></iframe>
+            </div>
+            <div>
+                <label for="shadow-host">Form in ShadowDOM:</label>
+                <div
+                    id="shadow-host"
+                    style="border: 1px solid #ddd; padding: 5px; width: 100%; height: 300px; overflow: auto"
+                ></div>
+            </div>
+        </fieldset>
+
+        <script>
+            // -- Iframe
+            const internalIframe = document.getElementById('internal-iframe');
+            if (internalIframe) {
+                fetch('/qy-docs/test-pages/pages/iframe-form.html')
+                    .then((response) => response.text())
+                    .then((html) => {
+                        const modifiedHtml = html.replace(/id="/g, 'id="internal-');
+                        internalIframe.srcdoc = modifiedHtml;
+                    })
+                    .catch((error) => console.error('Error loading internal frame:', error));
+            }
+            // -- End Iframe
+            // -- Shadow DOM
+            const shadowHost = document.getElementById('shadow-host');
+            if (shadowHost) {
+                const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+                fetch('/qy-docs/test-pages/pages/iframe-form.html')
+                    .then((response) => response.text())
+                    .then((html) => {
+                        // Populate the shadow root with the fetched HTML
+                        const modifiedHtml = html.replace(/id="/g, 'id="shadow-');
+                        shadowRoot.innerHTML = modifiedHtml;
+                    })
+                    .catch((error) => console.error('Error loading shadow host:', error));
+            }
+            // -- End Shadow DOM
+        </script>
+    </body>
+</html>

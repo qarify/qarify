@@ -1,0 +1,44 @@
+---
+sidebar_position: 1
+---
+
+# 📦 설치
+
+QArify CLI는 `npm`, `pnpm`, `yarn` 등 선호하는 패키지 매니저를 통해 간단하게 설치할 수 있습니다.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+    ```bash npm install -g qarify ```
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    ```bash pnpm add -g qarify ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```bash yarn global add qarify ```
+  </TabItem>
+</Tabs>
+
+:::info
+
+**시작하기 전에: URL 테스트 정책 안내**
+
+QArify를 시작하신 것을 환영합니다!
+
+보안 및 서비스 안정성을 위해, **로그인하지 않은 상태**에서는 `qy start` 명령어로 테스트할 수 있는 URL이 제한됩니다.
+
+- **허용되는 URL:**
+  - `localhost` (예: `http://localhost:3000`): 로컬 컴퓨터에서 개발 중인 애플리케이션을 테스트할 수 있습니다.
+  - `qarify.github.io`: QArify의 기능을 체험해볼 수 있는 공식 데모 페이지입니다.
+
+이 정책은 예기치 않은 서비스 오남용을 방지하고 모든 사용자에게 안정적인 환경을 제공하기 위한 것입니다.
+
+**외부 서버(개발, 스테이징 등)의 URL을 테스트하려면 어떻게 하나요?**
+
+간단합니다. 아래 명령어를 실행하여 로그인하시면 모든 URL을 자유롭게 테스트할 수 있습니다.
+
+```bash
+qy login
+```

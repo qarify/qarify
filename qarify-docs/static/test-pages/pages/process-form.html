@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Processed Form Data</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                background-color: #f9f9f9;
+                margin: 20px;
+                color: #333;
+            }
+            .container {
+                max-width: 800px;
+                margin: auto;
+                background: #fff;
+                padding: 20px 30px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                border-bottom: 2px solid #eee;
+                padding-bottom: 10px;
+            }
+            .result-item {
+                display: flex;
+                align-items: flex-start;
+                border-bottom: 1px solid #eee;
+                padding: 12px 0;
+                line-height: 1.6;
+            }
+            .result-item:last-child {
+                border-bottom: none;
+            }
+            .result-key {
+                font-weight: bold;
+                color: #0056b3;
+                flex: 0 0 200px; /* Fixed width for keys */
+            }
+            .result-value {
+                font-family: monospace;
+                background-color: #f0f0f0;
+                padding: 3px 6px;
+                border-radius: 3px;
+                word-break: break-all;
+            }
+            a.back-link {
+                display: inline-block;
+                margin-top: 25px;
+                padding: 10px 18px;
+                background-color: #6c757d;
+                color: white;
+                text-decoration: none;
+                border-radius: 3px;
+                font-size: 14px;
+            }
+            a.back-link:hover {
+                opacity: 0.85;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Submitted Form Data</h1>
+            <div id="results-container"></div>
+            <a href="/qy-docs/test-pages/index.html" class="back-link">← Back to Form</a>
+        </div>
+
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const resultsContainer = document.getElementById('results-container');
+
+                try {
+                    // Get the 'formdata' parameter from the URL
+                    const params = new URLSearchParams(window.location.search);
+                    const formDataParam = params.get('formdata');
+
+                    if (!formDataParam) {
+                        throw new Error('No form data found in URL parameter "formdata".');
+                    }
+
+                    // Decode the URL component and parse the JSON string
+                    const jsonString = decodeURIComponent(formDataParam);
+                    const data = JSON.parse(jsonString);
+
+                    // Check if the form was empty
+                    if (Object.keys(data).length === 0) {
+                        resultsContainer.innerHTML = '<p>The submitted form was empty.</p>';
+                        return;
+                    }
+
+                    // Render each key-value pair
+                    for (const [key, value] of Object.entries(data)) {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'result-item';
+
+                        const keySpan = document.createElement('span');
+                        keySpan.className = 'result-key';
+                        keySpan.textContent = key;
+
+                        const valueSpan = document.createElement('span');
+                        valueSpan.className = 'result-value';
+                        // Display array values cleanly
+                        const displayValue = Array.isArray(value) ? value.join(', ') : value;
+                        valueSpan.textContent = displayValue || '(empty)';
+
+                        itemDiv.appendChild(keySpan);
+                        itemDiv.appendChild(valueSpan);
+                        resultsContainer.appendChild(itemDiv);
+                    }
+                } catch (error) {
+                    resultsContainer.innerHTML = `<p style="color: red; font-weight: bold;">Error processing form data: ${error.message}</p>`;
+                    console.error(error);
+                }
+            });
+        </script>
+    </body>
+</html>

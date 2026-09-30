@@ -1,0 +1,38 @@
+{
+  "name": "qarify",
+  "private": true,
+  "version": "0.0",
+  "type": "module",
+  "scripts": {
+    "test-all": "bun run --workspaces --if-present test -- --only-failures",
+    "typecheck-all": "bun run --workspaces typecheck",
+    "build-all": "bun run --filter '!./' --if-present build",
+    "clean:build": "rm -rf packages/*/dist",
+    "clean:install": "rm -rf packages/*/node_modules node_modules",
+    "test-e2e": "bun run --filter 'qarify-e2e-tests' test-e2e",
+    "// --- Link commands ---": "",
+    "format": "bunx prettier . --write",
+    "SETUP": "bun install"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "dotenv-cli": "^11.0.0",
+    "prettier": "^3.8.4",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "tsup": "^8.5.1",
+    "typescript": "^7"
+  },
+  "overrides": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "zod": "~4.6.2"
+  },
+  "workspaces": {
+    "packages": [
+      "qarify-docs"
+    ],
+    "catalog": {}
+  }
+}

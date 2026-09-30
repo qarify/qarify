@@ -1,0 +1,111 @@
+---
+sidebar_position: 3
+---
+
+import {
+   CirclePause,
+   CirclePlay,
+   CircleStop,
+   SquarePlay,
+   Mic,
+   StepForward,
+   Pause,
+   Play,
+   Square,
+   HatGlasses,
+   Wifi,
+} from 'lucide-react';
+
+## Your first test (Tutorial)
+
+Now that you've installed QArify, it's time to create your first and most important test! 🚀
+
+In this tutorial, you'll automate a simple **login scenario** and experience QArify's core process of recording, running, and checking results in **under 5 minutes**.
+
+---
+
+### **Step 1. Plan your test scenario ✍️**
+
+First, you need to decide what to test. We'll automate a classic 'login' scenario.
+
+- **Test Goal**: Verify that when a user enters the correct ID and password, they are successfully logged in and a welcome message is displayed.
+- **Test Steps**:
+  1. Navigate to the login page.
+  2. Enter `testuser` in the ID field.
+  3. Enter `password123` in the password field.
+  4. Click the 'Login' button.
+  5. **Verify** that the text 'Welcome, testuser!' is visible on the page after login.
+
+---
+
+### **Step 2. Record your test 🎥**
+
+Now, enter the `qy start` command in your terminal to begin test recording. This command opens the specified test website in a new browser window.
+
+1. **Enter the command below in your terminal.** (Append the URL of the page you want to test)
+
+   ```bash
+   qy start https://qarify.github.io/qy-docs/test-pages/login
+   ```
+
+2. **When you run the command, a browser window will appear along with the `Web Agent`.**
+   - The **Web Agent** acts as a controller for recording and running tests on the page.<br/>
+     <img src="/img/qy-web-agent.png" alt="QArify Web Agent" width="200" />
+   - Click the record button (<Mic size={14} color={'red'}/>) on the `Web Agent` to start recording.
+
+3. **In the website window, perform the actions as planned in the scenario.**
+   - Click the ID input field and type `testuser`.
+   - Click the password input field and type `password123`.
+   - Click the login button.
+
+4. **Add the most important step: 'Verification'.**
+   - After a successful login, the welcome message 'Welcome, testuser!' will appear.
+   - Click the verification button (<HatGlasses size={14} color={'red'}/>) on the `Web Agent` and select the welcome message on the page.
+   - In the `Web Agent`, select 'is visible' (the default) for the 'Expect element' item and click the 'Add Verification' button.
+   - A verification step, "This text must be visible," is now added to your test. This is the core of automated testing.
+
+   👉 The `selector` information for the selected elements is displayed at the top of the `Web Agent`.
+
+5. **Stop the recording and review the test.**
+   - Click the stop recording button (<CircleStop size={14} color={'red'}/>) on the `Web Agent` to end the recording.
+
+---
+
+### **Step 3. Run the test ▶️**
+
+Now it's time to run the test you just recorded and let QArify perform the test for you.
+
+1. **Click the run button (Play size={14} color={'green'}/>) on the `Web Agent` to run the test.**
+   - The login process you recorded will be quickly replayed before your eyes.
+
+2. **Run from the `Studio`**
+   - **Studio** provides test management features in a web browser.
+   - Click the status button (<Wifi size={14} color={'green'}/>) on the `Web Agent` to open `Studio` in a new browser window.
+   - In the left panel, select the test created from the recording, right-click, and click Run Test (<Play size={14} color={'green'}/>) to execute the test.
+
+3. **Run from the terminal**
+   - Enter the following command in your terminal:
+
+   ```bash
+   qy run --config ./qarify.config.json --reporter junit
+   ```
+
+   - After running the command, a browser will open automatically, the test will run, and the browser will close automatically when the test is finished.
+
+   👉 `qarify.config.json` is the configuration file for your QArify project. It is automatically created in the directory where you ran the `qy start` command.
+
+---
+
+### **Step 4. Check the results 📊**
+
+When the test is complete, QArify automatically generates a report containing all the steps and results.
+
+1. **Check the `.qarify` directory created in your project folder.**
+   - The `reports` folder stores the report file specified during the run.
+   - The `attachments` and `logs` folders store screenshot files and log files, respectively.
+
+   👉 Currently supported report types are `json` and `junit`.
+
+### 🎉 **Congratulations!**
+
+You have successfully created and run your first web automation test using QArify. You can now apply this process to automate more complex and diverse scenarios.

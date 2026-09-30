@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HTML Elements Test - Two Columns</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                line-height: 1.4;
+                margin: 20px;
+                padding: 0;
+                font-size: 14px;
+                background-color: #f9f9f9;
+            }
+
+            /* --- Layout Styles for Two Columns --- */
+            .two-column-container {
+                display: flex;
+                gap: 20px; /* Creates space between the columns */
+                align-items: flex-start; /* Aligns columns to the top */
+            }
+
+            .column {
+                flex: 1; /* Each column will take up an equal amount of space */
+                min-width: 350px; /* Prevents columns from becoming too narrow on smaller screens */
+                background: #fff;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            /* --- End Layout Styles --- */
+
+            fieldset {
+                border: 1px solid #ccc;
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+            legend {
+                font-weight: bold;
+                padding: 0 5px;
+            }
+            label {
+                display: block;
+                margin-bottom: 3px;
+            }
+            details {
+                cursor: pointer;
+            }
+            input[type='text'],
+            input[type='email'],
+            input[type='password'],
+            input[type='date'],
+            input[type='number'],
+            select,
+            textarea {
+                width: calc(100% - 12px); /* Account for padding */
+                padding: 5px;
+                margin-bottom: 8px;
+                border: 1px solid #ddd;
+                box-sizing: border-box; /* Important for width calculation */
+                font-size: 13px;
+                border-radius: 3px;
+            }
+            input[type='checkbox'],
+            input[type='radio'] {
+                margin-right: 5px;
+                vertical-align: middle;
+            }
+            .radio-group label,
+            .checkbox-group label {
+                display: inline-block; /* Keep radio/checkbox labels on the same line */
+                margin-right: 15px;
+                font-weight: normal;
+            }
+            button, /* General button styling */
+            button[type='submit'],
+            button[type='reset'] {
+                padding: 8px 15px;
+                border: none;
+                background-color: #007bff;
+                color: white;
+                cursor: pointer;
+                border-radius: 3px;
+                font-size: 14px;
+                margin-right: 5px;
+            }
+            button[type='reset'] {
+                background-color: #6c757d;
+            }
+            button:hover {
+                opacity: 0.85;
+            }
+            /* --- Styles for the new Range Group --- */
+            .range-group > * {
+                display: inline-block;
+                vertical-align: middle;
+                margin-bottom: 8px;
+            }
+            .range-group input[type='range'] {
+                width: 120px;
+            }
+            .range-group input[type='number'] {
+                width: 120px;
+            }
+            /* --- End Range Group Styles --- */
+            .working {
+                display: none;
+            }
+            .tab-container {
+                display: flex;
+                border-bottom: 1px solid #ccc;
+                margin-bottom: 20px;
+            }
+            .tab {
+                padding: 10px 20px;
+                cursor: pointer;
+                border: 1px solid transparent;
+                border-bottom: none;
+                margin-right: 5px;
+            }
+            .tab.active {
+                border-color: #ccc;
+                border-bottom: 1px solid white;
+                background-color: white;
+                border-radius: 5px 5px 0 0;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Tabs -->
+        <div class="tab-container">
+            <div class="tab active" onclick="location.href = '/qy-docs/test-pages/index.html'">Normal elements</div>
+            <div class="tab" onclick="location.href = '/qy-docs/test-pages/embedded-content-tab.html'">
+                Embedded Content(TODO)
+            </div>
+        </div>
+
+        <div class="two-column-container">
+            <div class="column">
+                <form
+                    method="post"
+                    id="testForm"
+                    oninput="rangeResult.value = parseInt(rangeInput.value) + parseInt(rangeInput2.value)"
+                >
+                    <fieldset>
+                        <legend>Text Inputs</legend>
+                        <div>
+                            <label for="textInput">Text Input:</label>
+                            <input type="text" id="textInput" name="textInput" placeholder="Enter some text" />
+                        </div>
+                        <div>
+                            <label for="emailInput">Email Input:</label>
+                            <input type="email" id="emailInput" name="emailInput" placeholder="name@example.com" />
+                        </div>
+                        <div>
+                            <label for="passwordInput">Password Input:</label>
+                            <input
+                                type="password"
+                                id="passwordInput"
+                                name="passwordInput"
+                                placeholder="Enter password"
+                            />
+                        </div>
+                        <div>
+                            <label for="dateInput">Date Input:</label>
+                            <input type="date" id="dateInput" name="dateInput" />
+                        </div>
+                        <div>
+                            <label for="numberInput">Number Input:</label>
+                            <input
+                                type="number"
+                                id="numberInput"
+                                name="numberInput"
+                                placeholder="0"
+                                min="0"
+                                max="100"
+                            />
+                        </div>
+                        <div>
+                            <label for="rangeInput">Range Input:</label>
+                            <div class="range-group">
+                                <input type="range" id="rangeInput" name="rangeInput" value="50" />
+                                +<input type="number" id="rangeInput2" name="rangeInput2" value="50" /> =
+                                <output name="rangeResult" for="rangeInput rangeInput2">100</output>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Selection Elements</legend>
+                        <div class="single-select">
+                            <label for="selectSingleInput">Select (Dropdown):</label>
+                            <select id="selectSingleInput" name="selectSingleInput">
+                                <option value="">--Please choose an option--</option>
+                                <option value="option1">Option 1</option>
+                                <option value="option2">Option 2</option>
+                                <option value="option3">Option 3</option>
+                            </select>
+                        </div>
+                        <div class="multiple-select">
+                            <label for="selectMultipleInput">Select (Multiple):</label>
+                            <select id="selectMultipleInput" name="selectMultipleInput" multiple>
+                                <option value="">-- None --</option>
+                                <option value="option1">Option 1</option>
+                                <option value="option2">Option 2</option>
+                                <option value="option3">Option 3</option>
+                            </select>
+                        </div>
+                        <div class="radio-group">
+                            <label>Radio Buttons:</label>
+                            <label for="radio1"
+                                ><input type="radio" id="radio1" name="radioGroup" value="radioChoice1" /> Choice
+                                A</label
+                            >
+                            <label for="radio2"
+                                ><input type="radio" id="radio2" name="radioGroup" value="radioChoice2" /> Choice
+                                B</label
+                            >
+                        </div>
+                        <div class="checkbox-group" style="margin-top: 8px">
+                            <label>Checkboxes:</label>
+                            <label for="check1"
+                                ><input type="checkbox" id="check1" name="checkboxGroup1" value="checkValue1" /> Item
+                                X</label
+                            >
+                            <label for="check2"
+                                ><input type="checkbox" id="check2" name="checkboxGroup2" value="checkValue2" /> Item
+                                Y</label
+                            >
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Text Area</legend>
+                        <div>
+                            <label for="textareaInput">Textarea:</label>
+                            <textarea
+                                id="textareaInput"
+                                name="textareaInput"
+                                rows="3"
+                                placeholder="Enter multiple lines of text"
+                            ></textarea>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>File Input</legend>
+                        <div>
+                            <label for="fileInput">Upload File:</label>
+                            <input type="file" id="fileInput" name="fileInput" />
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Buttons</legend>
+                        <button type="submit">Submit</button>
+                        <button type="reset">Reset</button>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="column">
+                <!-- Content Editable -->
+                <fieldset>
+                    <legend>Content Editable</legend>
+                    <div>
+                        <label for="editableDiv">Editable Div:</label>
+                        <div
+                            id="editableDiv"
+                            contenteditable="true"
+                            style="
+                                border: 1px solid #ddd;
+                                padding: 5px;
+                                min-height: 50px;
+                                width: calc(100% - 12px);
+                                box-sizing: border-box;
+                            "
+                        >
+                            This text is editable.
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Dialog Function -->
+                <fieldset>
+                    <legend>Dialog Function</legend>
+                    <div>
+                        <button onclick="window.alert('Operation complete!')">Open Alert</button>
+                    </div>
+                    <div style="margin-top: 8px">
+                        <button
+                            onclick="
+                                document.getElementById('confirmResult').innerText =
+                                    'Result: ' + window.confirm('Proceed?')
+                            "
+                        >
+                            Open Confirm
+                        </button>
+                        <span id="confirmResult" style="margin-left: 8px"></span>
+                    </div>
+                    <div style="margin-top: 8px">
+                        <button
+                            onclick="
+                                document.getElementById('promptResult').innerText =
+                                    'Result: ' + window.prompt('Enter a value:', 'default text')
+                            "
+                        >
+                            Open Prompt
+                        </button>
+                        <span id="promptResult" style="margin-left: 8px"></span>
+                    </div>
+                    <div style="margin-top: 8px">
+                        <button onclick="document.getElementById('dialog').showModal()">Open Dialog</button>
+                        <dialog id="dialog">
+                            <h2>Dialog</h2>
+                            <p>This is a dialog element.</p>
+                            <button onclick="document.getElementById('dialog').close()">Close</button>
+                        </dialog>
+                    </div>
+                </fieldset>
+
+                <!-- Window Function -->
+                <fieldset>
+                    <legend>Window Function</legend>
+                    <div style="margin-top: 8px">
+                        <button onclick="window.open('https://www.example.com', '_blank')">Open Auth Tab</button>
+                    </div>
+                    <div style="margin-top: 8px">
+                        <button id="openAuthPopupBtn">Open Auth Popup</button>
+                        <span id="authStatus" style="margin-left: 8px"></span>
+                    </div>
+                </fieldset>
+
+                <!-- Interactive Elements -->
+                <fieldset>
+                    <legend>Interactive Elements</legend>
+                    <div>
+                        <details>
+                            <summary>Details & Summary</summary>
+                            <p>This is the content of the details element.</p>
+                        </details>
+                    </div>
+                    <div style="margin-top: 8px">
+                        <label for="video">Video:</label>
+                        <video
+                            id="video"
+                            width="100%"
+                            height="auto"
+                            controls
+                            src="https://www.w3schools.com/html/mov_bbb.mp4"
+                        ></video>
+                    </div>
+                    <div style="margin-top: 8px">
+                        <label for="audio">Audio:</label>
+                        <audio
+                            id="audio"
+                            controls
+                            src="https://www.w3schools.com/html/horse.ogg"
+                            style="width: 100%"
+                        ></audio>
+                    </div>
+                </fieldset>
+
+                <!-- File Input Exception Cases -->
+                <fieldset>
+                    <legend>File Input Exception Cases</legend>
+
+                    <!-- Case 1: Clicking a label associated with a file input -->
+                    <div style="margin-top: 8px">
+                        <label for="fileInputWithLabel" style="cursor: pointer; color: blue; text-decoration: underline"
+                            >Click this LABEL to upload a file</label
+                        >
+                        <input type="file" id="fileInputWithLabel" style="display: none" />
+                    </div>
+
+                    <div style="margin-top: 16px">
+                        <!-- Case 2: Clicking a generic button that programmatically clicks a hidden file input -->
+                        <button
+                            type="button"
+                            id="styledFileButton"
+                            onclick="document.getElementById('hiddenFileInput').click()"
+                        >
+                            Upload with Custom Button
+                        </button>
+                        <input type="file" id="hiddenFileInput" style="display: none" />
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <script>
+            // Form submit handler
+            document.getElementById('testForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                // alert('Form Submitted! (Check console for data - not implemented in this basic example)');
+                // location.reload();
+
+                // Create a FormData object from the form
+                const formData = new FormData(event.target);
+
+                // Convert FormData to a plain JavaScript object, handling multiple values
+                const data = {};
+                for (const [key, value] of formData.entries()) {
+                    // If the key already exists, convert it to an array
+                    if (data.hasOwnProperty(key)) {
+                        if (!Array.isArray(data[key])) {
+                            data[key] = [data[key]];
+                        }
+                        data[key].push(value);
+                    } else {
+                        data[key] = value;
+                    }
+                }
+
+                // Convert the object to a JSON string and URL-encode it
+                const jsonString = JSON.stringify(data);
+                const encodedData = encodeURIComponent(jsonString);
+
+                // Navigate to the processing page with the data in the URL
+                window.location.href = `/qy-docs/test-pages/pages/process-form.html?formdata=${encodedData}`;
+            });
+
+            // Auth Popup handler
+            let authPopup;
+            document.getElementById('openAuthPopupBtn').addEventListener('click', () => {
+                document.getElementById('authStatus').innerText = '';
+                authPopup = window.open(
+                    '/qy-docs/test-pages/pages/auth-form.html',
+                    'authWindow',
+                    'width=400,height=250,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no',
+                );
+
+                const timer = setInterval(() => {
+                    if (authPopup && authPopup.closed) {
+                        clearInterval(timer);
+                        const statusSpan = document.getElementById('authStatus');
+                        if (statusSpan.innerText === '') {
+                            statusSpan.innerText = 'Status: Popup dismissed';
+                        }
+                    }
+                }, 500);
+            });
+
+            window.addEventListener(
+                'message',
+                (event) => {
+                    const statusSpan = document.getElementById('authStatus');
+                    // It's a good practice to check event.origin for security
+                    // if (event.origin !== window.location.origin) return;
+                    if (event.source === authPopup) {
+                        if (event.data.status === 'logined') {
+                            statusSpan.innerText = `Status: Logined as ${event.data.username}`;
+                        } else if (event.data.status === 'canceled') {
+                            statusSpan.innerText = 'Status: Canceled';
+                        }
+                    }
+                },
+                false,
+            );
+        </script>
+    </body>
+</html>

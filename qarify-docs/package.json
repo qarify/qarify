@@ -1,0 +1,51 @@
+{
+  "name": "qarify-docs",
+  "version": "0.9.5",
+  "private": true,
+  "scripts": {
+    "dev": "docusaurus start --port 3001",
+    "dev:en": "docusaurus start --locale en",
+    "typecheck": "tsc --noEmit",
+    "clear": "docusaurus clear",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations --locale en",
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "tomd": "npx jsonschema2mk --schema ../../packages/types/schemas/suite.schema.json >docs/reference/types/suite.md",
+    "generate-docs": "tsx scripts/generate-typedocs.ts",
+    "deploy-gh-pages": "bash ./scripts/deploy-gh-pages.sh",
+    "SETUP": "bun install"
+  },
+  "dependencies": {
+    "@docusaurus/core": "~3.10.2",
+    "@docusaurus/faster": "~3.10.2",
+    "@docusaurus/preset-classic": "~3.10.2",
+    "@mdx-js/react": "^3.1.1",
+    "clsx": "^2.1.1",
+    "html-react-parser": "^6.1.7",
+    "lucide-react": "^1.45.0",
+    "prism-react-renderer": "^2.4.1",
+    "react": "~19.3.0",
+    "react-dom": "~19.3.0"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "~3.10.2",
+    "@docusaurus/tsconfig": "~3.10.2",
+    "@docusaurus/types": "~3.10.2",
+    "jsonschema2mk": "^2.2.3",
+    "typescript": "^5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 3 chrome version",
+      "last 3 firefox version",
+      "last 5 safari version"
+    ]
+  },
+  "license": "SEE LICENSE IN LICENSE.md"
+}
