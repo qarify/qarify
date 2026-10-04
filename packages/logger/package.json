@@ -1,0 +1,29 @@
+{
+  "name": "@qarify/logger",
+  "version": "0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "browser": "./index-browser.ts",
+      "import": "./index.ts"
+    },
+    "./browser": {
+      "import": "./index-browser.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test tests",
+    "sample": "bun run tests/sample.ts",
+    "build": "bun run --parallel bundle:* build:type",
+    "build:type": "tsc index.ts --emitDeclarationOnly --declaration --module es2022 --target es2022 --moduleResolution bundler --outDir ./dist",
+    "bundle:esm": "bun build index.ts --target=bun --outdir ./dist",
+    "bundle:browser": "bun build index-browser.ts --target=browser --format cjs --outdir ./dist"
+  },
+  "dependencies": {
+    "@logtape/logtape": "^2.2.1",
+    "@logtape/file": "^2.2.1",
+    "@logtape/pretty": "^2.2.1"
+  }
+}

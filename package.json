@@ -31,7 +31,8 @@
   },
   "workspaces": {
     "packages": [
-      "qarify-docs"
+      "qarify-docs",
+      "packages/*"
     ],
     "catalog": {}
   }

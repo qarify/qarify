@@ -1,0 +1,11 @@
+{
+  "name": "@qarify/utils",
+  "version": "0.0",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  }
+}
