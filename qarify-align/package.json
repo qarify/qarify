@@ -1,0 +1,18 @@
+{
+  "name": "@qarify/intent-align-docs",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./create-preview.md": "./skills/create-preview/SKILL.md",
+    "./update-preview.md": "./skills/update-preview/SKILL.md"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "SETUP": "bun install"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prettier": "^3.8.4",
+    "typescript": "^7"
+  }
+}

@@ -1,0 +1,1 @@
+# QArify Intent Align
