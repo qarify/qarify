@@ -18,27 +18,14 @@ export async function reconfigure(newConfig?: Config<string, string>) {
     return !newConfig?.loggers?.find((e) => isSameName(e.category, logger.category));
   });
 
-  if (IS_BROWSER) {
-    configureSync({
-      reset: true,
-      ...currentConfig,
-      ...(newConfig || {}),
-      sinks: {
-        ...currentConfig?.sinks,
-        ...(newConfig?.sinks || {}),
-      },
-      loggers: [...filteredLoggers, ...(newConfig?.loggers || [])],
-    });
-  } else {
-    await configure({
-      reset: true,
-      ...currentConfig,
-      ...(newConfig || {}),
-      sinks: {
-        ...currentConfig?.sinks,
-        ...(newConfig?.sinks || {}),
-      },
-      loggers: [...filteredLoggers, ...(newConfig?.loggers || [])],
-    });
-  }
+  configureSync({
+    reset: true,
+    ...currentConfig,
+    ...(newConfig || {}),
+    sinks: {
+      ...currentConfig?.sinks,
+      ...(newConfig?.sinks || {}),
+    },
+    loggers: [...filteredLoggers, ...(newConfig?.loggers || [])],
+  });
 }
