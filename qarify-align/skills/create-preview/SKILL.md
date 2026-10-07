@@ -187,7 +187,7 @@ A `promoted` feedback is **read-only**. Any further change is a NEW `qy_preview_
 
 ## 6. Ports and URLs
 
-- Mock URLs embed the qy server port. Pin it with `QY_STUDIO_PORT` to keep recorded origins stable across
+- Mock URLs embed the qy server port. Pin it with `QY_REVIEW_PORT` to keep recorded origins stable across
   restarts.
 - The acceptance recording uses the real app URL; Mock URLs never end up in a promoted suite.
 
