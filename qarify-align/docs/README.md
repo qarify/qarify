@@ -35,13 +35,13 @@
 **경로 고정**
 - 디렉토리 이름(`intents/`)과 위치(`.qarify/` 하위)는 고정하며 설정으로 바꾸지 않는다. origin 링크, skill, MCP 도구, CLI, Docs가 모두 이 경로를 전제로 한다.
 - UI 표시 이름만 프로젝트 설정으로 바꿀 수 있다(예: "Intent" / "Sprint" / "Ticket").
-- `.qarify/` 하위에 두는 이유: 사용자 저장소 최상위를 오염시키지 않고, QArify 흔적이 한 곳에 모인다. 숨김 디렉토리라 잘 보이지 않는 문제는 Studio Intent view(사람)와 MCP·skill의 명시 경로(agent)로 해결한다.
+- `.qarify/` 하위에 두는 이유: 사용자 저장소 최상위를 오염시키지 않고, QArify 흔적이 한 곳에 모인다. 숨김 디렉토리라 잘 보이지 않는 문제는 QReview Intent view(사람)와 MCP·skill의 명시 경로(agent)로 해결한다.
 
 **Intent 단계(`intent.md` `stage`)**: `intent` → `align` → `baseline` → `build` → `verify` → `signoff` → `done`. Decision 답변, AC 확정(`locked`), Sign-off는 사람만 수행한다.
 
 상세 규칙은 [`skills/intent-protocol/SKILL.md`](../skills/intent-protocol/SKILL.md).
 
-## Align ↔ Studio 계약
+## Align ↔ QReview 계약
 
 - **AC id**: `spec/acceptance.md`의 `AC-n`
 - **origin 링크**: 승격된 suite의 각 test는 `origin: "intent/{id}#AC-n"`을 가진다(qy 지원 전까지는 test 제목의 `[AC-n]`). 프로젝트 E2E 테스트는 제목에 `@AC-n`.

@@ -11,7 +11,7 @@
   - **Your First Test**: A step-by-step tutorial based on the user scenarios to create and run a basic test.
 
 - ### **Guides**
-  - **Using the Test Studio**: How to use `qy start` for recording test scenarios.
+  - **Using the Test QReview**: How to use `qy start` for recording test scenarios.
   - **Managing Tests**: Instructions on creating, editing, and organizing test suites and cases.
   - **Running Tests & Analyzing Results**: Details on executing tests via the CLI and interpreting the output reports.
   - **Authentication**: How to log in and manage user authentication via the CLI.
