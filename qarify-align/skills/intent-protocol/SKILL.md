@@ -1,6 +1,6 @@
 ---
 name: intent-protocol
-description: Shared Intent Align rules for every agent working in .qarify/intents/{id}/ — layout and id rules, stage gates that only a human may pass, intent/decision/acceptance file formats, AC traceability, what to read, the work/HANDOFF.md ledger, output budgets and the no-commit rule. Preloaded by intent subagents; read it before touching any .qarify/intents/ file.
+description: Shared Align Intent rules for every agent working in .qarify/intents/{id}/ — layout and id rules, stage gates that only a human may pass, intent/decision/acceptance file formats, AC traceability, what to read, the work/HANDOFF.md ledger, output budgets and the no-commit rule. Preloaded by intent subagents; read it before touching any .qarify/intents/ file.
 ---
 
 # Intent Protocol
@@ -15,8 +15,6 @@ Every token an agent writes into an intent directory is re-read by later agents 
 .qarify/intents/{id}/                  # id = {YYMMDD}-{slug}, immutable
 ├─ intent.md                           # [human] source of truth + frontmatter state (§2)
 ├─ decisions.md                        # D-n: agents propose, the human answers (§4)
-├─ preview/                            # Mock artifacts (target location, see §1.2)
-├─ feedback/{feedbackId}/feedback.md   # snapshot of qy_feedback_get (read-only copy)
 ├─ spec/
 │  ├─ acceptance.md                    # AC-n baseline (§5)
 │  └─ *.suite.json                     # executable spec before promotion
@@ -38,15 +36,6 @@ Other `.qarify/` directories are unchanged: `suites/` (promoted suites), `mocks/
 - No sequence numbers (`0007-…`): parallel branches collide.
 - Create a new intent only when the human asks or confirms. If the brief or the human does not name an intent, list `.qarify/intents/` (newest last) and ask — never guess.
 
-### 1.2 Transitional rules (current qy tools)
-
-The current qy MCP tools keep Mock files in `.qarify/mocks/<feature>/`, Draft meta in `.qarify/drafts/<feature>/` and feedback in qy's own store. Until the tools write into intent directories:
-
-- Use the **intent id as the qy `<feature>` name** (it satisfies qy's `^[a-z0-9][a-z0-9_-]{0,63}$`). An intent that needs several Previews uses `{id}-{part}`.
-- Register every Preview in `intent.md` frontmatter `previews:` (§2).
-- After every `qy_feedback_get`, save the returned markdown verbatim to `feedback/{feedbackId}/feedback.md` (overwrite on re-read). Never hand-edit qy's own feedback files.
-- If the qy tool `qy_intent_context` exists in your session, prefer it for a whole-intent summary. If it does not, read the files per §7. Never invent tool names.
-
 ## 2. intent.md
 
 ```markdown
@@ -55,11 +44,7 @@ title: 로그인 5회 실패 시 잠금
 stage: intent            # intent | align | baseline | build | verify | signoff | done
 status: active           # active | blocked | done | dropped
 size: M                  # S | M | L — optional; the PM classifies when absent
-preview: optional        # required | optional | skip — with reason in "## Preview"
 ref: JIRA-123            # optional external tracker link
-previews:
-  - { feature: 261003-login-lockout, kind: mock, feedbackIds: [fb_ab12] }
-affectedSuites: [login-page]
 created: 2026-10-03
 ---
 # Intent
@@ -67,12 +52,10 @@ created: 2026-10-03
 
 ## Context / Constraints
 ## Out of scope
-## Preview
-{required | optional | skip — one-line reason}
 ```
 
 - The **body is human-owned.** Agents never rewrite it; a needed change becomes a Decision (§4).
-- Agents may update frontmatter `stage`, `status`, `preview`, `previews`, `affectedSuites` as part of their step, and add the one-line `## Preview` reason.
+- Agents may update frontmatter `stage`, `status` as part of their step
 - Legacy input: a `USER.md` or `IDEA.md` handed over by the human is read as the intent body.
 
 ## 3. Stages and gates

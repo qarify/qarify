@@ -2,6 +2,9 @@
 #
 # Link Agents and Skills under the target directory
 #
+# Usage
+# link.sh <target_directory>
+#
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SRC="$(realpath "${SCRIPT_DIR}/..")"
@@ -21,6 +24,7 @@ TARGET_CLAUDE_DIR="${TARGET}/.claude"
 # TARGET_OPENCODE_DIR="${TARGET}/.opencode"
 
 SRC_AGENTS_DIR="${SRC}/agents"
+SRC_ROLE_AGENTS_DIR="${SRC}/agents-by-role"
 SRC_SKILLS_DIR="${SRC}/skills"
 SRC_DEV_SKILLS_DIR="${SRC}/.claude/skills"
 
@@ -29,6 +33,15 @@ mkdir -p "${TARGET_CLAUDE_DIR}/"{agents,skills}
 
 # agents
 for file in $SRC_AGENTS_DIR/*; do 
+    if [ -f "$file" ]; then 
+        TARGET_AGENTS_DIR="${TARGET_CLAUDE_DIR}/agents"
+        echo "AGENT: $file -> ${TARGET_AGENTS_DIR}/$(basename $file)"
+        ln -snf "$file" "${TARGET_AGENTS_DIR}/$(basename $file)"
+    fi 
+done
+
+# agents-by-role (2.0, align-* names)
+for file in $SRC_ROLE_AGENTS_DIR/*.md; do 
     if [ -f "$file" ]; then 
         TARGET_AGENTS_DIR="${TARGET_CLAUDE_DIR}/agents"
         echo "AGENT: $file -> ${TARGET_AGENTS_DIR}/$(basename $file)"

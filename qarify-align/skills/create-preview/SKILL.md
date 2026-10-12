@@ -1,6 +1,6 @@
 ---
 name: create-preview
-description: Build a Mock or Draft Preview for an Intent (.qarify/intents/{id}/) and run the Intent Align alignment loop through the qy MCP tools — record -> apply feedback -> review -> AC draft -> human baseline lock -> implement -> acceptance recording on the real app -> promote -> run.
+description: Build a Mock or Draft Preview for an Intent (.qarify/intents/{id}/) and run the Align Intent alignment loop through the qy MCP tools — record -> apply feedback -> review -> AC draft -> human baseline lock -> implement -> acceptance recording on the real app -> promote -> run.
 qy-skill-version: 2
 ---
 
@@ -14,7 +14,7 @@ result into **acceptance criteria (AC)** the human locks. After the real impleme
 acceptance run on the real app, and that run is promoted into a regression suite. Invoke as
 `/create-preview <intent-id | request>`.
 
-The rules of the Intent Align protocol (layout, id, file formats, human gates) are in the `intent-protocol` skill.
+The rules of the Align Intent protocol (layout, id, file formats, human gates) are in the `intent-protocol` skill.
 Load it if it is not already loaded. Paths below starting with `intent/` mean `.qarify/intents/{id}/`.
 
 Reply to the user in the user's own language. The exact wording of the confirmation messages below is a

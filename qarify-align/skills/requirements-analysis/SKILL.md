@@ -9,7 +9,7 @@ description: Analyze a vague intent and convert it into concrete intent requirem
 
 Transform an intent into actionable requirements that guide the Preview, the acceptance baseline, architecture, design and implementation. Ensures the human agrees on what "done" means before any production code is written.
 
-Under the Intent Align protocol (`intent-protocol` skill): open policy questions become **Decisions** in `decisions.md` (D-n), and each observable acceptance check becomes an **AC** in `spec/acceptance.md` (AC-n, `locked: false`). `requirements.md` references those ids instead of holding its own checklists. Only the human answers Decisions and locks AC.
+Under the Align Intent protocol (`intent-protocol` skill): open policy questions become **Decisions** in `decisions.md` (D-n), and each observable acceptance check becomes an **AC** in `spec/acceptance.md` (AC-n, `locked: false`). `requirements.md` references those ids instead of holding its own checklists. Only the human answers Decisions and locks AC.
 
 ## When to Use
 

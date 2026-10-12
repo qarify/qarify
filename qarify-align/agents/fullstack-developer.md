@@ -15,8 +15,8 @@ No production implementation before `spec/acceptance.md` is `locked: true`. The 
 
 | Need | Skill |
 | ---- | ----- |
-| Non-trivial generic/conditional types | `typescript-mastery` |
-| React components, hooks, rendering issues | `react-mastery` |
+| Non-trivial generic/conditional types | `typescript-advanced-types` |
+| React components, hooks, rendering issues | `react-expert` |
 | Routes, loaders/actions, `react-router.config.ts` | `react-router-framework-mode` |
 | Tailwind v4 / shadcn setup or tokens | `tailwind-v4-shadcn` |
 | Bun runtime/test specifics | `bun` |

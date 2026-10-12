@@ -1,5 +1,6 @@
 {
-  "name": "@qarify/intent-align-docs",
+  "name": "@qarify/align-intent-docs",
+  "version": "2.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -8,7 +9,9 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "SETUP": "bun install"
+    "create-link": "bash scripts/link.sh ",
+    "ls-external-skill": "bash scripts/external-skill.sh ls shadcn/ui",
+    "add-external-skill": "bash scripts/external-skill.sh all"
   },
   "devDependencies": {
     "@types/bun": "latest",
