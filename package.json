@@ -1,7 +1,7 @@
 {
   "name": "qarify",
   "private": true,
-  "version": "0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "test-all": "bun run --workspaces --if-present test -- --only-failures",

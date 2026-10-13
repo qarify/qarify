@@ -1,6 +1,6 @@
 {
   "name": "qarify-docs",
-  "version": "0.9.5",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "docusaurus start --port 3001",
