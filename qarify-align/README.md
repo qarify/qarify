@@ -18,7 +18,7 @@
 | 1 정렬 | AI | intent.md `## 현재 상태`, decisions.md, checks.md(계획) | — |
 | G1 결정 | 사용자 | D-n 답변, C-n 확인·수정 | 차단 D-n 전부 answered |
 | 2 수행 | AI | 변경, 수행 중 결정 기록 | 자체 테스트·typecheck 통과 |
-| 3 검증 | AI(verifier) | checks.md 결과·증거, 사람 확인 절차 | 모든 C-n에 결과 |
+| 3 검증 | AI(verifier) | checks.md 결과·증거, 수동 확인 절차 | 모든 C-n에 결과 |
 | G2 확인 | 사용자 | 수락 / 재작업 / 새 D-n | 수락 → done |
 
 G2에서 재작업이면 2로, 새 결정이면 1로 돌아간다.
@@ -82,7 +82,7 @@ G2에서 재작업이면 2로, 새 결정이면 1로 돌아간다.
 |---|---|---|---|
 | `align-manager` | 메인 스레드: `claude --agent align-manager` (또는 일반 세션에서 `/align-*` 스킬) | 사실 확인, D-n·C-n 작성, G1·G2 진행, 위임 | intent 파일 |
 | `align-executor` | 서브에이전트 | 확정된 D-n대로 수행, 필요한 테스트 추가, 수행 중 결정 기록 | 제품 코드, `work/build.md` |
-| `align-verifier` | 서브에이전트(새 컨텍스트) | C-n 실행·증거, 범위 밖 변경, 사람 확인 절차 | `checks.md` 결과 열, `work/verify/` |
+| `align-verifier` | 서브에이전트(새 컨텍스트) | C-n 실행·증거, 범위 밖 변경, 수동 확인 절차 | `checks.md` 결과 열, `work/verify/` |
 
 manager가 서브에이전트가 아닌 이유: `AskUserQuestion`은 모든 서브에이전트에서 제거된다. 넓은 코드 조사는 내장 `Explore` 서브에이전트를 쓴다.
 

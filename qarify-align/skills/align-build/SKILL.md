@@ -45,7 +45,7 @@ Set `stage: accept`. Report in this order, ≤20 lines:
 1. Check summary: counts of pass / fail / blocked / needs-human, then each non-pass C-n in one line.
 2. `ai-decided` D-n made during build — one line each (the human may object).
 3. `## 범위 밖 변경` — anything listed.
-4. `## 사람 확인 절차` — point to it in `checks.md`; give the first step inline.
+4. `## 수동 확인 절차` — point to it in `checks.md`; give the first step inline.
 
 Human response:
 - accept → `stage: done`, `status: done`. Remind that commits are theirs.

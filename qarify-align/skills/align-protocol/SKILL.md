@@ -104,7 +104,7 @@ base:                # set by /align-build: git HEAD + pre-existing dirty paths 
 | C-2 | 30분 뒤 같은 계정으로 로그인된다 | D-1(a) | manual: 1) 5회 실패 2) 시계를 30분 앞으로 3) 로그인 → 기대: 대시보드 이동 | | |
 
 ## 범위 밖 변경
-## 사람 확인 절차
+## 수동 확인 절차
 ```
 
 - One observable behavior per C-n (URL, visible text, element state, response, file content, exit code).
@@ -113,7 +113,7 @@ base:                # set by /align-build: git HEAD + pre-existing dirty paths 
 - `결과`: `pass` | `fail` | `blocked` | `needs-human`. `pass` without 증거 is invalid. 증거 is a path under `work/verify/` or a one-line command result.
 - After G1 the plan columns (확인할 것, 근거, 방법) change only when the human edits them or through a D-n. A verifier that finds a check wrong reports it; it does not rewrite it.
 - `## 범위 밖 변경`: changed paths/behaviors linked to no D-n or C-n (verifier).
-- `## 사람 확인 절차`: the manual checks in run order, merged into one walkthrough (verifier).
+- `## 수동 확인 절차`: the manual checks in run order, merged into one walkthrough (verifier).
 
 ## 7. In-flight decisions (during build)
 
