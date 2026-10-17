@@ -114,6 +114,8 @@ base:                # set by /align-build: git HEAD + pre-existing dirty paths 
 - After G1 the plan columns (확인할 것, 근거, 방법) change only when the human edits them or through a D-n. A verifier that finds a check wrong reports it; it does not rewrite it.
 - `## 범위 밖 변경`: changed paths/behaviors linked to no D-n or C-n (verifier).
 - `## 수동 확인 절차`: the manual checks in run order, merged into one walkthrough (verifier).
+  - Include only those items that strictly require human verification (e.g., actions initiated or decided by a person, or items that are difficult to verify automatically).
+  - Provide a detailed description of the verification procedure when documenting these items.
 
 ## 7. In-flight decisions (during build)
 

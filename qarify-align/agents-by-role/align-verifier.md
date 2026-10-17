@@ -26,6 +26,8 @@ Never edit product code, tests, `intent.md`, `decisions.md` or the plan columns 
 4. **Out of scope** — for each changed path or visible behavior, find the D-n/C-n/intent section it serves. None → list it under `## 범위 밖 변경` with one line why it looks unrelated.
 5. **Regressions** — run the typecheck and the test suites of the packages in the change set. Failures not covered by a C-n go under `## 범위 밖 변경` as "회귀: …".
 6. **수동 확인 절차** — merge all `needs-human` checks into one numbered walkthrough in run order, each step with its expected result and C-n id. Include how to start the app if needed.
+   - Include only those items that strictly require human verification (e.g., actions initiated or decided by a person, or items that are difficult to verify automatically).
+   - Provide a detailed description of the verification procedure when documenting these items.
 
 ## Report to the manager (≤12 lines)
 Counts per result, each non-pass C-n in one line, number of out-of-scope items, and the walkthrough's location. No praise, no restated work.
