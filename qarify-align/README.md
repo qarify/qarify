@@ -1,4 +1,4 @@
-# QArify Align Intent V2.0
+# QArify Align Intent
 
 > **Align Intent** — 사람의 의도를 AI에게 효과적으로 전달하기 위한 프로토콜
 
@@ -9,7 +9,7 @@
 2. 점검 항목은 수행 전에 정한다. 수행 후에 쓰면 AI가 자기 결과로 자기를 채점한다.
 3. 결정에는 사람만 답한다. AI는 옵션·추천·영향을 제시하고 멈춘다.
 4. 사실은 결정이 아니다. 코드·문서로 확인 가능한 것은 AI가 확인해 "현재 상태"에 적는다.
-5. 검증은 수행하지 않은 에이전트가 한다(새 컨텍스트, intent·decisions·checks·변경분만 읽음).
+5. 검증과 수행은 독립된 에이전트가 한다(새 컨텍스트, intent·decisions·checks·변경분만 읽음).
 
 ### 절차
 | 단계 | 주체 | 산출물 | 통과 조건 |
@@ -63,9 +63,9 @@ G2에서 재작업이면 2로, 새 결정이면 1로 돌아간다.
 - 범위 밖 변경: 변경분 중 어떤 D-n·C-n에도 연결되지 않는 것은 verifier가 별도 목록으로 보고한다.
 - G2의 "검증 방법 확인" = 사용자는 manual 항목을 실행하고 auto 항목은 증거를 본다.
 
-## 2.0 구성 (역할 기준)
+## 구성 (역할 기준)
 
-에이전트는 **권한과 컨텍스트**(관리 / 수행 / 검증)로 나누고, 업무 전문성(기획·설계·아키텍처·QA)은 스킬로 둔다. 1.x 업무별 에이전트(`agents/`)와 `intent-protocol`은 그대로 두며, 1.x intent(`spec/acceptance.md`, `work/HANDOFF.md`가 있는 디렉토리)는 1.x 규칙으로 처리한다.
+에이전트는 **권한과 컨텍스트**(관리 / 수행 / 검증)로 나누고, 업무 전문성(기획·설계·아키텍처·QA)은 스킬로 둔다.
 
 ### 이름 규칙
 
@@ -73,8 +73,9 @@ G2에서 재작업이면 2로, 새 결정이면 1로 돌아간다.
 
 | 접두사 | 대상 | 예 |
 |---|---|---|
-| `align-` | 2.0 프로토콜·절차 스킬과 역할 에이전트 | `align-protocol`, `align-plan`, `align-executor` |
-| 없음 | 업무 지식 스킬(executor가 필요할 때 불러 씀), 1.x 에이전트 | `test-plan-design`, `react-expert` |
+| `align-` | 프로토콜·절차 스킬과 역할 에이전트 | `align-protocol`, `align-plan`, `align-executor` |
+| `ais-` | AlignIntent 특화된 스킬 | `ais-design-architecture`,`ais-design-ux` |
+| 없음 | 업무 지식 스킬(executor가 필요할 때 불러 씀) | `test-plan-design`, `react-expert` |
 
 ### Agents (`agents-by-role/`)
 
